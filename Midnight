@@ -1,0 +1,14 @@
+local Disabled={}
+getgenv().Toggle=function(v)
+	coroutine.wrap(function()
+		if v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) or v:IsDescendantOf(game:GetService("Players").LocalPlayer) then return; end
+		if table.pack(pcall(gethiddenproperty, v, "Enabled"))[1]==true and gethiddenproperty(v, "Enabled")==true and not table.find(Disabled, v) then
+			workspace.Remote.toggleSiren:FireServer({
+				isOn = {Value=false},
+				Part1 = {Weld_Part=true, l=v},
+				Speaker = {Weld_Part=true, Sound=workspace.Prison_guardspawn.spawn.Sound}
+			})
+			table.insert(Disabled, v)
+		end
+	end)()
+end
