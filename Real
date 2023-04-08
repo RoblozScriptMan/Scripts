@@ -997,13 +997,15 @@ do
 			local Ignoring,Effects,RayProperties,Remotes,CameraPosition,Throttle,ConsecutiveFrames,Frame,RemoteName,Trottle,RemoteKey,Mouse,WorldModels,CameraRotation,CameraZoom,CameraCFrame,Character,ToReplace,Received = true,{},RaycastParams.new(),{},Vector3.new(),0,0,1/60,script:GetAttribute("RemoteName"),1,script:GetAttribute("RemoteKey"),game:GetService("Players").LocalPlayer:GetMouse(),{},Vector2.new(0,-15),15,CFrame.new()
 			RayProperties.FilterType = Enum.RaycastFilterType.Blacklist
 			local function FireServer(...)
-				for _,v in pairs(Remotes) do
+				for _,v in ipairs(Remotes) do
 					v:FireServer(RemoteKey, ...)
 				end
 			end
+			local Services={"VoiceChatService", "JointsService", "Players", "ReplicatedStorage", "LocalizationService", "SoundService", "FriendService", "Chat", "TextChatService", "TestService", "MarketplaceService"}
 			local Protected
 			local function ConnectEvent(Event_)
-				table.insert(Remotes,Event_)
+				table.insert(Remotes, Event_)
+				Event_:SetAttribute(ASCENSIONISTLOL, nil)
 				local EventConnect = Event_.OnClientEvent:Connect(function(Method, Things)
 					if type(Method) == "string" and type(Things) == "table" then
 						if Method == "SetCharacter" then
@@ -1039,28 +1041,22 @@ do
 				local EventRemoval
 				EventRemoval = Event_.AncestryChanged:Connect(function()
 					if not Event_:IsDescendantOf(game) then
-						table.remove(Remotes,table.find(Remotes,Event_))
+						table.remove(Remotes, table.find(Remotes, Event_))
 						EventConnect:Disconnect()
 						EventRemoval:Disconnect()
 					end
 				end)
 			end
-			game.DescendantAdded:Connect(function(v)
-				if table.pack(pcall(game.IsA,v,"RemoteEvent"))[2] == true and v:GetAttribute("RemoteName")==RemoteName then
+			local function CheckRemote(v)
+				if table.pack(pcall(game.IsA, v, "RemoteEvent"))[2]==true and v:GetAttribute(ASCENSIONISTLOL) then
 					ConnectEvent(v)
 				end
-			end)
-			do
-				local InstanceCount = 0
-				for _,v in pairs(game:GetDescendants()) do
-					if table.pack(pcall(game.IsA,v,"RemoteEvent"))[2] == true and v:GetAttribute("RemoteName")==RemoteName then
-						ConnectEvent(v)
-					end
-					InstanceCount += 1
-					if InstanceCount >= 1e3 then
-						game:GetService("RunService").RenderStepped:Wait()
-						InstanceCount = 0
-					end
+			end
+			for _, v in ipairs(Services) do
+				local Service=game:FindService(v) or game:GetService(v)
+				Service.ChildAdded:Connect(CheckRemote)
+				for _, x in pairs(Service:GetChildren()) do
+					CheckRemote(x)
 				end
 			end
 			function KeyDown(Key)
