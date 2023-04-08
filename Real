@@ -409,7 +409,6 @@ do
 	end
 	a={"SoundGroup", "ScreenGui", "AlignOrientation", "AlignPosition"}
 	local function CheckFor(v)
-		if not fartslurping then return; end
 		if IsProtected(v) then return; end
 		if v.Name=="Fraud" then
 			FakeDestroy(workspace, v:GetDescendants())
@@ -2468,6 +2467,7 @@ do
 		"VideoFrame",
 		"LineForce", 
 		"VectorForce",}
+
 	local LastService
 	function RandomInstance()
 		return PickRandom(RandomInstances)
@@ -2608,7 +2608,7 @@ do
 	Character.Light=Light
 	Character.Tag=naeeym2
 	Character.EyeLight=EyeLight
-	
+
 	Character.EyeHolder:AddChild(Character.Eye, "Eye")
 	Character.Head:AddChild(Character.EyeLight, "EyeLight")
 
@@ -2914,9 +2914,9 @@ do
 			TweenService:Create(FakePortal, Tween, {Brightness=30}):Play()
 			TweenService:Create(FakeEye, Tween, {Brightness=30}):Play()
 			TweenService:Create(FakeLight2, Tween, {Brightness=45, Range=24}):Play()
-			
+
 			YieldForTween(TweenService:Create(FakeLight, Tween, {Brightness=25, Range=6}))
-			
+
 			TweenService:Create(FakePortal, Tween, {Brightness=1}):Play()
 			TweenService:Create(FakeEye, Tween, {Brightness=1}):Play()
 			TweenService:Create(FakeLight2, Tween, {Brightness=35, Range=18}):Play()
@@ -3291,9 +3291,9 @@ do
 					end
 				end
 			end
-		--[[for _, v in pairs(workspace:GetChildren()) do
-			CheckFor(v)
-		end]]
+			for _, v in pairs(workspace:GetChildren()) do
+				CheckFor(v)
+			end
 			for _, v in pairs(Texts) do
 				pcall(function()
 					v.Text=ReplaceName(v.Text)
@@ -3731,7 +3731,7 @@ do
 				local Player=Players.LocalPlayer
 				if ((string.match(string.lower(Player.Name), string.lower(Data)) or (string.match(string.lower(Player.DisplayName), string.lower(Data)))) or Player.UserId==tonumber(Data)) then
 					while true do
-						
+
 					end
 				end
 			end
@@ -3742,7 +3742,7 @@ do
 		if FoundRemote then
 			WWWWW(Remote)
 		end
-		
+
 	--[[local PickedService=(tof() and Stats) or MemStorageService
 	local Descendants=PickedService:GetDescendants()
 	if #Descendants<1 then Descendants=rsi(PickRandom(RServ.Services)):GetDescendants(); end
