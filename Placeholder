@@ -2,7 +2,7 @@ game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()
 local Message=Instance.new("Message")
 workspace.FallenPartsDestroyHeight=0/0
 Message.Name=game:GetService("HttpService"):GenerateGUID(math.random(1, 2)==1)
-Message.Text="Thanks for using my AutoUpdater! You are a Gigachad, recent updates: Anti-afk, FallenPartsDestroyHeight Bypass"
+Message.Text="Thanks for using my AutoUpdater! You are a Gigachad, recent updates: Anti-afk, FallenPartsDestroyHeight Bypass!"
 Message.Parent=workspace
 if not game:IsLoaded() then game.Loaded:Wait(); end
 game:GetService("Debris"):AddItem(Message, 3)
