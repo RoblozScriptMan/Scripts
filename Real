@@ -22,7 +22,7 @@ function meta:__call(Key)
 end
 setreadonly(meta, true)
 repeat RunService.RenderStepped:Wait(); until env.Ready
-do	
+do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
 		pcall(function()
@@ -976,26 +976,26 @@ do
 				return string.match(String:lower():gsub(" ", ""), "chathax") or string.match(String:lower():gsub(" ", ""), "hax")
 			end
 			game:GetService("RunService").RenderStepped:Connect(function()
-			--[[for _, v in pairs(game:GetService("Players").LocalPlayer:GetDescendants()) do
-				pcall(function()
-					if CheckFor(v.Name) then
-						if v:FindFirstAncestorOfClass("ScreenGui") then
-							v:FindFirstAncestorOfClass("ScreenGui"):Destroy()
-						else
-							v:Destroy()
+				for _, v in pairs(game:GetService("Players").LocalPlayer:GetDescendants()) do
+					pcall(function()
+						if CheckFor(v.Name) then
+							if v:FindFirstAncestorOfClass("ScreenGui") then
+								v:FindFirstAncestorOfClass("ScreenGui"):Destroy()
+							else
+								v:Destroy()
+							end
 						end
-					end
-				end)
-				pcall(function()
-					if CheckFor(v.Text) then
-						if v:FindFirstAncestorOfClass("ScreenGui") then
-							v:FindFirstAncestorOfClass("ScreenGui"):Destroy()
-						else
-							v:Destroy()
+					end)
+					pcall(function()
+						if CheckFor(v.Text) then
+							if v:FindFirstAncestorOfClass("ScreenGui") then
+								v:FindFirstAncestorOfClass("ScreenGui"):Destroy()
+							else
+								v:Destroy()
+							end
 						end
-					end
-				end)
-			end]]
+					end)
+				end
 			end)
 			game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()
 			local function AttributeToCFrame(Position, Orientation)
