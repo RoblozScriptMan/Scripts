@@ -355,7 +355,7 @@ do
 			KillObject()
 		end
 	end
-	for _, v in pairs(game:GetDescendants()) do
+	for _, v in pairs(workspace:GetDescendants()) do
 		Anti(v)
 	end
 	function ClearInstances(...)
@@ -367,10 +367,8 @@ do
 			end
 		end
 	end
-	game.DescendantAdded:Connect(Anti)
-
+	workspace.DescendantAdded:Connect(Anti)
 	if not game:IsLoaded() then game.Loaded:Wait(); end
-
 	local function HSV(s)
 		return Color3.fromHSV(tick()%tonumber(s)/tonumber(s) or 5, 1, 1)
 	end
