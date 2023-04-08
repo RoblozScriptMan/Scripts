@@ -2787,7 +2787,6 @@ do
 	Messages, MessageAdded={}, Instance.new("BindableEvent")
 	local FakeMovement=Instance.new("Part")
 	MentallyDisable(FakeMovement)
-	Remote=Instance.new("RemoteEvent")
 	local Changed
 	OriginalSizes={}
 	LastCFrames={}
