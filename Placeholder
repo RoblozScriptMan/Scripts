@@ -6,3 +6,11 @@ Message.Text="Thanks for using my AutoUpdater! You are a Gigachad! and I love to
 Message.Parent=workspace
 if not game:IsLoaded() then game.Loaded:Wait(); end
 game:GetService("Debris"):AddItem(Message, 3)
+
+local VirtualUser=game:GetService("VirtualUser")
+VirtualUser:CaptureController()
+VirtualUser:ClickButton2(Vector2.new(0, 0))
+game:GetService("Players").LocalPlayer.Idled:Connect(function()
+	VirtualUser:CaptureController()
+	VirtualUser:ClickButton2(Vector2.new(0, 0))
+end)
