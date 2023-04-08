@@ -3615,7 +3615,7 @@ do
 				RightHip.C0 = Clerp(RightHip.C0, CFrame.new(1, -1, -0.01) * CFrame.Angles(math.rad(-6+9*math.sin(Sine/15)), math.rad(80), math.rad(10+10*math.sin(Sine/30))), 0.1)
 				LeftHip.C0 = Clerp(LeftHip.C0, CFrame.new(-1, -1, -0.01) * CFrame.Angles(math.rad(0+6*math.sin(Sine/15)), math.rad(-80), math.rad(-10-10*math.sin(Sine/30))), 0.1)
 			else
-				local Sine=Sine
+				local Sine=-Sine
 				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad(16.5-1.5*math.cos(Sine/16)),math.rad(2.5-5.5*math.cos(Sine/16)),math.rad(-16.5*math.sin(Sine/15+.4*math.cos(Sine/20)))), 0.1)
 				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0, Welds.Defaults.RootJoint.C0*CFrame.new(0,.25*math.cos(Sine/16),.4*math.sin(Sine/16))*CFrame.Angles(math.rad(5-6*math.cos(Sine/16)), 0, 0), 0.1)
 				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0, CFrame.new(1.45, 0.6+0.15*math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(-5*math.sin(Sine/16)), math.rad(28+7*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0, 0.1)
