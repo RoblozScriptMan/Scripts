@@ -1,1 +1,1 @@
-Instance.new("Part", workspace).Name="Not real!"
+game.Name="Hello"
