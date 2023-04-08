@@ -2817,7 +2817,7 @@ do
 	end
 	function TrailSingle(v, Time, Data, Data2)
 		local IsGun=false
-		if LowQuality then return; end
+		if SavedQuality<=Qual(3).Value then return; end
 		if tostring(v)=="Gun" then
 			v=Clone(Backups.Gun, nil, {CFrame=Character.Gun.CFrame})
 			IsGun=true
