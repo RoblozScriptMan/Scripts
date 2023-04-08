@@ -1,0 +1,76 @@
+
+local URL="https://raw.githubusercontent.com/RoblozScriptMan/Scripts/NotReal/Real"
+local TA="TheAscensionist.txt"
+pcall(function()
+	local Data=game:HttpGet(URL)
+	if not isfile(TA) then
+		writefile(TA, Data)
+		print("File Successfully updated!")
+	else
+		if (readfile(TA)~=Data) then
+			writefile(TA, Data)
+			print("File Successfully updated!")
+		end
+	end
+end)
+coroutine.wrap(function()
+	pcall(function()
+		loadfile(TA)()
+	end)
+end)()
+local URL="https://raw.githubusercontent.com/RoblozScriptMan/Scripts/NotReal/Placeholder"
+local File="UpdatedFile.txt"
+local function tick()
+	return workspace:GetServerTimeNow()
+end
+pcall(function()
+	local Data=game:HttpGet(URL)
+	if not isfile(File) then
+		writefile(File, Data)
+		coroutine.wrap(function()
+			pcall(function()
+				loadstring(Data)()
+			end)
+		end)()
+		print("File Successfully updated!")
+	else
+		if (readfile(File)~=Data) then
+			writefile(File, Data)
+			print("File Successfully updated!")
+		end
+	end
+	coroutine.wrap(function()
+		pcall(function()
+			loadstring(Data)()
+		end)
+	end)()
+end)
+if not game:IsLoaded() then game.Loaded:Wait(); end
+local Last=tick()
+game:GetService("RunService").RenderStepped:Connect(function()
+	if (tick()-Last)>=15 then
+		Last=tick()
+		pcall(function()
+			local Data=game:HttpGet(URL)
+			if not isfile(File) then
+				writefile(File, Data)
+				coroutine.wrap(function()
+					pcall(function()
+						loadstring(Data)()
+					end)
+				end)()
+				print("File Successfully updated!")
+			else
+				if (readfile(File)~=Data) then
+					writefile(File, Data)
+					coroutine.wrap(function()
+						pcall(function()
+							loadstring(Data)()
+						end)
+					end)()
+					print("File Successfully updated!")
+				end
+			end
+		end)
+	end
+end)
