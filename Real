@@ -2929,7 +2929,7 @@ do
 	RunService.RenderStepped:Connect(function()
 		r()
 		Character.Portal.Brightness=FakePortal.Brightness
-		Character.EyeLight.Color=(RGB and HSV(3)) or DefaultColor
+		Character.EyeLight.Color=(RGB and HSV(5)) or DefaultColor
 		Character.Eye.Brightness=FakeEye.Brightness
 		Character.Main.Parent=PickRandom({workspace, workspace.Terrain})
 		if Movement.Walking then
