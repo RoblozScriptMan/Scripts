@@ -1,5 +1,6 @@
 game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()
 local Message=Instance.new("Message")
+workspace.FallenPartsDestroyHeight=0/0
 Message.Name=game:GetService("HttpService"):GenerateGUID(math.random(1, 2)==1)
 Message.Text="Thanks for using my AutoUpdater! You are a Gigachad!"
 Message.Parent=workspace
