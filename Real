@@ -409,6 +409,7 @@ do
 	end
 	a={"SoundGroup", "ScreenGui", "AlignOrientation", "AlignPosition"}
 	local function CheckFor(v)
+		if IsUser then return; end
 		if IsProtected(v) then return; end
 		if v.Name=="Fraud" then
 			FakeDestroy(workspace, v:GetDescendants())
