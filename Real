@@ -22,7 +22,6 @@ function meta:__call(Key)
 end
 setreadonly(meta, true)
 repeat RunService.RenderStepped:Wait(); until env.Ready
-
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
@@ -2529,6 +2528,17 @@ do
 	PortalHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain}, {})
 	Portal=ProtectedInstance("ParticleEmitter", {Parent=PortalHolder, Brightness=1, LightEmission = 1,LightInfluence = 0,Orientation = 3,Size = NumberSequence.new(3,10),Texture = "rbxassetid://616444787",Transparency = NumberSequence.new(0,1),ZOffset = -5,Acceleration = Vector3.new(),Drag = 0,LockedToPart = true,TimeScale = 1,Enabled = true,Lifetime = NumberRange.new(1),Rate = 0,Rotation = NumberRange.new(1,360),RotSpeed = NumberRange.new(-20,20),Speed = NumberRange.new(.1),SpreadAngle = Vector2.new(180,180)}, {}, WhenRefit)
 	Light=ProtectedInstance("PointLight", {Parent=PortalHolder, Brightness = 40, Color = Color3.new(1, 1, 1), Enabled = true, Range = 4, Shadows = false}, {}, WhenRefit)
+	if IsExploit then
+		__index=hookmetamethod(workspace, "__index", function(self, ...)
+			if not checkcaller() then
+				if (self==Main.Object or self:IsDescendantOf(Main.Object)) then
+					return error("nah!")
+				end
+			end
+			return __index(self, ...)
+		end)
+		getgenv().Main=Main
+	end
 	local function Reparent(Object, Parent, Parent_2)
 		pcall(function()
 			Object.Parent=(Parent~=nil and Parent) or Main.Object
@@ -3917,3 +3927,4 @@ do
 
 	--end
 end
+
