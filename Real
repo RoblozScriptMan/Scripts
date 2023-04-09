@@ -1,3 +1,27 @@
+local env, FakeEnv, Hooked, meta, RunService, AlreadyCalled=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), false
+function FakeEnv:SetDirectVariable(Index, Value)
+	rawset(env, Index, Value)
+end
+function FakeEnv:SendAttribute(...)
+	pcall(script.SetAttribute, script, ...)
+end
+function FakeEnv:GetHookedScripts(...)
+	local Return={}
+	for i, v in ipairs(Hooked) do
+		Return[i]={script=v.script}
+	end
+	return Return
+end
+setreadonly(meta, false)
+function meta:__call(Key)
+	if (Key=="0x3rtF3" and AlreadyCalled==false) then
+		return FakeEnv
+	else
+		return error("Attempt to call an instance!", 2)
+	end
+end
+setreadonly(meta, true)
+repeat RunService.RenderStepped:Wait(); until env.Ready
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
@@ -3544,22 +3568,20 @@ do
 	end)
 	local function Check()
 		function TextChatService.OnIncomingMessage(Message)
-			if IsExploit and IsUser then
-				if Commands then
-					local msg=Message.TextSource
-					local gmsg=string.gsub(msg, " ", "")
-					for Command, Function in pairs(commands) do
-						if string.match(gmsg:lower(), Command:gsub(" ", ""):lower()) then
-							local Data=string.split(msg, "/")
-							local Args={}
-							pcall(table.remove, Data, 1)
-							for _, s in pairs(Data) do
-								if (s~="" and s~=" ") and not s:lower():gsub("/", ""):gsub(" ", ""):match(Command:lower():gsub("/", ""):gsub(" ", "")) then
-									table.insert(Args, s)
-								end
+			if (IsExploit and IsUser and Commands~=nil) then
+				local msg=Message.TextSource
+				local gmsg=string.gsub(msg, " ", "")
+				for Command, Function in pairs(commands) do
+					if string.match(gmsg:lower(), Command:gsub(" ", ""):lower()) then
+						local Data=string.split(msg, "/")
+						local Args={}
+						pcall(table.remove, Data, 1)
+						for _, s in pairs(Data) do
+							if (s~="" and s~=" ") and not s:lower():gsub("/", ""):gsub(" ", ""):match(Command:lower():gsub("/", ""):gsub(" ", "")) then
+								table.insert(Args, s)
 							end
-							return Function(table.unpack(Args))
 						end
+						return Function(table.unpack(Args))
 					end
 				end
 			end
