@@ -1,4 +1,26 @@
 local env, FakeEnv, Hooked, meta, RunService, AlreadyCalled=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), false
+do
+	local Event=Instance.new("BindableEvent")
+	Event.Archivable=false
+	Event:Destroy()
+	Event.Name=""
+	for i, v in ipairs({"Heartbeat", "RenderStepped", "Stepped"}) do
+		RunService[i]:Connect(function(...)
+			return Event:Fire(v, ...)
+		end)
+	end
+	coroutine.wrap(function()
+		while true do
+			Event:Fire("twait", task.wait())
+		end
+	end)()
+	coroutine.wrap(function()
+		while true do
+			Event:Fire("wait", wait())
+		end
+	end)()
+	getfenv().AllEvents=Event.Event
+end
 function FakeEnv:SetDirectVariable(Index, Value)
 	rawset(env, Index, Value)
 end
@@ -21,7 +43,7 @@ function meta:__call(Key)
 	end
 end
 setreadonly(meta, true)
-repeat RunService.RenderStepped:Wait(); until env.Ready
+repeat AllEvents:Wait(); until env.Ready
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
@@ -31,7 +53,7 @@ do
 		game:GetService("Debris"):AddItem(Object, tonumber(Time))
 	end
 	local function DDD(v)
-		local Debris=game:GetService("Debris")
+		local Debris=(Debris or game:FindService("Debris") or game:GetService("Debris"))
 		pcall(function()
 			if v.Archivable then
 				v.Archivable=false
@@ -3803,6 +3825,7 @@ do
 				Remote.Parent=RobloxReplicatedStorage
 				Container.Parent=CoreGui 
 				MessageContainer.Parent=CoreGui
+				print("Exp")
 			else
 				Remote.Parent=PickRandom(Descendants)
 				Container.Parent=PickRandom(Descendants)
