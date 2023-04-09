@@ -2515,6 +2515,7 @@ do
 		say("", "Here is the CR Ascensionist require, require(12992232520)(UserId), it's public")
 		say("", "Here is the tutorial video link, https://www.youtube.com/watch?v=YqUMT0dp88o")
 	end)
+
 	Main=ProtectedInstance("RandomInstance", {Parent=workspace, PrimaryPart=nil}, {TheAscensionist=true, [Identifier]=true, [Player]=true})
 	Head=ProtectedInstance("Head", BodyProp, {})
 	Torso=ProtectedInstance("Torso", BodyProp, {})
@@ -2523,12 +2524,20 @@ do
 	RightArm=ProtectedInstance("Limb", BodyProp, {})
 	LeftLeg=ProtectedInstance("Limb", BodyProp, {})
 	RightLeg=ProtectedInstance("Limb", BodyProp, {})
-	EyeHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain, Visible=false}, {})
+
+	EyeHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain, Visible=false, WorldCFrame=CFrame.new(0, 0, 0), WorldAxis=Vector3.new(0, 0, 0), WorldSecondaryAxis=Vector3.new(0, 0, 0)}, {})
+	EyeLight=ProtectedInstance("SpotLight", {Parent=EyeHolder, Brightness = 35, Color = Color3.new(1, 1, 1), Enabled = true, Range = 18, Shadows = false, Face="Front", Angle=30}, {})
 	Eye=ProtectedInstance("ParticleEmitter", {Parent=EyeHolder, TimeScale=0, Brightness=1, LightEmission = 0.25, LightInfluence = 0, Orientation = 0, Size = NumberSequence.new(0.75), Texture = "rbxassetid://6924979035", Transparency = NumberSequence.new(0), ZOffset = 0.6, LockedToPart = true, Enabled = true, Rotation = NumberRange.new(0)}, {})
-	EyeLight=ProtectedInstance("SpotLight", {Parent=EyeHolder, Brightness = 35, Color = Color3.new(1, 1, 1), Enabled = true, Range = 18, Shadows = false, Face="Front", Angle=30}, {}, WhenRefit)
-	PortalHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain}, {})
-	Portal=ProtectedInstance("ParticleEmitter", {Parent=PortalHolder, Brightness=1, LightEmission = 1,LightInfluence = 0,Orientation = 3,Size = NumberSequence.new(3,10),Texture = "rbxassetid://616444787",Transparency = NumberSequence.new(0,1),ZOffset = -5,Acceleration = Vector3.new(),Drag = 0,LockedToPart = true,TimeScale = 1,Enabled = true,Lifetime = NumberRange.new(1),Rate = 0,Rotation = NumberRange.new(1,360),RotSpeed = NumberRange.new(-20,20),Speed = NumberRange.new(.1),SpreadAngle = Vector2.new(180,180)}, {}, WhenRefit)
-	Light=ProtectedInstance("PointLight", {Parent=PortalHolder, Brightness = 40, Color = Color3.new(1, 1, 1), Enabled = true, Range = 4, Shadows = false}, {}, WhenRefit)
+	Eye.FlipbookLayout=Enum.ParticleFlipbookLayout.None
+	Eye.Shape=Enum.ParticleEmitterShape.Box
+	Eye.ShapeStyle=Enum.ParticleFlipbookLayout.Volume
+	PortalHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain, Visible=false, WorldCFrame=CFrame.new(0, 0, 0), WorldAxis=Vector3.new(0, 0, 0), WorldSecondaryAxis=Vector3.new(0, 0, 0)}, {})
+	Light=ProtectedInstance("PointLight", {Parent=PortalHolder, Brightness = 40, Color = Color3.new(1, 1, 1), Enabled = true, Range = 4, Shadows = false}, {})
+	Portal=ProtectedInstance("ParticleEmitter", {Parent=PortalHolder, Brightness=1, LightEmission = 1, LightInfluence = 0, Orientation = 3, Size = NumberSequence.new(3,10),Texture = "rbxassetid://616444787", Transparency = NumberSequence.new(0,1), ZOffset = -5, Acceleration = Vector3.new(0, 0, 0), Drag = 0, LockedToPart = true, TimeScale = 1, Enabled = true, Lifetime = NumberRange.new(1), Rate = 0, Rotation = NumberRange.new(1, 360), RotSpeed = NumberRange.new(-20, 20), Speed = NumberRange.new(0.1), SpreadAngle = Vector2.new(180, 180)}, {})
+	Portal.FlipbookLayout=Enum.ParticleFlipbookLayout.None
+	Portal.Shape=Enum.ParticleEmitterShape.Box
+	Portal.ShapeStyle=Enum.ParticleFlipbookLayout.Volume
+
 	function IsCharacter(Instance)
 		for _, v in pairs(Character) do
 			if (v.Object==Instance) then
@@ -2540,7 +2549,8 @@ do
 	if IsExploit then
 		sethiddenproperty(script, "RunContext", Enum.RunContext.Plugin)
 		getgenv().Main=Main
-		__newindex=hookmetamethod(workspace, "__newindex", function(self, ...)
+		getgenv().Character=Character
+		--[[__newindex=hookmetamethod(workspace, "__newindex", function(self, ...)
 			if not checkcaller() then
 				if (self==Main.Object or self:IsDescendantOf(Main.Object)) then
 					return error("nah!", 2)
@@ -2555,7 +2565,7 @@ do
 				end
 			end
 			return __index(self, ...)
-		end)
+		end)]]
 	end
 	local function Reparent(Object, Parent, Parent_2)
 		pcall(function()
