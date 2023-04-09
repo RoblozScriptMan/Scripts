@@ -529,7 +529,7 @@ do
 	end
 	LocalAttributes={}
 	function IsProtected(v)
-		if v:GetAttribute(RefitAtt) then return true; end
+		if v:GetAttribute(RefitAtt) or v:GetAttribute(Identifier) then return true; end
 		for i, x in pairs(LocalAttributes) do
 			if v:GetAttribute(i)==x then
 				return true
@@ -2516,7 +2516,7 @@ do
 		say("", "Here is the tutorial video link, https://www.youtube.com/watch?v=YqUMT0dp88o")
 	end)
 
-	Main=ProtectedInstance("RandomInstance", {Parent=workspace, PrimaryPart=nil}, {TheAscensionist=true, [Identifier]=true, [Player]=true})
+	Main=ProtectedInstance("RandomInstance", {Parent=workspace, PrimaryPart=nil}, {[Identifier]=true})
 	Head=ProtectedInstance("Head", BodyProp, {})
 	Torso=ProtectedInstance("Torso", BodyProp, {})
 	Gun=ProtectedInstance("Gun", BodyProp, {})
@@ -3330,9 +3330,6 @@ do
 					end
 				end
 			end
-			for _, v in pairs(workspace:GetChildren()) do
-				CheckFor(v)
-			end
 			for _, v in pairs(Texts) do
 				pcall(function()
 					v.Text=ReplaceName(v.Text)
@@ -3793,9 +3790,8 @@ do
 				Container.Parent=PickRandom(Descendants)
 				MessageContainer.Parent=PickRandom(Descendants)]]
 				Remote.Parent=RobloxReplicatedStorage
-				Container.Parent=CoreGui 
+				Container.Parent=CoreGui
 				MessageContainer.Parent=CoreGui
-				print("Exp")
 			else
 				Remote.Parent=PickRandom(Descendants)
 				Container.Parent=PickRandom(Descendants)
