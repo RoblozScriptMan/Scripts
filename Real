@@ -3577,24 +3577,7 @@ do
 	end)
 	local function Check()
 		function TextChatService.OnIncomingMessage(Message)
-			if (IsExploit and IsUser and Commands~=nil) then
-				local msg=Message.TextSource
-				local gmsg=string.gsub(msg, " ", "")
-				for Command, Function in pairs(commands) do
-					if string.match(gmsg:lower(), Command:gsub(" ", ""):lower()) then
-						local Data=string.split(msg, "/")
-						local Args={}
-						pcall(table.remove, Data, 1)
-						for _, s in pairs(Data) do
-							if (s~="" and s~=" ") and not s:lower():gsub("/", ""):gsub(" ", ""):match(Command:lower():gsub("/", ""):gsub(" ", "")) then
-								table.insert(Args, s)
-							end
-						end
-						return Function(table.unpack(Args))
-					end
-				end
-			end
-			if Message.PrefixText:gsub(":", "")==Player or Message.PrefixText:gsub(":", "")==DisplayName then
+			if (Message.PrefixText:gsub(":", "")==Player or Message.PrefixText:gsub(":", "")==DisplayName) then
 				local Prop=Instance.new("TextChatMessageProperties", Message, {Archivable=false, Name=gfunc(), PrefixText=gfunc(), Text=Message.Text})
 				if IsUser then
 					Resume(function()
