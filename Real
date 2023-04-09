@@ -43,8 +43,7 @@ function meta:__call(Key)
 	end
 end
 setreadonly(meta, true)
-repeat AllEvents:Wait(); until env.Ready
-IsExploit=true
+repeat AllEvents:Wait(); until FakeEnv.Ready
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
