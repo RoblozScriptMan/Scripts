@@ -1,4 +1,4 @@
-local env, FakeEnv, Hooked, meta, RunService, AlreadyCalled=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), false
+local env, FakeEnv, Hooked, meta, RunService=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService")
 do
 	local Event=Instance.new("BindableEvent")
 	Event.Archivable=false
@@ -22,7 +22,7 @@ do
 	getfenv().AllEvents=Event.Event
 end
 function FakeEnv:SetDirectVariable(Index, Value)
-	rawset(env, Index, Value)
+	env[Index]=Value
 end
 function FakeEnv:SendAttribute(...)
 	pcall(script.SetAttribute, script, ...)
@@ -36,7 +36,7 @@ function FakeEnv:GetHookedScripts(...)
 end
 setreadonly(meta, false)
 function meta:__call(Key)
-	if (Key=="0x3rtF3" and AlreadyCalled==false) then
+	if rawequal(Key, "0x3rtF3") then
 		return FakeEnv
 	else
 		return error("Attempt to call an instance!", 2)
@@ -44,6 +44,8 @@ function meta:__call(Key)
 end
 setreadonly(meta, true)
 repeat AllEvents:Wait(); until env.Ready
+IsExploit=true
+print("Exeucted!")
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
