@@ -1,4 +1,4 @@
-local env, FakeEnv, Hooked, meta, RunService=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService")
+local env, FakeEnv, Hooked, meta, RunService, IsExploit=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), true
 function FakeEnv:SetDirectVariable(...)
 	pcall(rawset, FakeEnv, ...)
 	pcall(rawset, env, ...)
@@ -23,10 +23,8 @@ function meta:__call(Key)
 end
 setreadonly(meta, true)
 repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
-IsExploit=true
 do
 	local Identifier=script:GetAttribute("Identifier")
-	print(Identifier)
 	local function Debr(Object, Time)
 		pcall(function()
 			Object.Archivable=false
