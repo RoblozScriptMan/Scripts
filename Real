@@ -3612,7 +3612,7 @@ do
 				RootJoint.C0 = Clerp(RootJoint.C0, RootJointC0 * CFrame.new(0, 0, 0.5 * math.sin(Sine/30)) * CFrame.Angles(math.rad(-5+7.5*math.cos(Sine/30)), math.rad(-10*math.cos(Sine/30)), math.rad(0)), 0.1)
 				Neck.C0 = Clerp(Neck.C0, NeckC0 * CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(-15*math.cos(Sine/30)), math.rad(0)), 0.1)
 				RightShoulder.C0 = Clerp(RightShoulder.C0, CFrame.new(1.5, 0.5, 0) * CFrame.Angles(math.rad(135+-35*math.cos(Sine/30)), math.rad(0), math.rad(25+15*math.cos(Sine/30))) * RightShoulderC0, 0.1)
-				LeftShoulder.C0 = Clerp(LeftShoulder.C0, CFrame.new(-1.5, 0.5, 0) * CFrame.Angles(math.rad(5+10*math.sin(Sine/30)), math.rad(5+10*math.sin(Sine/30)), math.rad(-25+10*math.sin(Sine/30))) * LeftShoulderC0, 0.1)
+				LeftShoulder.C0 = Clerp(LeftShoulder.C0, CFrame.new(-1.5, 0.5, 0) * CFrame.Angles(math.rad(5-10*math.sin(Sine/30)), math.rad(5), math.rad(-25+10*math.sin(Sine/30))) * LeftShoulderC0, 0.1)
 				RightHip.C0 = Clerp(RightHip.C0, CFrame.new(1, -1, -0.01) * CFrame.Angles(math.rad(-6+9*math.sin(Sine/15)), math.rad(80), math.rad(10+10*math.sin(Sine/30))), 0.1)
 				LeftHip.C0 = Clerp(LeftHip.C0, CFrame.new(-1, -1, -0.01) * CFrame.Angles(math.rad(0+6*math.sin(Sine/15)), math.rad(-80), math.rad(-10-10*math.sin(Sine/30))), 0.1)
 			else
