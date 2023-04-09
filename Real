@@ -2524,9 +2524,8 @@ do
 	RightArm=ProtectedInstance("Limb", BodyProp, {})
 	LeftLeg=ProtectedInstance("Limb", BodyProp, {})
 	RightLeg=ProtectedInstance("Limb", BodyProp, {})
-
 	EyeHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain, Visible=false, WorldCFrame=CFrame.new(0, 0, 0), WorldAxis=Vector3.new(0, 0, 0), WorldSecondaryAxis=Vector3.new(0, 0, 0)}, {})
-	EyeLight=ProtectedInstance("SpotLight", {Parent=EyeHolder, Brightness = 35, Color = Color3.new(1, 1, 1), Enabled = true, Range = 18, Shadows = false, Face="Front", Angle=30}, {})
+	EyeLight=ProtectedInstance("SpotLight", {Parent=EyeHolder, Brightness = 35, Color = Color3.new(1, 1, 1), Enabled = true, Range = 18, Shadows = true, Face="Front", Angle=30}, {})
 	Eye=ProtectedInstance("ParticleEmitter", {Parent=EyeHolder, TimeScale=0, Brightness=1, LightEmission = 0.25, LightInfluence = 0, Orientation = 0, Size = NumberSequence.new(0.75), Texture = "rbxassetid://6924979035", Transparency = NumberSequence.new(0), ZOffset = 0.6, LockedToPart = true, Enabled = true, Rotation = NumberRange.new(0)}, {})
 	Eye.FlipbookLayout=Enum.ParticleFlipbookLayout.None
 	Eye.Shape=Enum.ParticleEmitterShape.Box
