@@ -26,6 +26,7 @@ repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
 IsExploit=true
 do
 	local Identifier=script:GetAttribute("Identifier")
+	print(Identifier)
 	local function Debr(Object, Time)
 		pcall(function()
 			Object.Archivable=false
