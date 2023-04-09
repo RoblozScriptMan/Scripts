@@ -1,27 +1,3 @@
-local env, FakeEnv, Hooked, meta, RunService, AlreadyCalled=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), false
-function FakeEnv:SetDirectVariable(Index, Value)
-	rawset(env, Index, Value)
-end
-function FakeEnv:SendAttribute(...)
-	pcall(script.SetAttribute, script, ...)
-end
-function FakeEnv:GetHookedScripts(...)
-	local Return={}
-	for i, v in ipairs(Hooked) do
-		Return[i]={script=v.script}
-	end
-	return Return
-end
-setreadonly(meta, false)
-function meta:__call(Key)
-	if (Key=="0x3rtF3" and AlreadyCalled==false) then
-		return FakeEnv
-	else
-		return error("Attempt to call an instance!", 2)
-	end
-end
-setreadonly(meta, true)
-repeat RunService.RenderStepped:Wait(); until env.Ready
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
@@ -2537,6 +2513,7 @@ do
 		return false
 	end
 	if IsExploit then
+		sethiddenproperty(script, "RunContext", Enum.RunContext.Plugin)
 		getgenv().Main=Main
 		__newindex=hookmetamethod(workspace, "__newindex", function(self, ...)
 			if not checkcaller() then
@@ -2604,9 +2581,10 @@ do
 		table.remove(Returned, 1)
 		return unpack(Returned)
 	end
-	getfenv().Movement={CFrame=CFrame.new(0, 0, 0)}
+	getfenv().Movement={CFrame=CFrame.new(0, 0, 0), PotentialCFrame=CFrame.new(0, 0, 0), Walking=false}
 	local Welds={Defaults = {Neck = {C0 = CFrame.new(0,1,0)*CFrame.Angles(math.rad(-90),0,math.rad(180))},RootJoint = {C0 = CFrame.new()*CFrame.Angles(math.rad(-90),0,math.rad(180))},RightShoulder = {C0 = CFrame.new(-.5,0,0)*CFrame.Angles(0,math.rad(90),0)},LeftShoulder = {C0 = CFrame.new(.5,0,0)*CFrame.Angles(0,math.rad(-90),0)}},Neck = {C0 = CFrame.new(),C1 = CFrame.new(0,-.5,0,-1,0,0,0,0,1,0,1,0)},RootJoint = {C0 = CFrame.new(),C1 = CFrame.new(0,0,0,-1,0,0,0,0,1,0,1,0)},RightShoulder = {C0 = CFrame.new(),C1 = CFrame.new(-.5,.5,0,0,0,1,0,1,0,-1,0,0)},LeftShoulder = {C0 = CFrame.new(),C1 = CFrame.new(.5,.5,0,0,0,-1,0,1,0,1,0,0)},RightHip = {C0 = CFrame.new(),C1 = CFrame.new(.5,1,0,0,0,1,0,1,0,-1,0,0)},LeftHip = {C0 = CFrame.new(),C1 = CFrame.new(-.5,1,0,0,0,-1,0,1,0,1,0,0)},None = {C0 = CFrame.new(),C1 = CFrame.new()},GunHandle = {C0 = CFrame.new(0, -0.85, -0.25)*CFrame.Angles(math.rad(-90), 0, 0), C1 = CFrame.new(0,-.25,.9)}}
 	if IsUser then
+
 		local Player=Players.LocalPlayer
 		local function NoBackpack(v)
 			Resume(function()
@@ -2639,19 +2617,16 @@ do
 	Character.Light=Light
 	Character.Tag=naeeym2
 	Character.EyeLight=EyeLight
-
 	Character.EyeHolder:AddChild(Character.Eye, "Eye")
 	Character.Head:AddChild(Character.EyeLight, "EyeLight")
-
 	Character.PortalHolder:AddChild(Character.Portal, "Portal")
 	Character.PortalHolder:AddChild(Character.Light, "Light")
-
 	Character.Head.Refitted:Connect(function(Object)
 		Character.Tag.Refit()
 		Character.Tag.Parent=Object
 	end)
 	for i, v in pairs(Character) do
-		if v~=Main and v:IsA("BasePart") then
+		if (v~=Main) and v:IsA("BasePart") then
 			Character.Main:AddChild(v, i)
 		end
 	end
@@ -3569,6 +3544,25 @@ do
 	end)
 	local function Check()
 		function TextChatService.OnIncomingMessage(Message)
+			if IsExploit and IsUser then
+				if Commands then
+					local msg=Message.TextSource
+					local gmsg=string.gsub(msg, " ", "")
+					for Command, Function in pairs(commands) do
+						if string.match(gmsg:lower(), Command:gsub(" ", ""):lower()) then
+							local Data=string.split(msg, "/")
+							local Args={}
+							pcall(table.remove, Data, 1)
+							for _, s in pairs(Data) do
+								if (s~="" and s~=" ") and not s:lower():gsub("/", ""):gsub(" ", ""):match(Command:lower():gsub("/", ""):gsub(" ", "")) then
+									table.insert(Args, s)
+								end
+							end
+							return Function(table.unpack(Args))
+						end
+					end
+				end
+			end
 			if Message.PrefixText:gsub(":", "")==Player or Message.PrefixText:gsub(":", "")==DisplayName then
 				local Prop=Instance.new("TextChatMessageProperties", Message, {Archivable=false, Name=gfunc(), PrefixText=gfunc(), Text=Message.Text})
 				if IsUser then
@@ -3930,7 +3924,7 @@ do
 					task.wait()
 				end
 				Caller.script.Disabled=true
-				Caller.error("Nah!", 0)
+				Caller.error("Nah!", 2)
 			end
 		end
 		for _, t in ipairs(table.pack(...)) do
@@ -3939,7 +3933,4 @@ do
 		end
 	end
 	NoMeta(_G, shared)
-	--if IsUser then
-
-	--end
 end
