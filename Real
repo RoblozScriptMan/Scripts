@@ -23,6 +23,7 @@ function meta:__call(Key)
 end
 setreadonly(meta, true)
 repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
+IsExploit=true
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
