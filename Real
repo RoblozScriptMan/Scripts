@@ -1,26 +1,4 @@
 local env, FakeEnv, Hooked, meta, RunService=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService")
-do
-	local Event=Instance.new("BindableEvent")
-	Event.Archivable=false
-	Event:Destroy()
-	Event.Name=""
-	for i, v in ipairs({"Heartbeat", "RenderStepped", "Stepped"}) do
-		RunService[i]:Connect(function(...)
-			return Event:Fire(v, ...)
-		end)
-	end
-	coroutine.wrap(function()
-		while true do
-			Event:Fire("twait", task.wait())
-		end
-	end)()
-	coroutine.wrap(function()
-		while true do
-			Event:Fire("wait", wait())
-		end
-	end)()
-	getfenv().AllEvents=Event.Event
-end
 function FakeEnv:SetDirectVariable(...)
 	pcall(rawset, FakeEnv, ...)
 	pcall(rawset, env, ...)
@@ -44,7 +22,7 @@ function meta:__call(Key)
 	end
 end
 setreadonly(meta, true)
-repeat AllEvents:Wait(); until FakeEnv.Ready
+repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
