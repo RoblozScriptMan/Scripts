@@ -23,6 +23,7 @@ do
 end
 function FakeEnv:SetDirectVariable(...)
 	pcall(rawset, FakeEnv, ...)
+	pcall(rawset, env, ...)
 end
 function FakeEnv:SendAttribute(...)
 	pcall(script.SetAttribute, script, ...)
