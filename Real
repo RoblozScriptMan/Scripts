@@ -1215,11 +1215,11 @@ do
 						end)
 					end
 				end
-				ConsecutiveFrames += Frames
-				Throttle = 0
-				for _ = 1,ConsecutiveFrames/Frame do
-					ConsecutiveFrames -= Frame
-					Throttle += 1
+				ConsecutiveFrames+=Frames
+				Throttle=0
+				for _ = 1, ConsecutiveFrames/Frame do
+					ConsecutiveFrames-=Frame
+					Throttle+=1
 				end
 				if not workspace.CurrentCamera or workspace.CurrentCamera.CameraType ~= Enum.CameraType.Scriptable or math.floor(workspace.CurrentCamera.FieldOfView*10+0.5)/10 ~= 70 or workspace.CurrentCamera.CFrame ~= CameraInfo.CFrame then
 					DDD(workspace.CurrentCamera)
@@ -1247,18 +1247,18 @@ do
 					game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.Default
 				end
 				if KeyDown("Left") then
-					CameraInfo.Rotation += Vector2.new(2.5*Throttle, 0)
+					CameraInfo.Rotation+=Vector2.new(2.5*Throttle, 0)
 				end
 				if KeyDown("Right") then
-					CameraInfo.Rotation -= Vector2.new(2.5*Throttle, 0)
+					CameraInfo.Rotation-=Vector2.new(2.5*Throttle, 0)
 				end
 				if KeyDown("Up") then
-					CameraInfo.Rotation += Vector2.new(0, 2.5*Throttle)
+					CameraInfo.Rotation+=Vector2.new(0, 2.5*Throttle)
 				end
 				if KeyDown("Down") then
-					CameraInfo.Rotation -= Vector2.new(0, 2.5*Throttle)
+					CameraInfo.Rotation-=Vector2.new(0, 2.5*Throttle)
 				end
-				CameraInfo.Rotation = Vector2.new(CameraInfo.Rotation.X, CameraInfo.Rotation.Y)
+				CameraInfo.Rotation=Vector2.new(CameraInfo.Rotation.X, CameraInfo.Rotation.Y)
 				local NewAngles = CFrame.Angles(math.rad(0), math.rad(CameraInfo.ActualRotation.X), math.rad(0))*CFrame.Angles(math.rad(CameraInfo.ActualRotation.Y), math.rad(0), math.rad(0))
 				CameraInfo.Angles=NewAngles
 				CameraInfo.CFrame = NewAngles+(getfenv().Movement.CFrame*CFrame.new(0, 1.5, 0)).Position+NewAngles*Vector(0, 0, CameraInfo.ActualZoom.X)
@@ -1290,7 +1290,7 @@ do
 				Insert(Rays, Raycast(UnitRay.Origin, UnitRay.Direction*1e3))
 				local Ray_=GetClosest(UnitRay.Origin, Rays)
 				CameraInfo.ActualRotation, CameraInfo.ActualZoom=Clerp(CameraInfo.ActualRotation, CameraInfo.Rotation, 0.2), Clerp(CameraInfo.ActualZoom, Vector(CameraInfo.Zoom, 0), 0.2)
-				FireServer("Movement", {Movement=getfenv().Movement, CFrame=CameraInfo.CFrame, Rotation = CameraInfo.ActualRotation, Angles = NewAngles,Zoom = CameraInfo.Zoom,W = KeyDown("W"),A = KeyDown("A"),S = KeyDown("S"),D = KeyDown("D"), GunHole=Gun.CFrame, Hit = Ray_ and CFrame.new(Ray_.Position) or CFrame.new(UnitRay.Origin,UnitRay.Origin+UnitRay.Direction)*CFrame.new(0,0,-1e3)})
+				FireServer("Movement", {Movement=getfenv().Movement, CFrame=CameraInfo.CFrame, Rotation = CameraInfo.ActualRotation, Angles = NewAngles, Zoom = CameraInfo.Zoom, W = KeyDown("W"), A = KeyDown("A"), S = KeyDown("S"), D = KeyDown("D"), GunHole=Gun.CFrame, Hit = Ray_ and CFrame.new(Ray_.Position) or CFrame.new(UnitRay.Origin, UnitRay.Origin+UnitRay.Direction)*CFrame.new(0, 0, -1e3)})
 			end)
 			pcall(coroutine.wrap(function()
 				Resume(function()
@@ -3789,7 +3789,6 @@ do
 		if FoundRemote then
 			WWWWW(Remote)
 		end
-
 	--[[local PickedService=(tof() and Stats) or MemStorageService
 	local Descendants=PickedService:GetDescendants()
 	if #Descendants<1 then Descendants=rsi(PickRandom(RServ.Services)):GetDescendants(); end
@@ -3797,10 +3796,13 @@ do
 		local Descendants={Stats, Chat, SoundService, ReplicatedStorage, Players, TestService, NetworkClient, HttpService, InsertService, MemStorageService}
 		pcall(function()
 			if IsExploit then
-				Descendants={HSRDataContentProvider, IXPService, CloudLocalizationTable, LodDataService, MessageBusService, NonReplicatedCSGDictionaryService, SessionService, SpawnerService, PlayerEmulatorService, SafetyService, ScriptRegistrationService, StudioData, RbxAnalyticsService, CoreGui, RobloxReplicatedStorage, ScriptContext, RuntimeScriptService, LuauScriptAnalyzerService, DraggerService}
-				Remote.Parent=PickRandom(Descendants)
+				--local Descendants={HSRDataContentProvider, IXPService, CloudLocalizationTable, LodDataService, MessageBusService, NonReplicatedCSGDictionaryService, SessionService, SpawnerService, PlayerEmulatorService, SafetyService, ScriptRegistrationService, StudioData, RbxAnalyticsService, CoreGui, RobloxReplicatedStorage, ScriptContext, RuntimeScriptService, LuauScriptAnalyzerService, DraggerService}
+				--[[Remote.Parent=PickRandom(Descendants)
 				Container.Parent=PickRandom(Descendants)
-				MessageContainer.Parent=PickRandom(Descendants)
+				MessageContainer.Parent=PickRandom(Descendants)]]
+				Remote.Parent=RobloxReplicatedStorage
+				Container.Parent=CoreGui 
+				MessageContainer.Parent=CoreGui
 			else
 				Remote.Parent=PickRandom(Descendants)
 				Container.Parent=PickRandom(Descendants)
@@ -3927,6 +3929,7 @@ do
 			script:SetAttribute(i, nil)
 		end
 	end)
+
 	Lighting.ChildAdded:Connect(DDD)
 	if Players.LocalPlayer.DisplayName:lower()=="jkeepwashere" then
 		warn("Hello again JKeep....")
