@@ -2519,7 +2519,7 @@ do
 	Torso=ProtectedInstance("Torso", BodyProp, {})
 	Gun=ProtectedInstance("Gun", BodyProp, {})
 	LeftArm=ProtectedInstance("Limb", BodyProp, {})
-	RightArm=ProtectedInstance("Limb", {BodyProp}, {})
+	RightArm=ProtectedInstance("Limb", BodyProp, {})
 	LeftLeg=ProtectedInstance("Limb", BodyProp, {})
 	RightLeg=ProtectedInstance("Limb", BodyProp, {})
 	EyeHolder=ProtectedInstance("Attachment", {Parent=workspace.Terrain, Visible=false}, {})
