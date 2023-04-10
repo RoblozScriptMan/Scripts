@@ -6,6 +6,7 @@ end
 function FakeEnv:SendAttribute(...)
 	pcall(script.SetAttribute, script, ...)
 end
+
 function FakeEnv:GetHookedScripts(...)
 	local Return={}
 	for i, v in ipairs(Hooked) do
@@ -24,6 +25,7 @@ end
 setreadonly(meta, true)
 repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
 do
+	getfenv().Movement={CFrame=CFrame.new(0, 0, 0), PotentialCFrame=CFrame.new(0, 0, 0), Walking=false}
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
 		pcall(function()
@@ -2627,7 +2629,6 @@ do
 		table.remove(Returned, 1)
 		return unpack(Returned)
 	end
-	getfenv().Movement={CFrame=CFrame.new(0, 0, 0), PotentialCFrame=CFrame.new(0, 0, 0), Walking=false}
 	local Welds={Defaults = {Neck = {C0 = CFrame.new(0,1,0)*CFrame.Angles(math.rad(-90),0,math.rad(180))},RootJoint = {C0 = CFrame.new()*CFrame.Angles(math.rad(-90),0,math.rad(180))},RightShoulder = {C0 = CFrame.new(-.5,0,0)*CFrame.Angles(0,math.rad(90),0)},LeftShoulder = {C0 = CFrame.new(.5,0,0)*CFrame.Angles(0,math.rad(-90),0)}},Neck = {C0 = CFrame.new(),C1 = CFrame.new(0,-.5,0,-1,0,0,0,0,1,0,1,0)},RootJoint = {C0 = CFrame.new(),C1 = CFrame.new(0,0,0,-1,0,0,0,0,1,0,1,0)},RightShoulder = {C0 = CFrame.new(),C1 = CFrame.new(-.5,.5,0,0,0,1,0,1,0,-1,0,0)},LeftShoulder = {C0 = CFrame.new(),C1 = CFrame.new(.5,.5,0,0,0,-1,0,1,0,1,0,0)},RightHip = {C0 = CFrame.new(),C1 = CFrame.new(.5,1,0,0,0,1,0,1,0,-1,0,0)},LeftHip = {C0 = CFrame.new(),C1 = CFrame.new(-.5,1,0,0,0,-1,0,1,0,1,0,0)},None = {C0 = CFrame.new(),C1 = CFrame.new()},GunHandle = {C0 = CFrame.new(0, -0.85, -0.25)*CFrame.Angles(math.rad(-90), 0, 0), C1 = CFrame.new(0,-.25,.9)}}
 	if IsUser then
 
