@@ -2518,6 +2518,7 @@ do
 	Resume(function() Channels = TextChatService:WaitForChild("TextChannels", math.huge) ChatSystem = Channels:WaitForChild("RBXSystem", math.huge) end)
 	Resume(function()
 		task.wait(1)
+		if not ChatSystem then return; end
 		local function say(u: string, msg: string)
 			local DefaultColor=Color3.new(1, 1, 1)
 			local Hex=([[<font color='#DefaultColor'>%s<font color='#DefaultColor'>%s</font>: %s</font>]]):gsub("DefaultColor", tostring(Color3.new(1, 1, 1):ToHex()))
