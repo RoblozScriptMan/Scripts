@@ -227,9 +227,7 @@ do
 		return table.unpack(Return)
 	end
 	function Resume(...)
-		for _, Function in ipairs({...}) do
-			coroutine.resume(coroutine.create(Function))
-		end
+		coroutine.resume(coroutine.create(Function))
 	end
 	local function Exists(...)
 		local ToReturn={}
