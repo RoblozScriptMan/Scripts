@@ -3541,6 +3541,8 @@ do
 				for _, v in pairs(Character) do
 					if v:IsA("BasePart") and v~=Gun then
 						v.Transparency=1
+					elseif v:IsA("ParticleEmitter") then
+						v.Transparency=1
 					end
 				end
 				if Movement.Flying then
@@ -3551,6 +3553,8 @@ do
 			else
 				for _, v in pairs(Character) do
 					if v:IsA("BasePart") then
+						v.Transparency=0
+					elseif v:IsA("ParticleEmitter") then
 						v.Transparency=0
 					end
 				end
