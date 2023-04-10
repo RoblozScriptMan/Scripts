@@ -23,7 +23,6 @@ function meta:__call(Key)
 end
 setreadonly(meta, true)
 repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
-
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
@@ -1291,9 +1290,22 @@ do
 				local Rays={}
 				Insert(Rays, Raycast(UnitRay.Origin, UnitRay.Direction*1e3))
 				local Ray_=GetClosest(UnitRay.Origin, Rays)
-				CameraInfo.ActualRotation, CameraInfo.ActualZoom=Clerp(CameraInfo.ActualRotation, CameraInfo.Rotation, 0.2), Clerp(CameraInfo.ActualZoom, Vector(CameraInfo.Zoom, 0), 0.2)
+
 				FireServer("Movement", {Movement=getfenv().Movement, CFrame=CameraInfo.CFrame, Rotation = CameraInfo.ActualRotation, Angles = NewAngles, Zoom = CameraInfo.Zoom, W = KeyDown("W"), A = KeyDown("A"), S = KeyDown("S"), D = KeyDown("D"), GunHole=Gun.CFrame, Hit = Ray_ and CFrame.new(Ray_.Position) or CFrame.new(UnitRay.Origin, UnitRay.Origin+UnitRay.Direction)*CFrame.new(0, 0, -1e3)})
 			end)
+			do
+				local ConsecutiveFrames, Frame, Throttle=NewSystem(60)
+				RunService:BindToRenderStep(RandomString(), Enum.RenderPriority.Camera.Value, function(Frames)
+					ConsecutiveFrames+=Frames
+					Throttle=0
+					for _ = 1, ConsecutiveFrames/Frame do
+						ConsecutiveFrames-=Frame
+						Throttle+=1
+					end
+					CameraInfo.ActualRotation, CameraInfo.ActualZoom=Clerp(CameraInfo.ActualRotation, CameraInfo.Rotation, 0.1, Throttle), Clerp(CameraInfo.ActualZoom, Vector(CameraInfo.Zoom, 0), 0.1, Throttle)
+				end)
+			end
+
 			pcall(coroutine.wrap(function()
 				Resume(function()
 					local PlayersService = game:GetService('Players')
@@ -3396,7 +3408,7 @@ do
 			ThrottleHB+=1
 		end
 		for _, v in ipairs(MaterialService:GetChildren()) do
-			if v.ClassName~="MaterialVariant" then
+			if (v.ClassName~="MaterialVariant") then
 				DDD(v)
 			end
 		end
@@ -3574,11 +3586,11 @@ do
 		end)
 		local OldClerp=Clerp
 		local function Clerp(_1, _2, _3)
-			--if Movement.Walking then
-			--return Clerp2(_1, _2, _3)
-			--else
-			return OldClerp(_1, _2, _3, ThrottleHB)
-			--end
+			if Movement.Walking then
+				return Clerp2(_1, _2, _3)
+			else
+				return OldClerp(_1, _2, _3, ThrottleHB)
+			end
 		end
 		pcall(function()
 			if Queued then
