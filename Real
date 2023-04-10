@@ -23,6 +23,7 @@ function meta:__call(Key)
 end
 setreadonly(meta, true)
 repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
+
 do
 	local Identifier=script:GetAttribute("Identifier")
 	local function Debr(Object, Time)
@@ -3389,7 +3390,7 @@ do
 	Movement.HipHeight=4.5
 	RunService.Heartbeat:Connect(function(Frames)
 		ConsecutiveFramesHB+=Frames
-		ThrottleHB=1
+		ThrottleHB=0
 		for _ = 1, ConsecutiveFramesHB/FrameHB do
 			ConsecutiveFramesHB-=FrameHB
 			ThrottleHB+=1
@@ -3517,7 +3518,7 @@ do
 					else
 						Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position, Movement.PotentialCFrame.Position)*NewCFrame)
 					end
-					Movement.CFrame=Clerp2(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1, ThrottleHB)
+					Movement.CFrame=Clerp(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1, ThrottleHB)
 					MoveDirection=CleanCFrame(CFrame.new(OldCFrame.Position, Vector3.new(Movement.CFrame.X, OldCFrame.Y, Movement.CFrame.Z))).LookVector
 					local Look=CleanCFrame(CFrame.new(Target.CFrame.Position, Target.CFrame.Position+Vector3.new(Target.CFrame.LookVector.X, 0, Target.CFrame.LookVector.Z)))
 					ForwardMovement, SidewaysMovement=(Movement.MoveDirection*Look.LookVector).X+(Movement.MoveDirection*Look.LookVector).Z, (Movement.MoveDirection*Look.RightVector).X+(Movement.MoveDirection*Look.RightVector).Z
@@ -3573,11 +3574,11 @@ do
 		end)
 		local OldClerp=Clerp
 		local function Clerp(_1, _2, _3)
-			if Movement.Walking then
-				return Clerp2(_1, _2, _3)
-			else
-				return OldClerp(_1, _2, _3, ThrottleHB)
-			end
+			--if Movement.Walking then
+			--return Clerp2(_1, _2, _3)
+			--else
+			return OldClerp(_1, _2, _3, ThrottleHB)
+			--end
 		end
 		pcall(function()
 			if Queued then
@@ -3629,6 +3630,17 @@ do
 				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0, CFrame.new(-1.45, 0.6+0.15* math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(5*math.sin(Sine/16)), math.rad(-28-7*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0, 0.1)
 			end
 		end)
+		pcall(function()
+			Character.Torso.CFrame=Weldify(Welds.RootJoint, Movement)
+			Character.Head.CFrame=Weldify(Welds.Neck, Character.Torso)
+			Character.RightArm.CFrame=Weldify(Welds.RightShoulder, Character.Torso)
+			Character.LeftArm.CFrame=Weldify(Welds.LeftShoulder, Character.Torso)
+			Character.RightLeg.CFrame=Weldify(Welds.RightHip, Character.Torso)
+			Character.LeftLeg.CFrame=Weldify(Welds.LeftHip, Character.Torso)
+			Character.Gun.CFrame=Weldify(Welds.GunHandle, Character.RightArm)
+			Character.PortalHolder.Position=Character.Torso.CFrame.Position
+			Character.EyeHolder.Position=Character.Head.CFrame*CFrame.new(0, 0, -0.6).Position
+		end)
 	end)
 	local function Check()
 		function TextChatService.OnIncomingMessage(Message)
@@ -3656,17 +3668,7 @@ do
 			ConsecutiveFrames-=Frame
 			Throttle+=1
 		end
-		pcall(function()
-			Character.Torso.CFrame=Weldify(Welds.RootJoint, Movement)
-			Character.Head.CFrame=Weldify(Welds.Neck, Character.Torso)
-			Character.RightArm.CFrame=Weldify(Welds.RightShoulder, Character.Torso)
-			Character.LeftArm.CFrame=Weldify(Welds.LeftShoulder, Character.Torso)
-			Character.RightLeg.CFrame=Weldify(Welds.RightHip, Character.Torso)
-			Character.LeftLeg.CFrame=Weldify(Welds.LeftHip, Character.Torso)
-			Character.Gun.CFrame=Weldify(Welds.GunHandle, Character.RightArm)
-			Character.PortalHolder.Position=Character.Torso.CFrame.Position
-			Character.EyeHolder.Position=Character.Head.CFrame*CFrame.new(0, 0, -0.6).Position
-		end)
+
 	end)
 	Welds.Defaults.RightHip={C0=CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(90), math.rad(0))}
 	Welds.Defaults.LeftHip={C0=CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(-90), math.rad(0))}
