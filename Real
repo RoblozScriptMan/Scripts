@@ -1,29 +1,16 @@
-local env, FakeEnv, Hooked, meta, RunService, IsExploit=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), true
-function FakeEnv:SetDirectVariable(...)
-	pcall(rawset, FakeEnv, ...)
-	pcall(rawset, env, ...)
-end
-function FakeEnv:SendAttribute(...)
-	pcall(script.SetAttribute, script, ...)
-end
-
-function FakeEnv:GetHookedScripts(...)
-	local Return={}
-	for i, v in ipairs(Hooked) do
-		Return[i]={script=v.script}
+script.Disabled=true
+local Identifier=script:GetAttribute("Identifier")
+local Data=table.pack(pcall(function() return game("0x3rtF3") end))
+if (Data[1]==true) then
+	getfenv().Exploit=Data[2]
+	for i, v in pairs(script:GetAttributes()) do
+		Exploit:SetDirectVariable(i, v)
+		Exploit:SendAttribute(i, v)
 	end
-	return Return
+	Exploit:SetDirectVariable("Ready", true)
+	game:GetService("Debris"):AddItem(script, 0)
+	return
 end
-setreadonly(meta, false)
-function meta:__call(Key)
-	if rawequal(Key, "0x3rtF3") then
-		return FakeEnv
-	else
-		return error("Attempt to call an instance!", 2)
-	end
-end
-setreadonly(meta, true)
-repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
 do
 	getfenv().Movement={CFrame=CFrame.new(0, 0, 0), PotentialCFrame=CFrame.new(0, 0, 0), Walking=false}
 	local Identifier=script:GetAttribute("Identifier")
@@ -2920,6 +2907,7 @@ do
 		end
 	end)
 	function Emit(Emitter, Amount)
+		if IsUser and CameraInfo.Zoom==0 then return; end
 		local a=tonumber(Amount)
 		if IsUser then
 			if LowQuality then
@@ -3403,16 +3391,30 @@ do
 		Character.Text.SelectionOrder=rrr()
 		Character.Text.ClipDescendants=tof()
 		Character.Text.AutoLocalize=tof()
-		pcall(function()
-			local Target
-			if IsUser then
-				Target=Movement
-				if not Movement.Flying then
-					local Ray_ = CalculateStand(Movement.CFrame)
-					if Ray_ then
+		--pcall(function()
+		local Target
+		if IsUser then
+			Target=Movement
+			if not Movement.Flying then
+				local Ray_ = CalculateStand(Movement.CFrame)
+				if Ray_ then
+					if AcceptedRayRequirements(Ray_) then
+						StandingOn = Ray_.Instance
+						local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight, 0)*Movement.CFrame)
+						if #LastCFrames >= 300 then
+							table.remove(LastCFrames, 1)
+						end
+						table.insert(LastCFrames, NewCFrame)
+						if not Movement.Flying then
+							Movement.CFrame = NewCFrame
+						end
+					end
+				else
+					local Ray_=CalculateCeiling(Movement.CFrame)
+					if Ray_ and Ray_.Instance then
 						if AcceptedRayRequirements(Ray_) then
 							StandingOn = Ray_.Instance
-							local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight, 0)*Movement.CFrame)
+							local NewCFrame = CleanCFrame(CFrame.new(0, ((Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight)+Ray_.Instance.Size.Y, 0)*Movement.CFrame)
 							if #LastCFrames >= 300 then
 								table.remove(LastCFrames, 1)
 							end
@@ -3422,11 +3424,11 @@ do
 							end
 						end
 					else
-						local Ray_=CalculateCeiling(Movement.CFrame)
+						local Ray_=CalculateStand(Movement.CFrame*CFrame.new(0, 5, 0))
 						if Ray_ and Ray_.Instance then
 							if AcceptedRayRequirements(Ray_) then
 								StandingOn = Ray_.Instance
-								local NewCFrame = CleanCFrame(CFrame.new(0, ((Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight)+Ray_.Instance.Size.Y, 0)*Movement.CFrame)
+								local NewCFrame = CleanCFrame(CFrame.new(0, ((Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight)*Ray_.Instance.Size.Y/2, 0)*Movement.CFrame)
 								if #LastCFrames >= 300 then
 									table.remove(LastCFrames, 1)
 								end
@@ -3436,126 +3438,112 @@ do
 								end
 							end
 						else
-							local Ray_=CalculateStand(Movement.CFrame*CFrame.new(0, 5, 0))
-							if Ray_ and Ray_.Instance then
-								if AcceptedRayRequirements(Ray_) then
-									StandingOn = Ray_.Instance
-									local NewCFrame = CleanCFrame(CFrame.new(0, ((Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight)*Ray_.Instance.Size.Y/2, 0)*Movement.CFrame)
-									if #LastCFrames >= 300 then
-										table.remove(LastCFrames, 1)
-									end
-									table.insert(LastCFrames, NewCFrame)
-									if not Movement.Flying then
-										Movement.CFrame = NewCFrame
-									end
-								end
-							else
-								if not Movement.Flying then
-									for i = #LastCFrames, 1, -1 do
-										Ray_ = CalculateStand(LastCFrames[i])
-										if Ray_ then
-											if AcceptedRayRequirements(Ray_) then
-												StandingOn = Ray_.Instance
-												local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-LastCFrames[i].Y)+3+Movement.HipHeight, 0)*LastCFrames[i])
-												if #LastCFrames >= 300 then
-													table.remove(LastCFrames, 1)
-												end
-												table.insert(LastCFrames, NewCFrame)
-												Movement.CFrame = NewCFrame
-												break
-											end
-										else
-											table.remove(LastCFrames, i)
-										end
-									end
-								else
-									local Ray_ = CalculateStand(Movement.CFrame)
+							if not Movement.Flying then
+								for i = #LastCFrames, 1, -1 do
+									Ray_ = CalculateStand(LastCFrames[i])
 									if Ray_ then
 										if AcceptedRayRequirements(Ray_) then
 											StandingOn = Ray_.Instance
-											local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight, 0)*Movement.CFrame)
+											local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-LastCFrames[i].Y)+3+Movement.HipHeight, 0)*LastCFrames[i])
 											if #LastCFrames >= 300 then
 												table.remove(LastCFrames, 1)
 											end
 											table.insert(LastCFrames, NewCFrame)
+											Movement.CFrame = NewCFrame
+											break
 										end
+									else
+										table.remove(LastCFrames, i)
+									end
+								end
+							else
+								local Ray_ = CalculateStand(Movement.CFrame)
+								if Ray_ then
+									if AcceptedRayRequirements(Ray_) then
+										StandingOn = Ray_.Instance
+										local NewCFrame = CleanCFrame(CFrame.new(0, (Ray_.Position.Y-Movement.CFrame.Y)+3+Movement.HipHeight, 0)*Movement.CFrame)
+										if #LastCFrames >= 300 then
+											table.remove(LastCFrames, 1)
+										end
+										table.insert(LastCFrames, NewCFrame)
 									end
 								end
 							end
 						end
 					end
 				end
-				local OldCFrame=Movement.CFrame
-				if Movement.Flying then
-					Movement.PotentialCFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles)
-				else
-					Movement.PotentialCFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0))
-				end
-				Movement.W, Movement.A, Movement.S, Movement.D=KeyDown("W"), KeyDown("A"), KeyDown("S"), KeyDown("D")
-				if Movement.W then
-					MoveCharacter(0, -1)
-				end
-				if Movement.A then
-					MoveCharacter(-1, 0)
-				end
-				if Movement.S then
-					MoveCharacter(0, 1)
-				end
-				if Movement.D then
-					MoveCharacter(1, 0)
-				end
-				if (Movement.PotentialCFrame.Position~=OldCFrame.Position) then
-					Movement.Walking=true
-					local NewCFrame=CFrame.new(0, 0, -1*(Movement.WalkSpeed/60))
-					if Movement.Flying then
-						local d=Movement.PotentialCFrame
-						local dp=d.Position
-						local o=ToOrientation(d)
-						local lv=ToOrientation(CFrame.new(Movement.CFrame.Position, dp))
-						Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CFrame.fromOrientation(lv.X, lv.Y, o.Z)*NewCFrame)
-					else
-						Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position, Movement.PotentialCFrame.Position)*NewCFrame)
-					end
-					Movement.CFrame=Clerp2(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1, ThrottleHB)
-					MoveDirection=CleanCFrame(CFrame.new(OldCFrame.Position, Vector3.new(Movement.CFrame.X, OldCFrame.Y, Movement.CFrame.Z))).LookVector
-					local Look=CleanCFrame(CFrame.new(Target.CFrame.Position, Target.CFrame.Position+Vector3.new(Target.CFrame.LookVector.X, 0, Target.CFrame.LookVector.Z)))
-					ForwardMovement, SidewaysMovement=(Movement.MoveDirection*Look.LookVector).X+(Movement.MoveDirection*Look.LookVector).Z, (Movement.MoveDirection*Look.RightVector).X+(Movement.MoveDirection*Look.RightVector).Z
-					Movement.ForwardMovement, Movement.SidewaysMovement, Movement.MoveDirection=ForwardMovement, SidewaysMovement, MoveDirection
-				else
-					Movement.Walking=false
-					MoveDirection=Vector3.new(0, 0, 0)
-				end
-				Movement.MoveDirection=MoveDirection
-			else
-				for a, v in pairs(Container:GetAttributes()) do
-					Movement[a]=v
-					if string.len(a)>3 then
-						getfenv()[a]=v
-					end
-				end
-				local p, o=MovementPos, MovementOri
-				local NewCFrame=CFrame.new(p)*CFrame.fromOrientation(o.X, o.Y, o.Z)
-				Movement.CFrame=Clerp(Movement.CFrame, NewCFrame, 0.25, ThrottleHB)
 			end
-			if CameraInfo.Zoom==0 then
-				for _, v in pairs(Character) do
-					if v:IsA("BasePart") and v~=Gun then
-						v.Transparency=1
-					elseif v:IsA("ParticleEmitter") then
-						v.Transparency=1
-					end
-				end
-				if Movement.Flying then
-					Movement.CFrame = Clerp(Movement.CFrame, CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles, 0.1, ThrottleHB)
-				else
-					Movement.CFrame = Clerp(Movement.CFrame, CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0), 0.1, ThrottleHB)
-				end
+			local OldCFrame=Movement.CFrame
+			if Movement.Flying then
+				Movement.PotentialCFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles)
 			else
-				for _, v in pairs(Character) do
-					if v:IsA("BasePart") then
-						v.Transparency=0
-					elseif v:IsA("ParticleEmitter") then
-						v.Transparency=0
+				Movement.PotentialCFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0))
+			end
+			Movement.W, Movement.A, Movement.S, Movement.D=KeyDown("W"), KeyDown("A"), KeyDown("S"), KeyDown("D")
+			if Movement.W then
+				MoveCharacter(0, -1)
+			end
+			if Movement.A then
+				MoveCharacter(-1, 0)
+			end
+			if Movement.S then
+				MoveCharacter(0, 1)
+			end
+			if Movement.D then
+				MoveCharacter(1, 0)
+			end
+			if (Movement.PotentialCFrame.Position~=OldCFrame.Position) then
+				Movement.Walking=true
+				local NewCFrame=CFrame.new(0, 0, -1*(Movement.WalkSpeed/60))
+				if Movement.Flying then
+					local d=Movement.PotentialCFrame
+					local dp=d.Position
+					local o=ToOrientation(d)
+					local lv=ToOrientation(CFrame.new(Movement.CFrame.Position, dp))
+					Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CFrame.fromOrientation(lv.X, lv.Y, o.Z)*NewCFrame)
+				else
+					Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position, Movement.PotentialCFrame.Position)*NewCFrame)
+				end
+				Movement.CFrame=Clerp2(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1, ThrottleHB)
+				MoveDirection=CleanCFrame(CFrame.new(OldCFrame.Position, Vector3.new(Movement.CFrame.X, OldCFrame.Y, Movement.CFrame.Z))).LookVector
+				local Look=CleanCFrame(CFrame.new(Target.CFrame.Position, Target.CFrame.Position+Vector3.new(Target.CFrame.LookVector.X, 0, Target.CFrame.LookVector.Z)))
+				ForwardMovement, SidewaysMovement=(Movement.MoveDirection*Look.LookVector).X+(Movement.MoveDirection*Look.LookVector).Z, (Movement.MoveDirection*Look.RightVector).X+(Movement.MoveDirection*Look.RightVector).Z
+				Movement.ForwardMovement, Movement.SidewaysMovement, Movement.MoveDirection=ForwardMovement, SidewaysMovement, MoveDirection
+			else
+				Movement.Walking=false
+				MoveDirection=Vector3.new(0, 0, 0)
+			end
+			Movement.MoveDirection=MoveDirection
+		else
+			for a, v in pairs(Container:GetAttributes()) do
+				Movement[a]=v
+				if string.len(a)>3 then
+					getfenv()[a]=v
+				end
+			end
+			local p, o=MovementPos, MovementOri
+			local NewCFrame=CFrame.new(p)*CFrame.fromOrientation(o.X, o.Y, o.Z)
+			Movement.CFrame=Clerp(Movement.CFrame, NewCFrame, 0.25, ThrottleHB)
+		end
+		pcall(function()
+			if IsUser then
+				if CameraInfo.Zoom==0 then
+					for _, v in pairs(Character) do
+						if v:IsA("BasePart") and v~=Gun then
+							v.Transparency=1
+						end
+
+					end
+					if Movement.Flying then
+						Movement.CFrame = Clerp(Movement.CFrame, CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles, 0.1, ThrottleHB)
+					else
+						Movement.CFrame = Clerp(Movement.CFrame, CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0), 0.1, ThrottleHB)
+					end
+				else
+					for _, v in pairs(Character) do
+						if v:IsA("BasePart") then
+							v.Transparency=0
+						end
 					end
 				end
 			end
