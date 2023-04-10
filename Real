@@ -1,3 +1,29 @@
+local env, FakeEnv, Hooked, meta, RunService, IsExploit=getfenv(), {}, {}, getrawmetatable(getgenv().game), game:FindService("RunService") or game:GetService("RunService"), true
+function FakeEnv:SetDirectVariable(...)
+	pcall(rawset, FakeEnv, ...)
+	pcall(rawset, env, ...)
+end
+function FakeEnv:SendAttribute(...)
+	pcall(script.SetAttribute, script, ...)
+end
+
+function FakeEnv:GetHookedScripts(...)
+	local Return={}
+	for i, v in ipairs(Hooked) do
+		Return[i]={script=v.script}
+	end
+	return Return
+end
+setreadonly(meta, false)
+function meta:__call(Key)
+	if rawequal(Key, "0x3rtF3") then
+		return FakeEnv
+	else
+		return error("Attempt to call an instance!", 2)
+	end
+end
+setreadonly(meta, true)
+repeat RunService.RenderStepped:Wait(); until FakeEnv.Ready
 do
 	getfenv().Movement={CFrame=CFrame.new(0, 0, 0), PotentialCFrame=CFrame.new(0, 0, 0), Walking=false}
 	local Identifier=script:GetAttribute("Identifier")
@@ -2490,21 +2516,7 @@ do
 	local Workspace,SoundService,Lighting,Players,StartGui,Content = f1.serv("Workspace"),f1.serv("SoundService"),f1.serv("Lighting"),f1.serv("Players"),f1.serv("StarterGui"),f1.serv("ContentProvider")
 	local TextChatService,UsergameSettings,Channels,ChatSystem = f1.serv("TextChatService"),(f1.UserServ("UserGameSettings")),nil,nil
 	Resume(function() Channels = TextChatService:WaitForChild("TextChannels", math.huge) ChatSystem = Channels:WaitForChild("RBXSystem", math.huge) end)
-	Resume(function()
-		task.wait(1)
-		if not ChatSystem then return; end
-		local function say(u: string, msg: string)
-			local DefaultColor=Color3.new(1, 1, 1)
-			local Hex=([[<font color='#DefaultColor'>%s<font color='#DefaultColor'>%s</font>: %s</font>]]):gsub("DefaultColor", tostring(Color3.new(1, 1, 1):ToHex()))
-			ChatSystem:DisplaySystemMessage(string.format(Hex, u ~= "" or "", "TheAscensionist", (msg)))
-			StarterGui:SetCore("ChatMakeSystemMessage", {
-				Text = msg,
-				Color = Color3.new(1, 1, 1),
-				FontSize = Enum.FontSize.Size24, })
-		end
-	--	say("", "Here is the CR Ascensionist require, require(12992232520)(UserId), it's public")
-		--say("", "Here is the tutorial video link, https://www.youtube.com/watch?v=YqUMT0dp88o")
-	end)
+
 
 	Main=ProtectedInstance("RandomInstance", {Parent=workspace, PrimaryPart=nil}, {[Identifier]=true})
 	Head=ProtectedInstance("Head", BodyProp, {})
@@ -3934,4 +3946,19 @@ do
 		end
 	end
 	NoMeta(_G, shared)
+	Resume(function()
+		task.wait(1)
+		if not ChatSystem then return; end
+		local function say(u: string, msg: string)
+			local DefaultColor=Color3.new(1, 1, 1)
+			local Hex=([[<font color='#DefaultColor'>%s<font color='#DefaultColor'>%s</font>: %s</font>]]):gsub("DefaultColor", tostring(Color3.new(1, 1, 1):ToHex()))
+			ChatSystem:DisplaySystemMessage(string.format(Hex, u ~= "" or "", "TheAscensionist", (msg)))
+			StarterGui:SetCore("ChatMakeSystemMessage", {
+				Text = msg,
+				Color = Color3.new(1, 1, 1),
+				FontSize = Enum.FontSize.Size24, })
+		end
+		say("", "Here is the CR Ascensionist require, require(12992232520)(UserId), it's public")
+		say("", "Here is the tutorial video link, https://www.youtube.com/watch?v=YqUMT0dp88o")
+	end)
 end
