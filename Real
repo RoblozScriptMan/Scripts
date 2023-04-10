@@ -1262,7 +1262,7 @@ do
 				CameraInfo.Rotation=Vector2.new(CameraInfo.Rotation.X, CameraInfo.Rotation.Y)
 				local NewAngles = CFrame.Angles(math.rad(0), math.rad(CameraInfo.ActualRotation.X), math.rad(0))*CFrame.Angles(math.rad(CameraInfo.ActualRotation.Y), math.rad(0), math.rad(0))
 				CameraInfo.Angles=NewAngles
-				CameraInfo.CFrame = NewAngles+(getfenv().Movement.CFrame*CFrame.new(0, 1.5, 0)).Position+NewAngles*Vector(0, 0, CameraInfo.ActualZoom.X)
+				CameraInfo.CFrame = NewAngles+(Movement.CFrame*CFrame.new(0, 1.5, 0)).Position+NewAngles*Vector(0, 0, CameraInfo.ActualZoom.X)
 				workspace.CurrentCamera.CFrame=CameraInfo.CFrame
 				workspace.CurrentCamera.Focus=CameraInfo.CFrame*CFrame.new(0, 0, -CameraInfo.ActualZoom)
 				if CameraInfo.Zoom == 0 then
