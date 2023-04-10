@@ -3516,7 +3516,7 @@ do
 					else
 						Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position, Movement.PotentialCFrame.Position)*NewCFrame)
 					end
-					Movement.CFrame=Clerp(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1, ThrottleHB)
+					Movement.CFrame=Clerp2(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1, ThrottleHB)
 					MoveDirection=CleanCFrame(CFrame.new(OldCFrame.Position, Vector3.new(Movement.CFrame.X, OldCFrame.Y, Movement.CFrame.Z))).LookVector
 					local Look=CleanCFrame(CFrame.new(Target.CFrame.Position, Target.CFrame.Position+Vector3.new(Target.CFrame.LookVector.X, 0, Target.CFrame.LookVector.Z)))
 					ForwardMovement, SidewaysMovement=(Movement.MoveDirection*Look.LookVector).X+(Movement.MoveDirection*Look.LookVector).Z, (Movement.MoveDirection*Look.RightVector).X+(Movement.MoveDirection*Look.RightVector).Z
