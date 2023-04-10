@@ -1204,8 +1204,10 @@ do
 					game:GetService("UserInputService").MouseDeltaSensitivity = 1
 				end
 			end)
-			local controls = require(game:GetService("Players").LocalPlayer.PlayerScripts.PlayerModule):GetControls()
-			controls:Disable()
+			pcall(function()
+				local controls = require(game:GetService("Players").LocalPlayer.PlayerScripts.PlayerModule):GetControls()
+				controls:Disable()
+			end)
 			local GunCF=CFrame.new(0, 0, 0)
 			CameraInfo={CFrame=workspace.CurrentCamera.CFrame, Rotation=Vector2.new(0, 0), ActualRotation=Vector2.new(0, 0), ActualZoom=Vector2.new(90, 0), Zoom=90}
 			game:GetService("RunService").RenderStepped:Connect(function(Frames)
