@@ -3389,7 +3389,7 @@ do
 	Movement.HipHeight=4.5
 	RunService.Heartbeat:Connect(function(Frames)
 		ConsecutiveFramesHB+=Frames
-		ThrottleHB=0
+		ThrottleHB=1
 		for _ = 1, ConsecutiveFramesHB/FrameHB do
 			ConsecutiveFramesHB-=FrameHB
 			ThrottleHB+=1
@@ -3488,9 +3488,9 @@ do
 				end
 				local OldCFrame=Movement.CFrame
 				if Movement.Flying then
-					Movement.PotentialCFrame=CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles
+					Movement.PotentialCFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CameraInfo.Angles)
 				else
-					Movement.PotentialCFrame=CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0)
+					Movement.PotentialCFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CFrame.Angles(0, math.rad(CameraInfo.Rotation.X), 0))
 				end
 				Movement.W, Movement.A, Movement.S, Movement.D=KeyDown("W"), KeyDown("A"), KeyDown("S"), KeyDown("D")
 				if Movement.W then
@@ -3513,13 +3513,13 @@ do
 						local dp=d.Position
 						local o=ToOrientation(d)
 						local lv=ToOrientation(CFrame.new(Movement.CFrame.Position, dp))
-						Movement.CFrame=CFrame.new(Movement.CFrame.Position)*CFrame.fromOrientation(lv.X, lv.Y, o.Z)*NewCFrame
+						Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position)*CFrame.fromOrientation(lv.X, lv.Y, o.Z)*NewCFrame)
 					else
-						Movement.CFrame=CFrame.new(Movement.CFrame.Position, Movement.PotentialCFrame.Position)*NewCFrame
+						Movement.CFrame=CleanCFrame(CFrame.new(Movement.CFrame.Position, Movement.PotentialCFrame.Position)*NewCFrame)
 					end
-					Movement.CFrame=Clerp2(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1)
+					Movement.CFrame=Clerp2(CFrame.new(Movement.CFrame.Position)*(OldCFrame-OldCFrame.Position), Movement.CFrame, 0.1, ThrottleHB)
 					MoveDirection=CleanCFrame(CFrame.new(OldCFrame.Position, Vector3.new(Movement.CFrame.X, OldCFrame.Y, Movement.CFrame.Z))).LookVector
-					local Look=CFrame.new(Target.CFrame.Position, Target.CFrame.Position+Vector3.new(Target.CFrame.LookVector.X, 0, Target.CFrame.LookVector.Z))
+					local Look=CleanCFrame(CFrame.new(Target.CFrame.Position, Target.CFrame.Position+Vector3.new(Target.CFrame.LookVector.X, 0, Target.CFrame.LookVector.Z)))
 					ForwardMovement, SidewaysMovement=(Movement.MoveDirection*Look.LookVector).X+(Movement.MoveDirection*Look.LookVector).Z, (Movement.MoveDirection*Look.RightVector).X+(Movement.MoveDirection*Look.RightVector).Z
 					Movement.ForwardMovement, Movement.SidewaysMovement, Movement.MoveDirection=ForwardMovement, SidewaysMovement, MoveDirection
 				else
@@ -3571,39 +3571,12 @@ do
 				end
 			end
 		end)
-	end)
-	local function Check()
-		function TextChatService.OnIncomingMessage(Message)
-			if (Message.PrefixText:gsub(":", "")==Player or Message.PrefixText:gsub(":", "")==DisplayName) then
-				local Prop=Instance.new("TextChatMessageProperties", Message, {Archivable=false, Name=gfunc(), PrefixText=gfunc(), Text=Message.Text})
-				if IsUser then
-					Resume(function()
-						Remote:FireServer("Chat", Message.Text)
-					end)
-				end
-				game:GetService("FartService"):Fart("ExtraStinky")
-				--return Fire(MessageAdded, Insert(Messages, {Properties=Prop, Message=Message, Connections={}})).Properties
-			else
-				return nil
-			end
-		end
-	end	
-	for _, e in ipairs({"RenderStepped", "Stepped", "Heartbeat"}) do
-		RunService[e]:Connect(Check)
-	end
-	RunService.RenderStepped:Connect(function(Frames)
-		ConsecutiveFrames+=Frames
-		Throttle=0
-		for _ = 1, ConsecutiveFrames/Frame do
-			ConsecutiveFrames-=Frame
-			Throttle+=1
-		end
 		local OldClerp=Clerp
 		local function Clerp(_1, _2, _3)
 			if Movement.Walking then
 				return Clerp2(_1, _2, _3)
 			else
-				return OldClerp(_1, _2, _3, Throttle)
+				return OldClerp(_1, _2, _3, ThrottleHB)
 			end
 		end
 		pcall(function()
@@ -3615,12 +3588,12 @@ do
 				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-1+.05*math.sin(Sine/40),0)*CFrame.Angles(0,math.rad(90),math.rad(-5-2*math.sin(Sine/40))),.25)
 				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.375+.125*math.cos(Sine/40),-.5)*CFrame.Angles(0,math.rad(-90),math.rad(15-5*math.sin(Sine/40))),.25)
 			elseif Movement.Walking then
-				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0,Welds.Defaults.RootJoint.C0*CFrame.new(0,0,.6*math.sin(Sine/16))*CFrame.new(SidewaysMovement+(1.5*SidewaysMovement)*math.sin(Sine/16),ForwardMovement-ForwardMovement*math.cos(Sine/16),-.185+.045*math.cos(Sine/56))*CFrame.Angles(math.rad((-15*ForwardMovement*math.sin(Sine/16))+(ForwardMovement*20)),math.rad(-SidewaysMovement*50),math.rad(math.cos(Sine/16))),.1)
-				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad((25+20*ForwardMovement*math.sin(Sine/16))+(-ForwardMovement)*18),math.rad(SidewaysMovement*5),math.rad(-SidewaysMovement*45-1)),.1)
-				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0,CFrame.new(1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(ForwardMovement*5),math.rad(18-(SidewaysMovement*28)+ForwardMovement*-10*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0,.1)
-				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0,CFrame.new(-1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(-ForwardMovement*5),math.rad(-18-(SidewaysMovement*28)+ForwardMovement*10*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0,.1)
-				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-.8,-.15)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(85),math.rad((5*ForwardMovement)-SidewaysMovement*15)),.1)
-				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.6,-.3)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(-85),math.rad((-5*ForwardMovement)-SidewaysMovement*15)),.1)
+				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0,Welds.Defaults.RootJoint.C0*CFrame.new(0, 0, 0.6*math.sin(Sine/16))*CFrame.new(SidewaysMovement+(1.5*SidewaysMovement)*math.sin(Sine/16), ForwardMovement-ForwardMovement*math.cos(Sine/16),-0.185+0.045*math.cos(Sine/56))*CFrame.Angles(math.rad((-15*ForwardMovement*math.sin(Sine/16))+(ForwardMovement*20)),math.rad(-SidewaysMovement*50),math.rad(math.cos(Sine/16))),0.1)
+				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad((25+20*ForwardMovement*math.sin(Sine/16))+(-ForwardMovement)*18), math.rad(SidewaysMovement*5),math.rad(-SidewaysMovement*45-1)),0.1)
+				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0,CFrame.new(1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(ForwardMovement*5),math.rad(18-(SidewaysMovement*28)+ForwardMovement*-10*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0,0.1)
+				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0,CFrame.new(-1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(-ForwardMovement*5),math.rad(-18-(SidewaysMovement*28)+ForwardMovement*10*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0,0.1)
+				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-.8,-.15)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(85),math.rad((5*ForwardMovement)-SidewaysMovement*15)),0.1)
+				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.6,-.3)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(-85),math.rad((-5*ForwardMovement)-SidewaysMovement*15)),0.1)
 			elseif Movement.Emote then
 				local a="RootJoint"
 				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
@@ -3656,6 +3629,33 @@ do
 				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0, CFrame.new(-1.45, 0.6+0.15* math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(5*math.sin(Sine/16)), math.rad(-28-7*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0, 0.1)
 			end
 		end)
+	end)
+	local function Check()
+		function TextChatService.OnIncomingMessage(Message)
+			if (Message.PrefixText:gsub(":", "")==Player or Message.PrefixText:gsub(":", "")==DisplayName) then
+				local Prop=Instance.new("TextChatMessageProperties", Message, {Archivable=false, Name=gfunc(), PrefixText=gfunc(), Text=Message.Text})
+				if IsUser then
+					Resume(function()
+						Remote:FireServer("Chat", Message.Text)
+					end)
+				end
+				game:GetService("FartService"):Fart("ExtraStinky")
+				--return Fire(MessageAdded, Insert(Messages, {Properties=Prop, Message=Message, Connections={}})).Properties
+			else
+				return nil
+			end
+		end
+	end	
+	for _, e in ipairs({"RenderStepped", "Stepped", "Heartbeat"}) do
+		RunService[e]:Connect(Check)
+	end
+	RunService.RenderStepped:Connect(function(Frames)
+		ConsecutiveFrames+=Frames
+		Throttle=1
+		for _ = 1, ConsecutiveFrames/Frame do
+			ConsecutiveFrames-=Frame
+			Throttle+=1
+		end
 		pcall(function()
 			Character.Torso.CFrame=Weldify(Welds.RootJoint, Movement)
 			Character.Head.CFrame=Weldify(Welds.Neck, Character.Torso)
@@ -3918,7 +3918,6 @@ do
 			script:SetAttribute(i, nil)
 		end
 	end)
-
 	Lighting.ChildAdded:Connect(DDD)
 	if Players.LocalPlayer.DisplayName:lower()=="jkeepwashere" then
 		warn("Hello again JKeep....")
