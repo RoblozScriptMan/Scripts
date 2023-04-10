@@ -1204,6 +1204,7 @@ do
 					game:GetService("UserInputService").MouseDeltaSensitivity = 1
 				end
 			end)
+			Movement={CFrame=CFrame.new(0, 0, 0)}
 			local controls = require(game:GetService("Players").LocalPlayer.PlayerScripts.PlayerModule):GetControls()
 			controls:Disable()
 			local GunCF=CFrame.new(0, 0, 0)
