@@ -227,7 +227,7 @@ do
 		return table.unpack(Return)
 	end
 	function Resume(f)
-		coroutine.resume(coroutine.create(f))
+		coroutine.wrap(f)()
 	end
 	local function Exists(...)
 		local ToReturn={}
