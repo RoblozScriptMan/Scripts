@@ -3584,6 +3584,34 @@ do
 			end
 		end
 		pcall(function()
+			local a="RootJoint"
+			getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+			local a="Neck"
+			getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+			local a="RightShoulder"
+			getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+			local a="LeftShoulder"
+			getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+			local a="RightHip"
+			getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+			local a="LeftHip"
+			getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
+			for i, v in pairs(Welds) do
+				pcall(function()
+					if i=="Defaults" then return; end
+					getfenv()[i]=v
+				end)
+			end
+			local Hum=Movement 
+			local Humanoid=Movement
+			local WALKSPEEDVALUE = 6 / (Hum.WalkSpeed / 16)
+			ROOTC0=Welds.Defaults.RootJoint.C0
+			SINE=BaseSine
+			SIZE=1
+			ANGLES=CFrame.Angles
+			Animation_Speed=0.5
+			RIGHTSHOULDERC0, LEFTSHOULDERC0=Welds.Defaults.RightShoulder.C0, Welds.Defaults.LeftShoulder.C0
+			NECKC0=Welds.Defaults.Neck.C0
 			if Queued then
 				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0,Welds.Defaults.RootJoint.C0*CFrame.new(0,.1,.2*math.cos(Sine/40))*CFrame.Angles(0,0,math.rad(40)),.25)
 				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(0,math.rad(5),math.rad(-40)),.25)
@@ -3591,13 +3619,6 @@ do
 				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0,CFrame.new(-1.25,.85+.1*math.sin(Sine/40),-.25)*CFrame.Angles(math.rad(135),0,math.rad(45))*Welds.Defaults.LeftShoulder.C0,.25)
 				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-1+.05*math.sin(Sine/40),0)*CFrame.Angles(0,math.rad(90),math.rad(-5-2*math.sin(Sine/40))),.25)
 				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.375+.125*math.cos(Sine/40),-.5)*CFrame.Angles(0,math.rad(-90),math.rad(15-5*math.sin(Sine/40))),.25)
-			elseif Movement.Walking then
-				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0,Welds.Defaults.RootJoint.C0*CFrame.new(0, 0, 0.6*math.sin(Sine/16))*CFrame.new(SidewaysMovement+(1.5*SidewaysMovement)*math.sin(Sine/16), ForwardMovement-ForwardMovement*math.cos(Sine/16),-0.185+0.045*math.cos(Sine/56))*CFrame.Angles(math.rad((-15*ForwardMovement*math.sin(Sine/16))+(ForwardMovement*20)),math.rad(-SidewaysMovement*50),math.rad(math.cos(Sine/16))),0.1)
-				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad((25+20*ForwardMovement*math.sin(Sine/16))+(-ForwardMovement)*18), math.rad(SidewaysMovement*5),math.rad(-SidewaysMovement*45-1)),0.1)
-				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0,CFrame.new(1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(ForwardMovement*5),math.rad(18-(SidewaysMovement*28)+ForwardMovement*-10*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0,0.1)
-				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0,CFrame.new(-1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(-ForwardMovement*5),math.rad(-18-(SidewaysMovement*28)+ForwardMovement*10*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0,0.1)
-				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-.8,-.15)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(85),math.rad((5*ForwardMovement)-SidewaysMovement*15)),0.1)
-				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.6,-.3)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(-85),math.rad((-5*ForwardMovement)-SidewaysMovement*15)),0.1)
 			elseif Movement.Emote then
 				local a="RootJoint"
 				getfenv()[a], getfenv()[a.."C0"]=Welds[a], Welds.Defaults[a].C0
@@ -3623,14 +3644,50 @@ do
 				LeftShoulder.C0 = Clerp(LeftShoulder.C0, CFrame.new(-1.5, 0.5, 0) * CFrame.Angles(math.rad(5-10*math.sin(Sine/30)), math.rad(5), math.rad(-25+10*math.sin(Sine/30))) * LeftShoulderC0, 0.1)
 				RightHip.C0 = Clerp(RightHip.C0, CFrame.new(1, -1, -0.01) * CFrame.Angles(math.rad(-6+9*math.sin(Sine/15)), math.rad(80), math.rad(10+10*math.sin(Sine/30))), 0.1)
 				LeftHip.C0 = Clerp(LeftHip.C0, CFrame.new(-1, -1, -0.01) * CFrame.Angles(math.rad(0+6*math.sin(Sine/15)), math.rad(-80), math.rad(-10-10*math.sin(Sine/30))), 0.1)
+			elseif Movement.Walking then
+				if Mode==2 then
+					local Base=20
+					local ran=10
+					Neck.C0 = Clerp(Neck.C0, NECKC0 * CFrame.new(0,0,0) * CFrame.Angles(math.rad(25+3.4*math.cos(Sine/(Base/2))),math.rad(0+math.random(-2, 2)),math.rad(math.random(-10, 10))), 0.1)
+					RootJoint.C0 = Clerp(RootJoint.C0,ROOTC0 * CFrame.new(0+2*math.cos(Sine/(Base*6)) , 0+2*math.cos(Sine/(Base*4)), 1 + 0.45 * math.sin(Sine/(Base/2))) * CFrame.Angles(math.rad(25+math.random(-ran, ran)),math.rad(0+math.random(-ran, ran)),math.rad(0+math.random(-ran, ran))), 0.1)
+					RightShoulder.C0 = Clerp(RightShoulder.C0, CFrame.new(1.25*SIZE, 0.5*SIZE, 0.3*SIZE) * ANGLES(math.rad(-45), math.rad(0), math.rad(-45))*RIGHTSHOULDERC0, 0.1)
+					LeftShoulder.C0 = Clerp(LeftShoulder.C0, CFrame.new(-1.25*SIZE, 0.5*SIZE, 0.3*SIZE) * ANGLES(math.rad(-40), math.rad(0), math.rad(45))*LEFTSHOULDERC0, 0.1)
+					RootJoint.C0 = Clerp(RootJoint.C0,ROOTC0 * CFrame.new(0, 0, 2 + 0.45 * math.sin(Sine/(Base/2))) * CFrame.Angles(math.rad(10), math.rad(0), math.rad(0)), 0.1)
+					Welds.RightHip.C0 = Clerp(Welds.RightHip.C0, CFrame.new(1, -1+0.025*math.sin(Sine/(Base)), -0.1+0.086*math.cos(Sine/(Base)))*CFrame.Angles(math.rad(-35+54*math.sin(Sine/(Base))), math.rad(80), math.rad(25)), 0.1)
+					Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0, CFrame.new(-1, -1-0.025*math.sin(Sine/(Base)), 0.1-0.086*math.cos(Sine/(Base)))*CFrame.Angles(math.rad(-45-55*math.sin(Sine/(Base))), math.rad(-80), math.rad(-25)), 0.1)
+				else
+					--LeftHip.C1, RightHip.C1, Neck.C1, RootJoint.C1=Welds.Defaults.LeftHip.C1, Welds.Defaults.RightHip.C1, Welds.Defaults.Neck.C1, Welds.Defaults.RootJoint.C1
+					Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0,Welds.Defaults.RootJoint.C0*CFrame.new(0, 0, 0.6*math.sin(Sine/16))*CFrame.new(SidewaysMovement+(1.5*SidewaysMovement)*math.sin(Sine/16), ForwardMovement-ForwardMovement*math.cos(Sine/16),-0.185+0.045*math.cos(Sine/56))*CFrame.Angles(math.rad((-15*ForwardMovement*math.sin(Sine/16))+(ForwardMovement*20)),math.rad(-SidewaysMovement*50),math.rad(math.cos(Sine/16))),0.1)
+					Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad((25+20*ForwardMovement*math.sin(Sine/16))+(-ForwardMovement)*18), math.rad(SidewaysMovement*5),math.rad(-SidewaysMovement*45-1)),0.1)
+					Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0,CFrame.new(1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(ForwardMovement*5),math.rad(18-(SidewaysMovement*28)+ForwardMovement*-10*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0,0.1)
+					Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0,CFrame.new(-1.45+.0*math.cos(Sine/16),.5,0)*CFrame.Angles(math.rad((10*ForwardMovement*math.cos(Sine/16))-ForwardMovement*25),math.rad(-ForwardMovement*5),math.rad(-18-(SidewaysMovement*28)+ForwardMovement*10*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0,0.1)
+					Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1,-.8,-.15)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(85),math.rad((5*ForwardMovement)-SidewaysMovement*15)),0.1)
+					Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1,-.6,-.3)*CFrame.Angles(math.rad(-20-(20*math.cos(Sine/16))*ForwardMovement),math.rad(-85),math.rad((-5*ForwardMovement)-SidewaysMovement*15)),0.1)
+				end
 			else
-				local Sine=(Reverse and -Sine) or Sine
-				Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad(16.5-1.5*math.cos(Sine/16)),math.rad(2.5-5.5*math.cos(Sine/16)),math.rad(-16.5*math.sin(Sine/15+.4*math.cos(Sine/20)))), 0.1)
-				Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0, Welds.Defaults.RootJoint.C0*CFrame.new(0,.25*math.cos(Sine/16),.4*math.sin(Sine/16))*CFrame.Angles(math.rad(5-6*math.cos(Sine/16)), 0, 0), 0.1)
-				Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0, CFrame.new(1.45, 0.6+0.15*math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(-5*math.sin(Sine/16)), math.rad(28+7*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0, 0.1)
-				Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1, -0.6+0.1*math.sin(Sine/16), -0.4)*CFrame.Angles(math.rad(-21.5-12*math.cos(Sine/16)), math.rad(65-1*math.cos(Sine/16)), math.rad(2.5-0.4*math.cos(Sine/16))), 0.1)
-				Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1, -0.85+0.1*math.sin(Sine/16), -0.1)*CFrame.Angles(math.rad(-15.5-10*math.cos(Sine/16)), math.rad(-65+1*math.cos(Sine/16)), math.rad(-2-2*math.cos(Sine/17))), 0.1)
-				Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0, CFrame.new(-1.45, 0.6+0.15* math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(5*math.sin(Sine/16)), math.rad(-28-7*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0, 0.1)
+				if Mode==0 or Mode==nil then
+					local Sine=(Reverse and -Sine) or Sine
+					Welds.Neck.C0 = Clerp(Welds.Neck.C0,Welds.Defaults.Neck.C0*CFrame.Angles(math.rad(16.5-1.5*math.cos(Sine/16)),math.rad(2.5-5.5*math.cos(Sine/16)),math.rad(-16.5*math.sin(Sine/15+.4*math.cos(Sine/20)))), 0.1)
+					Welds.RootJoint.C0 = Clerp(Welds.RootJoint.C0, Welds.Defaults.RootJoint.C0*CFrame.new(0,.25*math.cos(Sine/16),.4*math.sin(Sine/16))*CFrame.Angles(math.rad(5-6*math.cos(Sine/16)), 0, 0), 0.1)
+					Welds.RightShoulder.C0 = Clerp(Welds.RightShoulder.C0, CFrame.new(1.45, 0.6+0.15*math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(-5*math.sin(Sine/16)), math.rad(28+7*math.sin(Sine/16)))*Welds.Defaults.RightShoulder.C0, 0.1)
+					Welds.RightHip.C0 = Clerp(Welds.RightHip.C0,CFrame.new(1, -0.6+0.1*math.sin(Sine/16), -0.4)*CFrame.Angles(math.rad(-21.5-12*math.cos(Sine/16)), math.rad(65-1*math.cos(Sine/16)), math.rad(2.5-0.4*math.cos(Sine/16))), 0.1)
+					Welds.LeftHip.C0 = Clerp(Welds.LeftHip.C0,CFrame.new(-1, -0.85+0.1*math.sin(Sine/16), -0.1)*CFrame.Angles(math.rad(-15.5-10*math.cos(Sine/16)), math.rad(-65+1*math.cos(Sine/16)), math.rad(-2-2*math.cos(Sine/17))), 0.1)
+					Welds.LeftShoulder.C0 = Clerp(Welds.LeftShoulder.C0, CFrame.new(-1.45, 0.6+0.15* math.sin(Sine/16), 0)*CFrame.Angles(math.rad(-3.25+10*math.cos(Sine/16)), math.rad(5*math.sin(Sine/16)), math.rad(-28-7*math.sin(Sine/16)))*Welds.Defaults.LeftShoulder.C0, 0.1)
+				elseif Mode==1 then
+					RootJoint.C0 = Clerp(RootJoint.C0, RootJointC0 * CFrame.new(0, 0, 0.5 * math.sin(Sine/30)) * CFrame.Angles(math.rad(-5+7.5*math.cos(Sine/30)), math.rad(-10*math.cos(Sine/30)), math.rad(0)), 0.1)
+					Neck.C0 = Clerp(Neck.C0, NeckC0 * CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(-15*math.cos(Sine/30)), math.rad(0)), 0.1)
+					RightShoulder.C0 = Clerp(RightShoulder.C0, CFrame.new(1.5, 0.5, 0) * CFrame.Angles(math.rad(135+-35*math.cos(Sine/30)), math.rad(0), math.rad(25+15*math.cos(Sine/30))) * RightShoulderC0, 0.1)
+					LeftShoulder.C0 = Clerp(LeftShoulder.C0, CFrame.new(-1.5, 0.5, 0) * CFrame.Angles(math.rad(5-10*math.sin(Sine/30)), math.rad(5), math.rad(-25+10*math.sin(Sine/30))) * LeftShoulderC0, 0.1)
+					RightHip.C0 = Clerp(RightHip.C0, CFrame.new(1, -1, -0.01) * CFrame.Angles(math.rad(-6+9*math.sin(Sine/15)), math.rad(80), math.rad(10+10*math.sin(Sine/30))), 0.1)
+					LeftHip.C0 = Clerp(LeftHip.C0, CFrame.new(-1, -1, -0.01) * CFrame.Angles(math.rad(0+6*math.sin(Sine/15)), math.rad(-80), math.rad(-10-10*math.sin(Sine/30))), 0.1)
+				elseif Mode==2 then
+					RootJoint.C0 = Clerp(RootJoint.C0,ROOTC0 * CFrame.new(0, 0, 1 + 0.5 * math.cos(SINE / 12)) * ANGLES(math.rad(-25 - 3 * math.sin(SINE / 12)), math.rad(0), math.rad(-25)), 0.5)
+					Neck.C0 = Clerp(Neck.C0, NeckC0 * CFrame.new(0, 0, 0 + ((1.1*SIZE) - 1)) * ANGLES(math.rad(23 - 3 * math.sin(SINE / 12)), math.rad(0), math.rad(30)), 0.1)
+					RightShoulder.C0 = Clerp(RightShoulder.C0, CFrame.new(0.75*SIZE, 0.5*SIZE, -1*SIZE) * ANGLES(math.rad(70), math.rad(0), math.rad(-70)) * ANGLES(math.rad(20), math.rad(25), math.rad(-15))*RightShoulderC0, 0.1)
+					LeftShoulder.C0 = Clerp(LeftShoulder.C0, CFrame.new(-1*SIZE, 0.2*SIZE, -0.5*SIZE) * ANGLES(math.rad(25), math.rad(0), math.rad(85))*LeftShoulderC0, 0.1)
+					RightHip.C0 = Clerp(RightHip.C0, CFrame.new(1*SIZE, -0.5*SIZE - 0.05*SIZE * math.cos(SINE / 12), -0.5*SIZE) * ANGLES(math.rad(0), math.rad(90), math.rad(0)) * ANGLES(math.rad(-8), math.rad(0), math.rad(0)), 0.1)
+					LeftHip.C0 = Clerp(LeftHip.C0, CFrame.new(-1*SIZE, -0.8*SIZE - 0.05*SIZE * math.cos(SINE / 12), -0.01*SIZE) * ANGLES(math.rad(0), math.rad(-90), math.rad(0)) * ANGLES(math.rad(-8), math.rad(0), math.rad(0)), 0.1)
+				end
 			end
 		end)
 		pcall(function()
